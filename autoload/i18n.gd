@@ -14,8 +14,8 @@ var _locale := "en"
 func _ready() -> void:
 	for locale: String in CATALOG_PATHS:
 		_catalogs[locale] = _load_catalog(str(CATALOG_PATHS[locale]))
-	# A saved player choice wins; otherwise follow the OS/browser language on first launch.
-	_locale = resolve_locale(SaveStore.get_locale(), OS.get_locale())
+	# Hex Hollow is intentionally a single-language English game.
+	_locale = "en"
 	if not _catalogs.has(_locale):
 		_locale = "en"
 

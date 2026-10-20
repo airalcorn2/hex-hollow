@@ -1,0 +1,205 @@
+class_name HollowWorld
+extends Node2D
+
+signal recipe_changed
+signal message(text: String)
+signal spell_completed
+
+const INGREDIENTS := [
+	{"id":"mushroom", "name":"Mooncap mushroom", "hint":"Mushroom grove · southwest", "pos":Vector2(365, 790)},
+	{"id":"pumpkin", "name":"Ember pumpkin", "hint":"Pumpkin patch · northeast", "pos":Vector2(1290, 225)},
+	{"id":"skull", "name":"Old hollow skull", "hint":"Graveyard · northwest", "pos":Vector2(350, 190)},
+	{"id":"feather", "name":"Raven feather", "hint":"Northern woodland path", "pos":Vector2(815, 170)},
+	{"id":"essence", "name":"Ghost essence", "hint":"Pond bridge · southeast", "pos":Vector2(1320, 725)},
+	{"id":"moonflower", "name":"Moonflower", "hint":"Eastern lantern trail", "pos":Vector2(1120, 525)}
+]
+const ICONS := {
+	"cauldron":preload("res://assets/recipe/icons/cauldron.png"),
+	"cauldron_spell":preload("res://assets/recipe/icons/cauldron_spell.png"),
+	"mushroom":preload("res://assets/recipe/icons/mushroom.png"),
+	"pumpkin":preload("res://assets/recipe/icons/pumpkin.png"),
+	"skull":preload("res://assets/recipe/icons/skull.png"),
+	"feather":preload("res://assets/recipe/icons/feather.png"),
+	"essence":preload("res://assets/recipe/icons/essence.png"),
+	"moonflower":preload("res://assets/recipe/icons/moonflower.png"),
+	"tree":preload("res://assets/recipe/icons/tree.png"),
+	"gravestone":preload("res://assets/recipe/icons/gravestone.png"),
+	"lantern":preload("res://assets/recipe/icons/lantern.png"),
+	"spell":preload("res://assets/recipe/icons/spell.png"),
+}
+const CAULDRON := Vector2(800, 525)
+var witch: HollowWitch
+var camera: Camera2D
+var collected: Array[String] = []
+var deposited: Array[String] = []
+var pickup_sprites: Dictionary = {}
+var cauldron: Sprite2D
+var spell: Sprite2D
+var active := false
+var won := false
+var elapsed := 0.0
+var age := 0.0
+var completion_age := 0.0
+var nearest := ""
+var glows: Array[Sprite2D] = []
+
+func _ready() -> void:
+	var terrain := Sprite2D.new()
+	terrain.texture = preload("res://assets/hollow/map.png")
+	terrain.centered = false
+	terrain.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	add_child(terrain)
+	# Water and selected tree/stone footprints are solid; open woodland remains walkable.
+	for rect in [Rect2(1065, 780, 345, 140), Rect2(1298, 625, 120, 65), Rect2(5, 5, 75, 1067), Rect2(1520, 5, 80, 1067)]:
+		_add_rect_collision(rect)
+	for footprint in [Vector3(265, 400, 36), Vector3(432, 410, 44), Vector3(520, 430, 34), Vector3(565, 260, 48), Vector3(660, 225, 30), Vector3(1015, 263, 42), Vector3(1215, 432, 48), Vector3(1130, 461, 34), Vector3(633, 740, 49), Vector3(670, 915, 46), Vector3(980, 777, 36), Vector3(264, 169, 24), Vector3(465, 180, 18)]:
+		_add_circle_collision(Vector2(footprint.x, footprint.y), footprint.z)
+	cauldron = _sprite("cauldron", CAULDRON + Vector2(0, -35), 1.05)
+	_add_circle_collision(CAULDRON + Vector2(0, -15), 28)
+	for ingredient in INGREDIENTS:
+		var glow := _sprite("spell", ingredient.pos + Vector2(0, -15), 0.48)
+		glow.modulate = Color(0.9, 0.85, 1.0, 0.3)
+		glows.append(glow)
+		var icon := _sprite(ingredient.id, ingredient.pos + Vector2(0, -17), 0.46)
+		pickup_sprites[ingredient.id] = icon
+	witch = HollowWitch.new()
+	witch.position = Vector2(800, 635)
+	witch.z_index = 5
+	add_child(witch)
+	camera = Camera2D.new()
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 7.0
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = 1600
+	camera.limit_bottom = 1067
+	camera.position = witch.position
+	add_child(camera)
+	spell = _sprite("spell", CAULDRON + Vector2(0, -75), 2.0)
+	spell.visible = false
+	spell.z_index = 10
+
+func _sprite(id: String, pos: Vector2, factor: float) -> Sprite2D:
+	var sprite := Sprite2D.new()
+	sprite.texture = ICONS[id]
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.position = pos
+	sprite.scale = Vector2.ONE * factor
+	add_child(sprite)
+	return sprite
+
+func _add_rect_collision(rect: Rect2) -> void:
+	var body := StaticBody2D.new()
+	body.position = rect.get_center()
+	var node := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = rect.size
+	node.shape = shape
+	body.add_child(node)
+	add_child(body)
+
+func _add_circle_collision(pos: Vector2, radius: float) -> void:
+	var body := StaticBody2D.new()
+	body.position = pos
+	var node := CollisionShape2D.new()
+	var shape := CircleShape2D.new()
+	shape.radius = radius
+	node.shape = shape
+	body.add_child(node)
+	add_child(body)
+
+func set_active(value: bool) -> void:
+	active = value and not won
+	witch.active = active
+
+func _process(delta: float) -> void:
+	camera.position = witch.position
+	if not active and not won:
+		return
+	age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
+	if active:
+		elapsed += delta
+		nearest = nearby_target()
+	for i in INGREDIENTS.size():
+		var entry: Dictionary = INGREDIENTS[i]
+		var icon: Sprite2D = pickup_sprites[entry.id]
+		icon.position.y = entry.pos.y - 17 + sin(age * 2.4 + i) * 3.0
+		glows[i].scale = Vector2.ONE * (0.44 + sin(age * 2.0 + i) * 0.035)
+	cauldron.modulate = Color(1.0, 1.0, 1.0, 0.93 + sin(age * 3.0) * 0.07)
+	if won:
+		completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
+		spell.rotation = sin(completion_age) * 0.08
+		spell.scale = Vector2.ONE * (1.8 + sin(completion_age * 2.0) * 0.15)
+
+func nearby_target() -> String:
+	if witch.position.distance_to(CAULDRON) < 92.0:
+		return "cauldron"
+	var closest := 65.0
+	var result := ""
+	for entry in INGREDIENTS:
+		if entry.id in collected or entry.id in deposited:
+			continue
+		var distance: float = witch.position.distance_to(entry.pos)
+		if distance < closest:
+			closest = distance
+			result = entry.id
+	return result
+
+func interact() -> void:
+	if not active:
+		return
+	var target := nearby_target()
+	if target == "cauldron":
+		if collected.is_empty():
+			message.emit("The cauldron is hungry. Find a glowing ingredient!")
+			return
+		var amount := collected.size()
+		for id in collected:
+			if id not in deposited:
+				deposited.append(id)
+		collected.clear()
+		message.emit("Into the cauldron! %d ingredient%s added." % [amount, "" if amount == 1 else "s"])
+		recipe_changed.emit()
+		if deposited.size() == INGREDIENTS.size():
+			won = true
+			set_active(false)
+			cauldron.texture = ICONS.cauldron_spell
+			spell.visible = true
+			spell_completed.emit()
+	elif not target.is_empty():
+		collected.append(target)
+		(pickup_sprites[target] as Sprite2D).visible = false
+		for i in INGREDIENTS.size():
+			if INGREDIENTS[i].id == target:
+				glows[i].visible = false
+		message.emit("Found %s. Tucked safely in your satchel." % ingredient_name(target))
+		recipe_changed.emit()
+	else:
+		message.emit("Look for sparkling ingredients along the woodland trails.")
+
+func ingredient_name(id: String) -> String:
+	for entry in INGREDIENTS:
+		if entry.id == id:
+			return entry.name
+	return id
+
+func restore(data: Dictionary) -> void:
+	collected.clear()
+	deposited.clear()
+	for entry in INGREDIENTS:
+		if entry.id in data.get("deposited", []):
+			deposited.append(entry.id)
+		elif entry.id in data.get("collected", []):
+			collected.append(entry.id)
+		var hidden: bool = entry.id in collected or entry.id in deposited
+		(pickup_sprites[entry.id] as Sprite2D).visible = not hidden
+		glows[INGREDIENTS.find(entry)].visible = not hidden
+	elapsed = maxf(0.0, float(data.get("elapsed", 0)))
+	var x := clampf(float(data.get("x", 800)), 100.0, 1500.0)
+	var y := clampf(float(data.get("y", 635)), 100.0, 960.0)
+	witch.position = Vector2(x, y)
+	camera.position = witch.position
+	camera.reset_smoothing()
+
+func snapshot() -> Dictionary:
+	return {"collected":collected.duplicate(), "deposited":deposited.duplicate(), "elapsed":elapsed, "x":witch.position.x, "y":witch.position.y}

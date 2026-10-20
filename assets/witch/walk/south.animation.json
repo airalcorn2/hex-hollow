@@ -1,0 +1,7 @@
+{
+  "type": "frame-animation",
+  "name": "Witch walks south",
+  "fps": 8,
+  "loop": true,
+  "coverFrame": "assets/witch/walk/south_0.png"
+}

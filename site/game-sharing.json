@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 2,
+  "publicationOrigin": "https://hexhollow-mnedueb6.manus.game",
+  "title": "Hex Hollow",
+  "description": "A cozy top-down Halloween adventure. Wander a moonlit woodland as a witch, gather six enchanted ingredients and brew a spell in your cauldron.",
+  "defaultCaptions": {
+    "x": "A little mischief. A little magic. Explore Hex Hollow and brew your Halloween spell.",
+    "discord": "Play Hex Hollow: a cozy witch's midnight ingredient hunt."
+  },
+  "assets": {
+    "og": {
+      "digest": "sha256:38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6",
+      "path": "share/38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6.png",
+      "mime": "image/png",
+      "width": 1200,
+      "height": 675,
+      "sizeBytes": 1661952,
+      "sourcePath": "assets/share/cover.png"
+    },
+    "favicon": {
+      "digest": "sha256:803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc",
+      "path": "share/803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc.png",
+      "mime": "image/png",
+      "width": 64,
+      "height": 64,
+      "sizeBytes": 3876,
+      "sourcePath": "assets/share/favicon.png"
+    }
+  }
+}

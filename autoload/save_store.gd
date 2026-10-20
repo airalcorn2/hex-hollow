@@ -20,6 +20,7 @@ func _default_data() -> Dictionary:
 		"tutorial_version": 0,
 		"player_name": "PLAYER",
 		"leaderboard": [],
+		"hollow": {},
 	}
 
 
@@ -38,6 +39,8 @@ func _load() -> void:
 	var version := int(candidate.get("version", 0))
 	if version not in [1, SAVE_VERSION]:
 		return
+	if candidate.get("hollow", {}) is Dictionary:
+		_data.hollow = candidate.get("hollow", {}).duplicate(true)
 	var locale := str(candidate.get("locale", ""))
 	_data.locale = locale if locale in ["en", "zh-CN"] else ""
 	_data.tutorial_version = (
@@ -70,6 +73,15 @@ func save() -> bool:
 		if remove_error != OK:
 			return false
 	return DirAccess.rename_absolute(temporary, destination) == OK
+
+
+func get_adventure() -> Dictionary:
+	return (_data.get("hollow", {}) as Dictionary).duplicate(true)
+
+
+func set_adventure(progress: Dictionary) -> bool:
+	_data.hollow = progress.duplicate(true)
+	return save()
 
 
 ## Returns the player's saved language, or "" if none was chosen yet (I18n then auto-detects).

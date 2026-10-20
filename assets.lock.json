@@ -1,13 +1,238 @@
 {
   "version": 2,
   "groups": {
+    "hollow": {
+      "name": "Haunted woodland",
+      "order": 20
+    },
+    "recipe": {
+      "name": "Spell ingredients",
+      "order": 30
+    },
+    "share": {
+      "name": "Game cover and icon",
+      "order": 50
+    },
+    "spellcraft": {
+      "name": "Cauldron and magic",
+      "order": 40
+    },
     "template": {
       "name": "Template",
       "order": 0
+    },
+    "witch": {
+      "name": "Witch animations",
+      "order": 10
     }
   },
-  "bundles": {},
+  "bundles": {
+    "witch-walk-east": {
+      "name": "Witch walks east",
+      "assetType": "animation",
+      "groupId": "witch",
+      "frames": [
+        "assets/witch/walk/east_0.png",
+        "assets/witch/walk/east_1.png",
+        "assets/witch/walk/east_2.png",
+        "assets/witch/walk/east_3.png"
+      ],
+      "fps": 8,
+      "loop": true,
+      "coverFrame": "assets/witch/walk/east_0.png",
+      "descriptor": "assets/witch/walk/east.animation.json"
+    },
+    "witch-walk-north": {
+      "name": "Witch walks north",
+      "assetType": "animation",
+      "groupId": "witch",
+      "frames": [
+        "assets/witch/walk/north_0.png",
+        "assets/witch/walk/north_1.png",
+        "assets/witch/walk/north_2.png",
+        "assets/witch/walk/north_3.png"
+      ],
+      "fps": 8,
+      "loop": true,
+      "coverFrame": "assets/witch/walk/north_0.png",
+      "descriptor": "assets/witch/walk/north.animation.json"
+    },
+    "witch-walk-south": {
+      "name": "Witch walks south",
+      "assetType": "animation",
+      "groupId": "witch",
+      "frames": [
+        "assets/witch/walk/south_0.png",
+        "assets/witch/walk/south_1.png",
+        "assets/witch/walk/south_2.png",
+        "assets/witch/walk/south_3.png"
+      ],
+      "fps": 8,
+      "loop": true,
+      "coverFrame": "assets/witch/walk/south_0.png",
+      "descriptor": "assets/witch/walk/south.animation.json"
+    },
+    "witch-walk-west": {
+      "name": "Witch walks west",
+      "assetType": "animation",
+      "groupId": "witch",
+      "frames": [
+        "assets/witch/walk/west_0.png",
+        "assets/witch/walk/west_1.png",
+        "assets/witch/walk/west_2.png",
+        "assets/witch/walk/west_3.png"
+      ],
+      "fps": 8,
+      "loop": true,
+      "coverFrame": "assets/witch/walk/west_0.png",
+      "descriptor": "assets/witch/walk/west.animation.json"
+    }
+  },
   "assets": {
+    "assets/hollow/map.png": {
+      "path": "/manus-storage/game/sha256/5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af.png",
+      "sha256": "sha256:5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af",
+      "size": 4011602,
+      "assetType": "image",
+      "groupId": "hollow",
+      "used": true
+    },
+    "assets/hollow/world.png": {
+      "path": "/manus-storage/game/sha256/4a6f11faaff555581b2acc096a97d833feb47f5834b18e1fd1886846ad542a74.png",
+      "sha256": "sha256:4a6f11faaff555581b2acc096a97d833feb47f5834b18e1fd1886846ad542a74",
+      "size": 7243765,
+      "assetType": "image",
+      "groupId": "hollow",
+      "used": false
+    },
+    "assets/recipe/icons/cauldron.png": {
+      "path": "/manus-storage/game/sha256/847ea8f4c8d23c704fc331c05014c8154fbd6bffbdc185f70cf4c12df637f5a6.png",
+      "sha256": "sha256:847ea8f4c8d23c704fc331c05014c8154fbd6bffbdc185f70cf4c12df637f5a6",
+      "size": 12589,
+      "assetType": "image",
+      "groupId": "spellcraft",
+      "used": true
+    },
+    "assets/recipe/icons/cauldron_spell.png": {
+      "path": "/manus-storage/game/sha256/b7db6b3e3dabb57df420c2bf25053d853aa78c8b31c8852422265c34ff7b51dd.png",
+      "sha256": "sha256:b7db6b3e3dabb57df420c2bf25053d853aa78c8b31c8852422265c34ff7b51dd",
+      "size": 15324,
+      "assetType": "image",
+      "groupId": "spellcraft",
+      "used": true
+    },
+    "assets/recipe/icons/essence.png": {
+      "path": "/manus-storage/game/sha256/2669ec1fd016f93729cc654393274c5d3a4ed62fef8da6ab79c183da09a3952f.png",
+      "sha256": "sha256:2669ec1fd016f93729cc654393274c5d3a4ed62fef8da6ab79c183da09a3952f",
+      "size": 13262,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/feather.png": {
+      "path": "/manus-storage/game/sha256/bceb829c4bdb21651f6a41adfa00e5a79e7728d796f1565652eeaace0e682196.png",
+      "sha256": "sha256:bceb829c4bdb21651f6a41adfa00e5a79e7728d796f1565652eeaace0e682196",
+      "size": 10420,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/gravestone.png": {
+      "path": "/manus-storage/game/sha256/7e0e594c441b55946ff25b3417fb6613eda06003baeff7d266fc546361557b80.png",
+      "sha256": "sha256:7e0e594c441b55946ff25b3417fb6613eda06003baeff7d266fc546361557b80",
+      "size": 17621,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/lantern.png": {
+      "path": "/manus-storage/game/sha256/b148761c372cd7735117f4871860e9ca30255e322419dffc7ed036ef4446c796.png",
+      "sha256": "sha256:b148761c372cd7735117f4871860e9ca30255e322419dffc7ed036ef4446c796",
+      "size": 10619,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/moonflower.png": {
+      "path": "/manus-storage/game/sha256/42e81b27942e3691cd9391a00392bcf540f8e5d2b34a6e070401131f4968e92f.png",
+      "sha256": "sha256:42e81b27942e3691cd9391a00392bcf540f8e5d2b34a6e070401131f4968e92f",
+      "size": 17968,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/mushroom.png": {
+      "path": "/manus-storage/game/sha256/33f803d81cf8125d43ac4f974aa71f3a47406ab48857e0dd003c558870f3413f.png",
+      "sha256": "sha256:33f803d81cf8125d43ac4f974aa71f3a47406ab48857e0dd003c558870f3413f",
+      "size": 14011,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/pumpkin.png": {
+      "path": "/manus-storage/game/sha256/d4386a55c9c45ad2c0c364210afd6bf0e35e6f0a6fc906cda1e4a30f39e98297.png",
+      "sha256": "sha256:d4386a55c9c45ad2c0c364210afd6bf0e35e6f0a6fc906cda1e4a30f39e98297",
+      "size": 11238,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/skull.png": {
+      "path": "/manus-storage/game/sha256/28fbd3afe58b807713182f9dbf90d055b712f5519cbcfa9ae2db1996bf27d819.png",
+      "sha256": "sha256:28fbd3afe58b807713182f9dbf90d055b712f5519cbcfa9ae2db1996bf27d819",
+      "size": 11647,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/spell.png": {
+      "path": "/manus-storage/game/sha256/1ec6b516dccac04a53c3c40fd89f08f14ab0b8c5c4ac77df337dc8ee42c6fae0.png",
+      "sha256": "sha256:1ec6b516dccac04a53c3c40fd89f08f14ab0b8c5c4ac77df337dc8ee42c6fae0",
+      "size": 10176,
+      "assetType": "image",
+      "groupId": "spellcraft",
+      "used": true
+    },
+    "assets/recipe/icons/tree.png": {
+      "path": "/manus-storage/game/sha256/de7e43e53666fcc45841a31a9f37e30cc085bd64034ae6a18b66f5da6b2ca0ad.png",
+      "sha256": "sha256:de7e43e53666fcc45841a31a9f37e30cc085bd64034ae6a18b66f5da6b2ca0ad",
+      "size": 19016,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/objects.png": {
+      "path": "/manus-storage/game/sha256/ec179997ef14676424670972a79af66ae101688474051dc6e8515084fd8cd3aa.png",
+      "sha256": "sha256:ec179997ef14676424670972a79af66ae101688474051dc6e8515084fd8cd3aa",
+      "size": 3878321,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": false
+    },
+    "assets/share/cover.png": {
+      "path": "/manus-storage/game/sha256/38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6.png",
+      "sha256": "sha256:38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6",
+      "size": 1661952,
+      "assetType": "image",
+      "groupId": "share",
+      "used": true
+    },
+    "assets/share/favicon.png": {
+      "path": "/manus-storage/game/sha256/803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc.png",
+      "sha256": "sha256:803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc",
+      "size": 3876,
+      "assetType": "image",
+      "groupId": "share",
+      "used": true
+    },
+    "assets/share/og.png": {
+      "path": "/manus-storage/game/sha256/94470cf59700c24bc77a2ab305cb581406600d2844ca8200c52eb24c416d6c20.png",
+      "sha256": "sha256:94470cf59700c24bc77a2ab305cb581406600d2844ca8200c52eb24c416d6c20",
+      "size": 5411883,
+      "assetType": "image",
+      "groupId": "share",
+      "used": false
+    },
     "assets/template/characters/runner.png": {
       "path": "https://d1oupeiobkpcny.cloudfront.net/assets/dashboard/materials/2026/09/06/game-template/game-generic/2026.09.07-minimalist-v1/c88485773d6ff9361e036f37d8ac76fb77b8c3f7c041c3f52c8dd222adc8cc21/assets/characters/runner.png",
       "sha256": "sha256:c88485773d6ff9361e036f37d8ac76fb77b8c3f7c041c3f52c8dd222adc8cc21",
@@ -127,6 +352,142 @@
       "assetType": "image",
       "groupId": "template",
       "used": true
+    },
+    "assets/witch/walk/east_0.png": {
+      "path": "/manus-storage/game/sha256/6cd2d504b4f96161b4bbd3d47be6594b21426a008571f82782e7023c6ac1823e.png",
+      "sha256": "sha256:6cd2d504b4f96161b4bbd3d47be6594b21426a008571f82782e7023c6ac1823e",
+      "size": 5287,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/east_1.png": {
+      "path": "/manus-storage/game/sha256/f9fe9e1b4ccaffc8bf896dc7a0ceedcec324a683c42ebc99716296a9e7b3cb61.png",
+      "sha256": "sha256:f9fe9e1b4ccaffc8bf896dc7a0ceedcec324a683c42ebc99716296a9e7b3cb61",
+      "size": 5515,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/east_2.png": {
+      "path": "/manus-storage/game/sha256/e5460a4c505c27dd13abb342421e344cdabbae3a8253baae66380fcfdd410b41.png",
+      "sha256": "sha256:e5460a4c505c27dd13abb342421e344cdabbae3a8253baae66380fcfdd410b41",
+      "size": 5422,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/east_3.png": {
+      "path": "/manus-storage/game/sha256/0541b5222e3bc265f66d70ceb2d2c2737a13cb6d251bd3b9a65241a209715d6a.png",
+      "sha256": "sha256:0541b5222e3bc265f66d70ceb2d2c2737a13cb6d251bd3b9a65241a209715d6a",
+      "size": 5268,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/north_0.png": {
+      "path": "/manus-storage/game/sha256/021d86dfec58ccae9f985e9b2afb6582b53e0c59967d326ba6f20ec530c02568.png",
+      "sha256": "sha256:021d86dfec58ccae9f985e9b2afb6582b53e0c59967d326ba6f20ec530c02568",
+      "size": 5248,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/north_1.png": {
+      "path": "/manus-storage/game/sha256/a3e7dbf4381ff83c812b0d6267284adce74da16ddf20bb6d1985c44db04bd6a7.png",
+      "sha256": "sha256:a3e7dbf4381ff83c812b0d6267284adce74da16ddf20bb6d1985c44db04bd6a7",
+      "size": 5300,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/north_2.png": {
+      "path": "/manus-storage/game/sha256/965c52e0f9a4d476e6abe733f0bee980a2855430c0a48479218ed7f4a148ecee.png",
+      "sha256": "sha256:965c52e0f9a4d476e6abe733f0bee980a2855430c0a48479218ed7f4a148ecee",
+      "size": 5261,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/north_3.png": {
+      "path": "/manus-storage/game/sha256/8759614d79a8e4254451aa8223e325cf81f465779aabf8be2a3b767cb680714d.png",
+      "sha256": "sha256:8759614d79a8e4254451aa8223e325cf81f465779aabf8be2a3b767cb680714d",
+      "size": 5220,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/south_0.png": {
+      "path": "/manus-storage/game/sha256/3772b681c2df05bdf6a96ca3243b1c9fd20d8e156deadc9ee9632ccfa9f0f817.png",
+      "sha256": "sha256:3772b681c2df05bdf6a96ca3243b1c9fd20d8e156deadc9ee9632ccfa9f0f817",
+      "size": 5896,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/south_1.png": {
+      "path": "/manus-storage/game/sha256/3e9b890e8e0e68bc7509a30f586e9816a39ce0616326a9ff7d3fbf6693ba5ffb.png",
+      "sha256": "sha256:3e9b890e8e0e68bc7509a30f586e9816a39ce0616326a9ff7d3fbf6693ba5ffb",
+      "size": 5782,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/south_2.png": {
+      "path": "/manus-storage/game/sha256/7b7847abfefb0a4e6c68ee5ba37a3648423af9328e5198060290b41446aab08d.png",
+      "sha256": "sha256:7b7847abfefb0a4e6c68ee5ba37a3648423af9328e5198060290b41446aab08d",
+      "size": 5793,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/south_3.png": {
+      "path": "/manus-storage/game/sha256/ba44bea4c2bec8a610d1b14fbced794967f207592e266b520e7187a1fe91af41.png",
+      "sha256": "sha256:ba44bea4c2bec8a610d1b14fbced794967f207592e266b520e7187a1fe91af41",
+      "size": 5881,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/west_0.png": {
+      "path": "/manus-storage/game/sha256/6fd1f10e0c509cb7632bf1ab11d5e8ffedc8a5d40a391d49cae562886c4994dc.png",
+      "sha256": "sha256:6fd1f10e0c509cb7632bf1ab11d5e8ffedc8a5d40a391d49cae562886c4994dc",
+      "size": 5288,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/west_1.png": {
+      "path": "/manus-storage/game/sha256/c3c8cdec3b71256dd2995de531dc8c95ef8d5e54e5dcaf6443d804a7eb028a3e.png",
+      "sha256": "sha256:c3c8cdec3b71256dd2995de531dc8c95ef8d5e54e5dcaf6443d804a7eb028a3e",
+      "size": 5405,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/west_2.png": {
+      "path": "/manus-storage/game/sha256/4d59e8ea31b5879f8435231cad89c4b30c851f94afd95d12af05df1d67cf3451.png",
+      "sha256": "sha256:4d59e8ea31b5879f8435231cad89c4b30c851f94afd95d12af05df1d67cf3451",
+      "size": 5302,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/walk/west_3.png": {
+      "path": "/manus-storage/game/sha256/437ce35b41b5b4c03aeaae878af44199263690bb3a2ae1879a843dcdfffd0404.png",
+      "sha256": "sha256:437ce35b41b5b4c03aeaae878af44199263690bb3a2ae1879a843dcdfffd0404",
+      "size": 5241,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": true
+    },
+    "assets/witch/witch_sheet.png": {
+      "path": "/manus-storage/game/sha256/155c07c6de9748dd28d1b72c8c3e345d50428a2ba48e98d988b4e1ca77d9fc27.png",
+      "sha256": "sha256:155c07c6de9748dd28d1b72c8c3e345d50428a2ba48e98d988b4e1ca77d9fc27",
+      "size": 3461924,
+      "assetType": "image",
+      "groupId": "witch",
+      "used": false
     }
   }
 }

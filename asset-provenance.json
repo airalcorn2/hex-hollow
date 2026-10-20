@@ -1,33 +1,413 @@
 {
   "assets": {
+    "assets/hollow/map.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af",
+      "shipped": true,
+      "size": 4011602,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/hollow/world.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:4a6f11faaff555581b2acc096a97d833feb47f5834b18e1fd1886846ad542a74",
+      "shipped": false,
+      "size": 7243765,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/recipe/icons/cauldron.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:847ea8f4c8d23c704fc331c05014c8154fbd6bffbdc185f70cf4c12df637f5a6",
+      "shipped": true,
+      "size": 12589,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/cauldron_spell.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:b7db6b3e3dabb57df420c2bf25053d853aa78c8b31c8852422265c34ff7b51dd",
+      "shipped": true,
+      "size": 15324,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/essence.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:2669ec1fd016f93729cc654393274c5d3a4ed62fef8da6ab79c183da09a3952f",
+      "shipped": true,
+      "size": 13262,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/feather.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:bceb829c4bdb21651f6a41adfa00e5a79e7728d796f1565652eeaace0e682196",
+      "shipped": true,
+      "size": 10420,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/gravestone.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:7e0e594c441b55946ff25b3417fb6613eda06003baeff7d266fc546361557b80",
+      "shipped": true,
+      "size": 17621,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/lantern.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:b148761c372cd7735117f4871860e9ca30255e322419dffc7ed036ef4446c796",
+      "shipped": true,
+      "size": 10619,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/moonflower.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:42e81b27942e3691cd9391a00392bcf540f8e5d2b34a6e070401131f4968e92f",
+      "shipped": true,
+      "size": 17968,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/mushroom.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:33f803d81cf8125d43ac4f974aa71f3a47406ab48857e0dd003c558870f3413f",
+      "shipped": true,
+      "size": 14011,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/pumpkin.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:d4386a55c9c45ad2c0c364210afd6bf0e35e6f0a6fc906cda1e4a30f39e98297",
+      "shipped": true,
+      "size": 11238,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/skull.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:28fbd3afe58b807713182f9dbf90d055b712f5519cbcfa9ae2db1996bf27d819",
+      "shipped": true,
+      "size": 11647,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/spell.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:1ec6b516dccac04a53c3c40fd89f08f14ab0b8c5c4ac77df337dc8ee42c6fae0",
+      "shipped": true,
+      "size": 10176,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/tree.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:de7e43e53666fcc45841a31a9f37e30cc085bd64034ae6a18b66f5da6b2ca0ad",
+      "shipped": true,
+      "size": 19016,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/objects.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:ec179997ef14676424670972a79af66ae101688474051dc6e8515084fd8cd3aa",
+      "shipped": false,
+      "size": 3878321,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/share/cover.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "game-sharing.json",
+        "scripts/hollow_main.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6",
+      "shipped": true,
+      "size": 1661952,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "game-sharing.json",
+        "scripts/hollow_main.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/share/favicon.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "game-sharing.json",
+        "project.godot",
+        "scripts/hollow_main.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc",
+      "shipped": true,
+      "size": 3876,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "game-sharing.json",
+        "project.godot",
+        "scripts/hollow_main.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/share/og.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:94470cf59700c24bc77a2ab305cb581406600d2844ca8200c52eb24c416d6c20",
+      "shipped": false,
+      "size": 5411883,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
     "assets/template/characters/runner.png": {
       "declaredUseEvidence": [],
       "generator": {},
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "project.godot",
-        "scripts/entities/runner.gd",
-        "scripts/main.gd",
-        "scripts/ui/title_art.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:c88485773d6ff9361e036f37d8ac76fb77b8c3f7c041c3f52c8dd222adc8cc21",
-      "shipped": null,
+      "shipped": true,
       "size": 68885,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "project.godot",
-        "scripts/entities/runner.gd",
-        "scripts/main.gd",
-        "scripts/ui/title_art.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/characters/sentinel.png": {
@@ -36,24 +416,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/entities/sentinel.gd",
-        "scripts/ui/title_art.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:0d9fb751bca5507ba14f7090573e6605a94753390a9e7c53bf2f590f0a24918d",
-      "shipped": null,
+      "shipped": true,
       "size": 64998,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/entities/sentinel.gd",
-        "scripts/ui/title_art.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/environment/backdrop.png": {
@@ -62,22 +436,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/main.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:ec4ab7867e60fb483dd438459f587b478aac4c1e71ec4fe509ce74a18de34216",
-      "shipped": null,
+      "shipped": true,
       "size": 971282,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/main.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/environment/foreground.png": {
@@ -86,22 +456,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/main.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:4b6916024c69961fbfa7cdc929c68f547fea4561e61ebdb3405b3aba0efbd94d",
-      "shipped": null,
+      "shipped": true,
       "size": 58603,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/main.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/fonts/Figtree-VF.subset.woff2": {
@@ -117,12 +483,12 @@
       ],
       "regions": [],
       "sha256": "sha256:b3976c5969c8b1afd81dc3e314b61d8ffe3f3f58cf40906443105d330e6e0bdf",
-      "shipped": null,
+      "shipped": true,
       "size": 23660,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
       "useEvidence": [
         "assets/template/fonts/ui_bold.tres",
@@ -148,7 +514,7 @@
       ],
       "regions": [],
       "sha256": "sha256:38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412",
-      "shipped": null,
+      "shipped": true,
       "size": 1869368,
       "source": {
         "name": "NotoSansSC-VF.subset.woff2",
@@ -171,25 +537,19 @@
       "license": {},
       "origin": "template",
       "referenceEvidence": [
-        "assets/template/fonts/display/generic_eyebrow.tres",
-        "assets/template/fonts/display/generic_heading.tres",
-        "assets/template/fonts/display/generic_menu.tres",
-        "assets/template/fonts/display/generic_title.tres"
+        "assets/template/fonts/display/generic_heading.tres"
       ],
       "regions": [],
       "sha256": "sha256:438fbf4582548e76b266a738f2c11bcbd5137978f2d2e2f3aaabd49df69186f2",
-      "shipped": null,
+      "shipped": true,
       "size": 41696,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
       "useEvidence": [
-        "assets/template/fonts/display/generic_eyebrow.tres",
-        "assets/template/fonts/display/generic_heading.tres",
-        "assets/template/fonts/display/generic_menu.tres",
-        "assets/template/fonts/display/generic_title.tres"
+        "assets/template/fonts/display/generic_heading.tres"
       ],
       "used": true,
       "usedBy": []
@@ -200,26 +560,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/main.gd",
-        "scripts/ui/title_art.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:ffd7906f240f928e785d7c19a9e7a7b5dfab0d7483be5205dda3e4ba17ebe06a",
-      "shipped": null,
+      "shipped": true,
       "size": 50950,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/main.gd",
-        "scripts/ui/title_art.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/powerups/magnet.png": {
@@ -228,22 +580,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/game/maze_world.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:6e7354aa6510a462717218b09b9d784bb161b87878bff62ef4f2a9d03c053de7",
-      "shipped": null,
+      "shipped": true,
       "size": 53724,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/game/maze_world.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/powerups/overdrive.png": {
@@ -252,24 +600,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/ui/title_art.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:6a48a85886c0551c1af0df576b0225f0ec3ae86b326fd84fc614083fbfe2908b",
-      "shipped": null,
+      "shipped": true,
       "size": 37238,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/ui/title_art.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/powerups/shield.png": {
@@ -278,24 +620,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/ui/title_art.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:8cebf0cf730ca35c8c8697192ef78121c926442328a0725e0bd3e31701d64f13",
-      "shipped": null,
+      "shipped": true,
       "size": 39659,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/game/maze_world.gd",
-        "scripts/ui/title_art.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/powerups/slow_field.png": {
@@ -304,22 +640,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/game/maze_world.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:96874c000866b2e7503b40da73888afb918ae36e462f51488415157da52a8637",
-      "shipped": null,
+      "shipped": true,
       "size": 49145,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/game/maze_world.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/ui/loading-background.png": {
@@ -333,7 +665,7 @@
       ],
       "regions": [],
       "sha256": "sha256:16dde3061f4e60802f8f0d1a6b875e72b6add05192237b03fef1fd313968a13a",
-      "shipped": null,
+      "shipped": true,
       "size": 473356,
       "source": {
         "starterId": "game-generic-v56"
@@ -352,22 +684,18 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/main.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:c88a4725838df85e72c7270865848f275b62c525c5679a2a8b7ecefb1af82d4b",
-      "shipped": null,
+      "shipped": true,
       "size": 115691,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
       "transformations": [],
-      "useEvidence": [
-        "scripts/main.gd"
-      ],
-      "used": true,
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     },
     "assets/template/ui/title_glass.png": {
@@ -376,99 +704,516 @@
       "inputs": [],
       "license": {},
       "origin": "template",
-      "referenceEvidence": [
-        "scripts/main.gd"
-      ],
+      "referenceEvidence": [],
       "regions": [],
       "sha256": "sha256:8860db07768f093d4effea10b51431f76a1552d4bc7fd4e57757f189c51f0429",
-      "shipped": null,
+      "shipped": true,
       "size": 155592,
       "source": {
         "starterId": "game-generic-v56"
       },
-      "status": "awaiting-restoration",
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/witch/walk/east_0.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:6cd2d504b4f96161b4bbd3d47be6594b21426a008571f82782e7023c6ac1823e",
+      "shipped": true,
+      "size": 5287,
+      "source": {},
+      "status": "present",
       "transformations": [],
       "useEvidence": [
-        "scripts/main.gd"
+        "scripts/entities/witch.gd"
       ],
       "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/east_1.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:f9fe9e1b4ccaffc8bf896dc7a0ceedcec324a683c42ebc99716296a9e7b3cb61",
+      "shipped": true,
+      "size": 5515,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/east_2.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:e5460a4c505c27dd13abb342421e344cdabbae3a8253baae66380fcfdd410b41",
+      "shipped": true,
+      "size": 5422,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/east_3.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:0541b5222e3bc265f66d70ceb2d2c2737a13cb6d251bd3b9a65241a209715d6a",
+      "shipped": true,
+      "size": 5268,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/north_0.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:021d86dfec58ccae9f985e9b2afb6582b53e0c59967d326ba6f20ec530c02568",
+      "shipped": true,
+      "size": 5248,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/north_1.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:a3e7dbf4381ff83c812b0d6267284adce74da16ddf20bb6d1985c44db04bd6a7",
+      "shipped": true,
+      "size": 5300,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/north_2.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:965c52e0f9a4d476e6abe733f0bee980a2855430c0a48479218ed7f4a148ecee",
+      "shipped": true,
+      "size": 5261,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/north_3.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:8759614d79a8e4254451aa8223e325cf81f465779aabf8be2a3b767cb680714d",
+      "shipped": true,
+      "size": 5220,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/south_0.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:3772b681c2df05bdf6a96ca3243b1c9fd20d8e156deadc9ee9632ccfa9f0f817",
+      "shipped": true,
+      "size": 5896,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/south_1.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:3e9b890e8e0e68bc7509a30f586e9816a39ce0616326a9ff7d3fbf6693ba5ffb",
+      "shipped": true,
+      "size": 5782,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/south_2.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:7b7847abfefb0a4e6c68ee5ba37a3648423af9328e5198060290b41446aab08d",
+      "shipped": true,
+      "size": 5793,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/south_3.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:ba44bea4c2bec8a610d1b14fbced794967f207592e266b520e7187a1fe91af41",
+      "shipped": true,
+      "size": 5881,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/west_0.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:6fd1f10e0c509cb7632bf1ab11d5e8ffedc8a5d40a391d49cae562886c4994dc",
+      "shipped": true,
+      "size": 5288,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/west_1.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:c3c8cdec3b71256dd2995de531dc8c95ef8d5e54e5dcaf6443d804a7eb028a3e",
+      "shipped": true,
+      "size": 5405,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/west_2.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:4d59e8ea31b5879f8435231cad89c4b30c851f94afd95d12af05df1d67cf3451",
+      "shipped": true,
+      "size": 5302,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/walk/west_3.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:437ce35b41b5b4c03aeaae878af44199263690bb3a2ae1879a843dcdfffd0404",
+      "shipped": true,
+      "size": 5241,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/entities/witch.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/witch/witch_sheet.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:155c07c6de9748dd28d1b72c8c3e345d50428a2ba48e98d988b4e1ca77d9fc27",
+      "shipped": false,
+      "size": 3461924,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
       "usedBy": []
     }
   },
   "discoveries": {},
   "downloads": {},
+  "export": {
+    "coverage": "verified",
+    "hostMedia": [
+      {
+        "contentMatches": [],
+        "path": "index.apple-touch-icon.png",
+        "sha256": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
+        "size": 25636,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "index.icon.png",
+        "sha256": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
+        "size": 4706,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "index.png",
+        "sha256": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",
+        "size": 1010767,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "share/38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6.png",
+        "sha256": "sha256:38178f06d159f3b7e56a35ceaa58ec807964a22f17a54c650dc426e9267558e6",
+        "size": 1661952,
+        "sourcePaths": [
+          "assets/share/cover.png"
+        ]
+      },
+      {
+        "contentMatches": [],
+        "path": "share/803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc.png",
+        "sha256": "sha256:803f416aa05dbd8f1df2f8b789ca26b5be30744a0dc729f413dab931500164fc",
+        "size": 3876,
+        "sourcePaths": [
+          "assets/share/favicon.png"
+        ]
+      }
+    ],
+    "pckSha256": "sha256:8f8f1a4a3a8f333ddd2a55367cd218bf1a931c647e21b9d85d33fceaf6a38d39",
+    "profile": "release",
+    "sourceFingerprint": "sha256:2f019d0687c24078c7602d69cb76c9f432e4381e0575f49414446926c729b096"
+  },
   "procedures": {},
   "summary": {
     "ancestry": {
       "ai": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "catalog": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "procedural": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       }
     },
     "derivatives": {
       "retained": 0,
-      "shipped": null,
+      "shipped": 0,
       "used": 0
     },
-    "exportedHostMedia": null,
+    "exportedHostMedia": {
+      "paths": 5,
+      "uniqueHashes": 5,
+      "unmatchedSourcePaths": 3
+    },
     "files": {
       "downloaded": 0,
-      "retained": 15,
-      "shipped": null,
-      "used": 15
+      "retained": 50,
+      "shipped": 46,
+      "used": 35
     },
     "origins": {
       "ai": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "catalog": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "derivative": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "external": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "procedural": {
         "retained": 0,
-        "shipped": null,
+        "shipped": 0,
         "used": 0
       },
       "template": {
         "retained": 15,
-        "shipped": null,
-        "used": 15
+        "shipped": 15,
+        "used": 4
       },
       "unknown": {
-        "retained": 0,
-        "shipped": null,
-        "used": 0
+        "retained": 35,
+        "shipped": 31,
+        "used": 31
       }
     },
     "packs": {
       "discovered": 0,
       "downloaded": 0,
-      "shipped": null,
+      "shipped": 0,
       "used": 0
     },
     "proceduralSystems": {
@@ -477,9 +1222,109 @@
     },
     "spriteRegions": {
       "retained": 0,
-      "shipped": null,
+      "shipped": 0,
       "used": 0
+    },
+    "visualCoverage": {
+      "approvedRevision": 3,
+      "blueprintId": "gbp_408056b527f7f6b07fe946de",
+      "committedRoles": 5,
+      "expectedDigest": "623b3bbc611468725a7012728e6a49dde8ad88dfd95807d601c200d3f11d3a8d",
+      "fulfilledRoles": 0,
+      "roles": [
+        {
+          "id": "witch_player",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "spell_ingredients",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "spell_cauldron",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "spooky_environment",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "completion_effect",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        }
+      ],
+      "search": {
+        "checkedPages": 0,
+        "outcomes": 0,
+        "overflowEvents": 0,
+        "requests": 0
+      },
+      "selectedButUnusedAssets": [],
+      "staleRenderedEvidence": [],
+      "status": "incomplete",
+      "unexplainedFallbacks": [],
+      "unresolvedRoles": [
+        "witch_player",
+        "spell_ingredients",
+        "spell_cauldron",
+        "spooky_environment",
+        "completion_effect"
+      ],
+      "visualQuality": "requires_agent_review"
     }
   },
-  "version": 1
+  "version": 1,
+  "visualCoverage": {
+    "attempts": {},
+    "expected": {
+      "approvedRevision": 3,
+      "blueprintId": "gbp_408056b527f7f6b07fe946de",
+      "digest": "623b3bbc611468725a7012728e6a49dde8ad88dfd95807d601c200d3f11d3a8d",
+      "roles": [
+        {
+          "description": "Your top-down witch character, with readable movement animations for exploring the environment.",
+          "id": "witch_player",
+          "label": "Playable witch"
+        },
+        {
+          "description": "Distinct, readable ingredient visuals that your witch can find, collect, and carry back to the cauldron.",
+          "id": "spell_ingredients",
+          "label": "Collectible spell ingredients"
+        },
+        {
+          "description": "The central cauldron where you deposit ingredients, including clear idle and spell-completion states.",
+          "id": "spell_cauldron",
+          "label": "Spell cauldron"
+        },
+        {
+          "description": "A cohesive top-down Halloween environment set for your compact exploration area, including traversable ground, boundaries, and essential obstacles.",
+          "id": "spooky_environment",
+          "label": "Spooky environment set"
+        },
+        {
+          "description": "A clear magical visual effect that confirms when you have delivered every required ingredient and completed the spell.",
+          "id": "completion_effect",
+          "label": "Completed-spell effect"
+        }
+      ]
+    },
+    "overflowEvents": 0,
+    "resolutions": {},
+    "version": 1
+  }
 }
