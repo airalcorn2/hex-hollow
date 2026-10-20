@@ -131,13 +131,38 @@ func _process(delta: float) -> void:
 		spell.rotation = sin(completion_age) * 0.08
 		spell.scale = Vector2.ONE * (1.8 + sin(completion_age * 2.0) * 0.15)
 
+func next_required() -> String:
+	if deposited.size() >= INGREDIENTS.size():
+		return ""
+	return INGREDIENTS[deposited.size()].id
+
 func nearby_target() -> String:
 	if witch.position.distance_to(CAULDRON) < 92.0:
 		return "cauldron"
+	# Only one ingredient fits in the satchel at a time, and ingredients
+	# must be gathered in recipe order -- so there's ever at most one
+	# ingredient actually targetable: the single next-required one, and
+	# only while the satchel is empty.
+	if not collected.is_empty():
+		return ""
+	var required := next_required()
+	if required.is_empty():
+		return ""
+	for entry in INGREDIENTS:
+		if entry.id == required and witch.position.distance_to(entry.pos) < 65.0:
+			return required
+	return ""
+
+# The nearby ingredient (if any) that's out of reach right now -- either
+# because something's already in the satchel, or because it's not next in
+# the recipe order -- for a specific "not yet" message instead of the
+# generic "nothing here" one.
+func nearby_locked() -> String:
+	var required := next_required()
 	var closest := 65.0
 	var result := ""
 	for entry in INGREDIENTS:
-		if entry.id in collected or entry.id in deposited:
+		if entry.id in collected or entry.id in deposited or (entry.id == required and collected.is_empty()):
 			continue
 		var distance: float = witch.position.distance_to(entry.pos)
 		if distance < closest:
@@ -153,18 +178,24 @@ func interact() -> void:
 		if collected.is_empty():
 			message.emit("The cauldron is hungry. Find a glowing ingredient!")
 			return
-		var amount := collected.size()
-		for id in collected:
-			if id not in deposited:
-				deposited.append(id)
+		# Exactly one item in the satchel at a time (see nearby_target()),
+		# so there's only ever one to deposit here.
+		var id: String = collected[0]
 		collected.clear()
-		message.emit("Into the cauldron! %d ingredient%s added." % [amount, "" if amount == 1 else "s"])
+		deposited.append(id)
+		message.emit("%s added to the cauldron." % ingredient_name(id))
+		# The real cauldron prop (if one's connected -- see CauldronBridge)
+		# handles the actual spectacle: a witch announcing the ingredient,
+		# a splash, and a color flash reflecting it. This screen only ever
+		# shows plain state, not a faked stand-in for that.
+		CauldronBridge.notify_deposit(id)
 		recipe_changed.emit()
 		if deposited.size() == INGREDIENTS.size():
 			won = true
 			set_active(false)
 			cauldron.texture = ICONS.cauldron_spell
 			spell.visible = true
+			CauldronBridge.notify_victory()
 			spell_completed.emit()
 	elif not target.is_empty():
 		collected.append(target)
@@ -174,8 +205,14 @@ func interact() -> void:
 				glows[i].visible = false
 		message.emit("Found %s. Tucked safely in your satchel." % ingredient_name(target))
 		recipe_changed.emit()
+	elif not collected.is_empty():
+		message.emit("Your satchel is full. Bring it to the cauldron first.")
 	else:
-		message.emit("Look for sparkling ingredients along the woodland trails.")
+		var locked := nearby_locked()
+		if not locked.is_empty():
+			message.emit("Not yet! The spell calls for %s first." % ingredient_name(next_required()))
+		else:
+			message.emit("Look for sparkling ingredients along the woodland trails.")
 
 func ingredient_name(id: String) -> String:
 	for entry in INGREDIENTS:

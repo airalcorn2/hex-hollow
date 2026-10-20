@@ -221,6 +221,11 @@ func _recipe_changed() -> void:
 		return
 	progress_label.text = "%d / 6 ingredients brewed" % world.deposited.size()
 	satchel_label.text = "SATCHEL  ·  %d INGREDIENT%s" % [world.collected.size(), "" if world.collected.size() == 1 else "S"]
+	# Ingredients must now be gathered in order (see hollow_world.gd's
+	# next_required()), so the sidebar highlights which one's actually
+	# next -- without this, "why can't I pick that one up yet" has no
+	# visible answer.
+	var required := world.next_required()
 	for i in rows.size():
 		var id: String = WorldScript.INGREDIENTS[i].id
 		rows[i].text = WorldScript.INGREDIENTS[i].name
@@ -229,8 +234,10 @@ func _recipe_changed() -> void:
 			rows[i].add_theme_color_override("font_color", MINT)
 		elif id in world.collected:
 			rows[i].add_theme_color_override("font_color", GOLD)
+		elif id == required:
+			rows[i].add_theme_color_override("font_color", GOLD)
 		else:
-			rows[i].add_theme_color_override("font_color", CREAM)
+			rows[i].add_theme_color_override("font_color", MUTED)
 	_save_progress()
 
 func _show_message(text: String) -> void:
@@ -281,6 +288,9 @@ func _completed() -> void:
 	await get_tree().create_timer(1.6).timeout
 	if state != "complete":
 		return
-	_make_overlay("The spell is complete!", "Six enchanted ingredients, one perfect brew.\nYou've brought a little magic to Halloween.")
+	_make_overlay(
+		"The spell is complete!",
+		"Six enchanted ingredients, one perfect brew.\nYou've brought a little magic to Halloween."
+	)
 	_button(overlay, "Brew another spell  →", Rect2(470, 428, 340, 48), _start_new_run, true)
 	_button(overlay, "Back to title", Rect2(470, 490, 340, 46), _show_title)
