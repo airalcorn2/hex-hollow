@@ -42,7 +42,11 @@ var age := 0.0
 var completion_age := 0.0
 var nearest := ""
 var glows: Array[Sprite2D] = []
-
+var companion_witches: Array[HollowWitch] = []
+var companion_names: Array[String] = []
+var bubbles: Array[Sprite2D] = []
+var bubble_origins: Array[Vector2] = []
+var cauldron_home := Vector2.ZERO
 func _ready() -> void:
 	var terrain := Sprite2D.new()
 	terrain.texture = preload("res://assets/hollow/map.png")
@@ -54,8 +58,12 @@ func _ready() -> void:
 		_add_rect_collision(rect)
 	for footprint in [Vector3(265, 400, 36), Vector3(432, 410, 44), Vector3(520, 430, 34), Vector3(565, 260, 48), Vector3(660, 225, 30), Vector3(1015, 263, 42), Vector3(1215, 432, 48), Vector3(1130, 461, 34), Vector3(633, 740, 49), Vector3(670, 915, 46), Vector3(980, 777, 36), Vector3(264, 169, 24), Vector3(465, 180, 18)]:
 		_add_circle_collision(Vector2(footprint.x, footprint.y), footprint.z)
-	cauldron = _sprite("cauldron", CAULDRON + Vector2(0, -35), 1.05)
+	cauldron_home = CAULDRON + Vector2(0, -35)
+	cauldron = _sprite("cauldron", cauldron_home, 1.05)
+	cauldron.z_index = 3
 	_add_circle_collision(CAULDRON + Vector2(0, -15), 28)
+	_build_cauldron_bubbles()
+	_build_companion_witches()
 	for ingredient in INGREDIENTS:
 		var glow := _sprite("spell", ingredient.pos + Vector2(0, -15), 0.48)
 		glow.modulate = Color(0.9, 0.85, 1.0, 0.3)
@@ -78,6 +86,48 @@ func _ready() -> void:
 	spell = _sprite("spell", CAULDRON + Vector2(0, -75), 2.0)
 	spell.visible = false
 	spell.z_index = 10
+
+func _build_companion_witches() -> void:
+	var profiles := [
+		{"name":"Violet", "position":Vector2(686, 545), "tint":Color("c58cff"), "label":Color("d7b1ff")},
+		{"name":"Amber", "position":Vector2(914, 545), "tint":Color("ffad72"), "label":Color("ffc28c")},
+		{"name":"Hazel", "position":Vector2(800, 405), "tint":Color("9eea7d"), "label":Color("baf49b")},
+	]
+	for profile: Dictionary in profiles:
+		var companion := HollowWitch.new()
+		companion.position = profile.position
+		companion.z_index = 4 if profile.name != "Hazel" else 2
+		companion.modulate = profile.tint
+		companion.active = false
+		add_child(companion)
+		companion_witches.append(companion)
+		companion_names.append(profile.name)
+		var nameplate := Label.new()
+		nameplate.text = profile.name
+		nameplate.position = Vector2(-45, -82)
+		nameplate.size = Vector2(90, 22)
+		nameplate.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		nameplate.add_theme_font_size_override("font_size", 12)
+		nameplate.add_theme_font_override("font", preload("res://assets/template/fonts/display/generic_heading.tres"))
+		nameplate.add_theme_color_override("font_color", profile.label)
+		nameplate.add_theme_color_override("font_shadow_color", Color("171020"))
+		nameplate.add_theme_constant_override("shadow_offset_x", 1)
+		nameplate.add_theme_constant_override("shadow_offset_y", 1)
+		companion.add_child(nameplate)
+
+func _build_cauldron_bubbles() -> void:
+	var origins := [
+		CAULDRON + Vector2(-25, -79),
+		CAULDRON + Vector2(-7, -91),
+		CAULDRON + Vector2(14, -82),
+		CAULDRON + Vector2(29, -70),
+	]
+	for i in origins.size():
+		var bubble := _sprite("spell", origins[i], 0.105 + i * 0.012)
+		bubble.z_index = 6
+		bubble.modulate = Color(0.54, 1.0, 0.68, 0.55)
+		bubbles.append(bubble)
+		bubble_origins.append(origins[i])
 
 func _sprite(id: String, pos: Vector2, factor: float) -> Sprite2D:
 	var sprite := Sprite2D.new()
@@ -125,7 +175,15 @@ func _process(delta: float) -> void:
 		var icon: Sprite2D = pickup_sprites[entry.id]
 		icon.position.y = entry.pos.y - 17 + sin(age * 2.4 + i) * 3.0
 		glows[i].scale = Vector2.ONE * (0.44 + sin(age * 2.0 + i) * 0.035)
-	cauldron.modulate = Color(1.0, 1.0, 1.0, 0.93 + sin(age * 3.0) * 0.07)
+	var motion_enabled := not bool(TuningStore.get_active_value("ui.reduced_motion", false))
+	cauldron.position = cauldron_home + Vector2(0, sin(age * 4.0) * 0.8 if motion_enabled else 0.0)
+	cauldron.scale = Vector2.ONE * (1.05 + (sin(age * 4.0) * 0.012 if motion_enabled else 0.0))
+	cauldron.modulate = Color(1.0, 1.0, 1.0, 0.93 + sin(age * 3.0) * 0.07 if motion_enabled else 0.93)
+	for i in bubbles.size():
+		var cycle := fmod(age * (0.42 + i * 0.055) + i * 0.21, 1.0)
+		var bubble: Sprite2D = bubbles[i]
+		bubble.position = bubble_origins[i] + Vector2(sin(age * 3.4 + i) * 3.0, -cycle * 28.0)
+		bubble.modulate.a = (0.12 + (1.0 - cycle) * 0.7) if motion_enabled else 0.38
 	if won:
 		completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
 		spell.rotation = sin(completion_age) * 0.08

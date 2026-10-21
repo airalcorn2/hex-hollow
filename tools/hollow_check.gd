@@ -12,6 +12,12 @@ func _check() -> void:
 	main._start_new_run()
 	await process_frame
 	var world = main.world
+	assert(world.companion_witches.size() == 3, "Three companion witches surround the cauldron")
+	assert(world.companion_names == ["Violet", "Amber", "Hazel"], "Companion names match the physical cauldron registry")
+	assert(world.bubbles.size() == 4, "Cauldron has multiple bubbling sprites")
+	var bubble_start: Vector2 = world.bubbles[0].position
+	await create_timer(0.2).timeout
+	assert(world.bubbles[0].position != bubble_start, "Cauldron bubbles animate while playing")
 	var start: Vector2 = world.witch.position
 	Input.action_press("move_right")
 	await create_timer(0.2).timeout
