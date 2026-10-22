@@ -34,6 +34,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	{
 		"name":"The crooked gravestone",
 		"pos":Vector2(264, 169),
+		"prompt":"Read the epitaph",
 		"epitaphs":[
 			"Here lies Reginald. He chased a ghost. The ghost won.",
 			"He asked the moon for directions. It pointed down.",
@@ -42,9 +43,37 @@ const ENVIRONMENT_INTERACTIONS := [
 	{
 		"name":"The mossy gravestone",
 		"pos":Vector2(465, 180),
+		"prompt":"Read the epitaph",
 		"epitaphs":[
 			"Beloved Beatrice. She always said the grave was half full.",
 			"Rest in peace. Please leave the offerings where they are.",
+		],
+	},
+	{
+		"name":"The lantern with no flame",
+		"pos":Vector2(445, 790),
+		"prompt":"Inspect the lantern",
+		"epitaphs":[
+			"The flame went out years ago. Its shadow still flickers.",
+			"Someone lit this lantern at midnight. Someone else answered.",
+		],
+	},
+	{
+		"name":"The whispering oak",
+		"pos":Vector2(633, 740),
+		"prompt":"Listen to the tree",
+		"epitaphs":[
+			"The oak whispers your name, but only on the second listen.",
+			"A face is carved in the bark. It looks more awake than you do.",
+		],
+	},
+	{
+		"name":"The crooked pond sign",
+		"pos":Vector2(1225, 807),
+		"prompt":"Read the pond sign",
+		"epitaphs":[
+			"POND RULES: No feeding the fish. They remember faces.",
+			"The water is six inches deep. The reflection is much deeper.",
 		],
 	},
 ]
@@ -83,10 +112,12 @@ var bubbles: Array[Sprite2D] = []
 var bubble_origins: Array[Vector2] = []
 var cauldron_home := Vector2.ZERO
 var companion_dialogue_index := {"Violet":0, "Amber":0, "Hazel":0}
-var environment_dialogue_index := [0, 0]
+var environment_dialogue_index: Array[int] = []
 var recipe_order: Array[String] = []
 func _ready() -> void:
 	recipe_order = _new_recipe_order()
+	for _landmark in ENVIRONMENT_INTERACTIONS:
+		environment_dialogue_index.append(0)
 	var terrain := Sprite2D.new()
 	terrain.texture = preload("res://assets/hollow/map.png")
 	terrain.centered = false
@@ -305,6 +336,11 @@ func nearby_environment() -> int:
 			closest = distance
 			result = i
 	return result
+
+func environment_prompt(index: int) -> String:
+	if index < 0 or index >= ENVIRONMENT_INTERACTIONS.size():
+		return "Inspect the surroundings"
+	return ENVIRONMENT_INTERACTIONS[index].prompt
 
 # The nearby ingredient (if any) that's out of reach right now -- either
 # because something's already in the satchel, or because it's not next in

@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 	elif world.nearby_companion() >= 0:
 		prompt_label.text = "[ E / SPACE ]  Talk to " + world.companion_names[world.nearby_companion()]
 	elif world.nearby_environment() >= 0:
-		prompt_label.text = "[ E / SPACE ]  Read the epitaph"
+		prompt_label.text = "[ E / SPACE ]  " + world.environment_prompt(world.nearby_environment())
 	else:
 		prompt_label.text = "Follow the woodland trails. Look for a magical glow."
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
