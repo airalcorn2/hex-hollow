@@ -30,6 +30,24 @@ const COMPANION_DIALOGUE := {
 		"Mind the moonflower. It wilts when young witches hurry.",
 	],
 }
+const ENVIRONMENT_INTERACTIONS := [
+	{
+		"name":"The crooked gravestone",
+		"pos":Vector2(264, 169),
+		"epitaphs":[
+			"Here lies Reginald. He chased a ghost. The ghost won.",
+			"He asked the moon for directions. It pointed down.",
+		],
+	},
+	{
+		"name":"The mossy gravestone",
+		"pos":Vector2(465, 180),
+		"epitaphs":[
+			"Beloved Beatrice. She always said the grave was half full.",
+			"Rest in peace. Please leave the offerings where they are.",
+		],
+	},
+]
 const ICONS := {
 	"cauldron":preload("res://assets/recipe/icons/cauldron.png"),
 	"cauldron_spell":preload("res://assets/recipe/icons/cauldron_spell.png"),
@@ -65,6 +83,7 @@ var bubbles: Array[Sprite2D] = []
 var bubble_origins: Array[Vector2] = []
 var cauldron_home := Vector2.ZERO
 var companion_dialogue_index := {"Violet":0, "Amber":0, "Hazel":0}
+var environment_dialogue_index := [0, 0]
 func _ready() -> void:
 	var terrain := Sprite2D.new()
 	terrain.texture = preload("res://assets/hollow/map.png")
@@ -241,6 +260,18 @@ func nearby_companion() -> int:
 			result = i
 	return result
 
+func nearby_environment() -> int:
+	if witch.position.distance_to(CAULDRON) < 92.0:
+		return -1
+	var closest := 70.0
+	var result := -1
+	for i in ENVIRONMENT_INTERACTIONS.size():
+		var distance: float = witch.position.distance_to(ENVIRONMENT_INTERACTIONS[i].pos)
+		if distance < closest:
+			closest = distance
+			result = i
+	return result
+
 # The nearby ingredient (if any) that's out of reach right now -- either
 # because something's already in the satchel, or because it's not next in
 # the recipe order -- for a specific "not yet" message instead of the
@@ -301,6 +332,14 @@ func interact() -> void:
 			var line_index: int = int(companion_dialogue_index[companion_name])
 			message.emit("%s: \"%s\"" % [companion_name, lines[line_index]])
 			companion_dialogue_index[companion_name] = (line_index + 1) % lines.size()
+			return
+		var environment_index := nearby_environment()
+		if environment_index >= 0:
+			var landmark: Dictionary = ENVIRONMENT_INTERACTIONS[environment_index]
+			var epitaphs: Array = landmark.epitaphs
+			var epitaph_index: int = environment_dialogue_index[environment_index]
+			message.emit("%s: \"%s\"" % [landmark.name, epitaphs[epitaph_index]])
+			environment_dialogue_index[environment_index] = (epitaph_index + 1) % epitaphs.size()
 			return
 	if not collected.is_empty():
 		message.emit("Your satchel is full. Bring it to the cauldron first.")

@@ -26,6 +26,12 @@ func _check() -> void:
 		var before_dialogue: int = world.companion_dialogue_index[companion_name]
 		world.interact()
 		assert(world.companion_dialogue_index[companion_name] != before_dialogue, "Companion %s speaks" % companion_name)
+	for i in world.ENVIRONMENT_INTERACTIONS.size():
+		world.witch.position = world.ENVIRONMENT_INTERACTIONS[i].pos + Vector2(0, 58)
+		assert(world.nearby_environment() == i, "Gravestone %d is readable" % i)
+		var before_epitaph: int = world.environment_dialogue_index[i]
+		world.interact()
+		assert(world.environment_dialogue_index[i] != before_epitaph, "Gravestone %d reveals an epitaph" % i)
 	world.witch.position = Vector2(800, 635)
 	var start: Vector2 = world.witch.position
 	Input.action_press("move_right")
