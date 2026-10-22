@@ -51,7 +51,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	},
 	{
 		"name":"The lantern with no flame",
-		"pos":Vector2(445, 790),
+		"pos":Vector2(402, 620),
 		"prompt":"Inspect the lantern",
 		"epitaphs":[
 			"The flame went out years ago. Its shadow still flickers.",
@@ -60,7 +60,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	},
 	{
 		"name":"The whispering oak",
-		"pos":Vector2(633, 740),
+		"pos":Vector2(880, 770),
 		"prompt":"Listen to the tree",
 		"epitaphs":[
 			"The oak whispers your name, but only on the second listen.",
@@ -74,6 +74,24 @@ const ENVIRONMENT_INTERACTIONS := [
 		"epitaphs":[
 			"POND RULES: No feeding the fish. They remember faces.",
 			"The water is six inches deep. The reflection is much deeper.",
+		],
+	},
+	{
+		"name":"The winking pumpkin",
+		"pos":Vector2(1210, 175),
+		"prompt":"Inspect the pumpkin",
+		"epitaphs":[
+			"This pumpkin has a heartbeat. It is trying to pretend it doesn't.",
+			"The grin is painted on. The blink was not.",
+		],
+	},
+	{
+		"name":"The smallest pumpkin",
+		"pos":Vector2(1370, 245),
+		"prompt":"Inspect the pumpkin",
+		"epitaphs":[
+			"It is holding a secret. It refuses to share.",
+			"A tiny stem, a tiny curse, an enormous attitude.",
 		],
 	},
 ]
