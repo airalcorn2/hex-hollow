@@ -13,6 +13,23 @@ const INGREDIENTS := [
 	{"id":"essence", "name":"Ghost essence", "hint":"Pond bridge · southeast", "pos":Vector2(1320, 725)},
 	{"id":"moonflower", "name":"Moonflower", "hint":"Eastern lantern trail", "pos":Vector2(1120, 525)}
 ]
+const COMPANION_DIALOGUE := {
+	"Violet": [
+		"The moon is a silver spoon, dear. Stir clockwise for luck.",
+		"A little stardust makes every spell more scholarly.",
+		"Do mind the ghosts. They are terribly fond of interrupting rituals.",
+	],
+	"Amber": [
+		"Drop something spooky in the pot, babe. Give it some attitude.",
+		"That cauldron is glowing. Honestly? Iconic.",
+		"If it hisses, smile like you meant for it to do that.",
+	],
+	"Hazel": [
+		"Hmph. Keep your fingers out of the brew, child. It bites.",
+		"The old ways favor patience, proper shoes, and fewer explosions.",
+		"Mind the moonflower. It wilts when young witches hurry.",
+	],
+}
 const ICONS := {
 	"cauldron":preload("res://assets/recipe/icons/cauldron.png"),
 	"cauldron_spell":preload("res://assets/recipe/icons/cauldron_spell.png"),
@@ -47,6 +64,7 @@ var companion_names: Array[String] = []
 var bubbles: Array[Sprite2D] = []
 var bubble_origins: Array[Vector2] = []
 var cauldron_home := Vector2.ZERO
+var companion_dialogue_index := {"Violet":0, "Amber":0, "Hazel":0}
 func _ready() -> void:
 	var terrain := Sprite2D.new()
 	terrain.texture = preload("res://assets/hollow/map.png")
@@ -211,6 +229,18 @@ func nearby_target() -> String:
 			return required
 	return ""
 
+func nearby_companion() -> int:
+	if witch.position.distance_to(CAULDRON) < 92.0:
+		return -1
+	var closest := 76.0
+	var result := -1
+	for i in companion_witches.size():
+		var distance: float = witch.position.distance_to(companion_witches[i].position)
+		if distance < closest:
+			closest = distance
+			result = i
+	return result
+
 # The nearby ingredient (if any) that's out of reach right now -- either
 # because something's already in the satchel, or because it's not next in
 # the recipe order -- for a specific "not yet" message instead of the
@@ -263,7 +293,16 @@ func interact() -> void:
 				glows[i].visible = false
 		message.emit("Found %s. Tucked safely in your satchel." % ingredient_name(target))
 		recipe_changed.emit()
-	elif not collected.is_empty():
+	else:
+		var companion_index := nearby_companion()
+		if companion_index >= 0:
+			var companion_name: String = companion_names[companion_index]
+			var lines: Array = COMPANION_DIALOGUE[companion_name]
+			var line_index: int = int(companion_dialogue_index[companion_name])
+			message.emit("%s: \"%s\"" % [companion_name, lines[line_index]])
+			companion_dialogue_index[companion_name] = (line_index + 1) % lines.size()
+			return
+	if not collected.is_empty():
 		message.emit("Your satchel is full. Bring it to the cauldron first.")
 	else:
 		var locked := nearby_locked()

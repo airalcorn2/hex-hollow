@@ -55,6 +55,8 @@ func _process(delta: float) -> void:
 		prompt_label.text = "[ E / SPACE ]  Add %d to the cauldron" % world.collected.size() if not world.collected.is_empty() else "Your cauldron · %d / 6 brewed" % world.deposited.size()
 	elif not target.is_empty():
 		prompt_label.text = "[ E / SPACE ]  Gather " + world.ingredient_name(target)
+	elif world.nearby_companion() >= 0:
+		prompt_label.text = "[ E / SPACE ]  Talk to " + world.companion_names[world.nearby_companion()]
 	else:
 		prompt_label.text = "Follow the woodland trails. Look for a magical glow."
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0

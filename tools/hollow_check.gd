@@ -18,6 +18,15 @@ func _check() -> void:
 	var bubble_start: Vector2 = world.bubbles[0].position
 	await create_timer(0.2).timeout
 	assert(world.bubbles[0].position != bubble_start, "Cauldron bubbles animate while playing")
+	var companion_offsets := [Vector2(0, 65), Vector2(0, 65), Vector2(0, -70)]
+	for i in world.companion_witches.size():
+		world.witch.position = world.companion_witches[i].position + companion_offsets[i]
+		assert(world.nearby_companion() == i, "Companion %s is interactable" % world.companion_names[i])
+		var companion_name: String = world.companion_names[i]
+		var before_dialogue: int = world.companion_dialogue_index[companion_name]
+		world.interact()
+		assert(world.companion_dialogue_index[companion_name] != before_dialogue, "Companion %s speaks" % companion_name)
+	world.witch.position = Vector2(800, 635)
 	var start: Vector2 = world.witch.position
 	Input.action_press("move_right")
 	await create_timer(0.2).timeout
