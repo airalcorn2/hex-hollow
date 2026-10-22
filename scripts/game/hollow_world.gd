@@ -89,9 +89,9 @@ func _ready() -> void:
 
 func _build_companion_witches() -> void:
 	var profiles := [
-		{"name":"Violet", "position":Vector2(686, 545), "tint":Color("c58cff"), "label":Color("d7b1ff")},
+		{"name":"Violet", "position":Vector2(800, 405), "tint":Color("c58cff"), "label":Color("d7b1ff")},
 		{"name":"Amber", "position":Vector2(914, 545), "tint":Color("ffad72"), "label":Color("ffc28c")},
-		{"name":"Hazel", "position":Vector2(800, 405), "tint":Color("9eea7d"), "label":Color("baf49b")},
+		{"name":"Hazel", "position":Vector2(686, 545), "tint":Color("9eea7d"), "label":Color("baf49b")},
 	]
 	for profile: Dictionary in profiles:
 		var companion := HollowWitch.new()
