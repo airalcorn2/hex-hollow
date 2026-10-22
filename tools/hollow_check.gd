@@ -18,7 +18,7 @@ func _check() -> void:
 	var bubble_start: Vector2 = world.bubbles[0].position
 	await create_timer(0.2).timeout
 	assert(world.bubbles[0].position != bubble_start, "Cauldron bubbles animate while playing")
-	var companion_offsets := [Vector2(0, 65), Vector2(0, 65), Vector2(0, -70)]
+	var companion_offsets := [Vector2(0, -70), Vector2(0, 65), Vector2(0, 65)]
 	for i in world.companion_witches.size():
 		world.witch.position = world.companion_witches[i].position + companion_offsets[i]
 		assert(world.nearby_companion() == i, "Companion %s is interactable" % world.companion_names[i])
