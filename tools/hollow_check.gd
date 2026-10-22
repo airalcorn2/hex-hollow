@@ -12,6 +12,11 @@ func _check() -> void:
 	main._start_new_run()
 	await process_frame
 	var world = main.world
+	assert(world.recipe_order.size() == world.INGREDIENTS.size(), "New run creates a full recipe order")
+	var recipe_ids := {}
+	for id in world.recipe_order:
+		recipe_ids[id] = true
+	assert(recipe_ids.size() == world.INGREDIENTS.size(), "Recipe order contains each ingredient exactly once")
 	assert(world.companion_witches.size() == 3, "Three companion witches surround the cauldron")
 	assert(world.companion_names == ["Violet", "Amber", "Hazel"], "Companion names match the physical cauldron registry")
 	assert(world.bubbles.size() == 4, "Cauldron has multiple bubbling sprites")
@@ -45,8 +50,9 @@ func _check() -> void:
 	Input.action_release("move_right")
 	assert(world.witch.position.distance_to(stopped) < 1.0, "Pause stops movement")
 	main._resume()
-	for i in world.INGREDIENTS.size():
-		var entry: Dictionary = world.INGREDIENTS[i]
+	var saved_recipe_order: Array[String] = world.recipe_order.duplicate()
+	for i in world.recipe_order.size():
+		var entry: Dictionary = world.recipe_entry(world.recipe_order[i])
 		world.witch.position = entry.pos + Vector2(0, 28)
 		assert(world.next_required() == entry.id, "Recipe order advances one ingredient at a time")
 		assert(world.nearby_target() == entry.id, "Ingredient must be interactable")
@@ -62,6 +68,7 @@ func _check() -> void:
 			var snapshot: Dictionary = world.snapshot()
 			world.restore(snapshot)
 			assert(world.collected.is_empty() and world.deposited.size() == 2, "Save restore keeps cauldron progression")
+			assert(world.recipe_order == saved_recipe_order, "Save restore keeps the shuffled recipe order")
 	assert(world.won and world.deposited.size() == 6 and world.spell.visible, "Final deposit completes spell")
 	assert(main.state == "complete", "Result flow starts")
 	main._start_new_run()

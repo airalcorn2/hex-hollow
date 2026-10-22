@@ -84,7 +84,9 @@ var bubble_origins: Array[Vector2] = []
 var cauldron_home := Vector2.ZERO
 var companion_dialogue_index := {"Violet":0, "Amber":0, "Hazel":0}
 var environment_dialogue_index := [0, 0]
+var recipe_order: Array[String] = []
 func _ready() -> void:
+	recipe_order = _new_recipe_order()
 	var terrain := Sprite2D.new()
 	terrain.texture = preload("res://assets/hollow/map.png")
 	terrain.centered = false
@@ -221,15 +223,47 @@ func _process(delta: float) -> void:
 		var bubble: Sprite2D = bubbles[i]
 		bubble.position = bubble_origins[i] + Vector2(sin(age * 3.4 + i) * 3.0, -cycle * 28.0)
 		bubble.modulate.a = (0.12 + (1.0 - cycle) * 0.7) if motion_enabled else 0.38
-	if won:
-		completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
-		spell.rotation = sin(completion_age) * 0.08
-		spell.scale = Vector2.ONE * (1.8 + sin(completion_age * 2.0) * 0.15)
+		if won:
+			completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
+			spell.rotation = sin(completion_age) * 0.08
+			spell.scale = Vector2.ONE * (1.8 + sin(completion_age * 2.0) * 0.15)
+
+func _new_recipe_order() -> Array[String]:
+	var order: Array[String] = []
+	for entry in INGREDIENTS:
+		order.append(entry.id)
+	order.shuffle()
+	return order
+
+func _valid_recipe_order(candidate: Variant) -> bool:
+	if not candidate is Array or candidate.size() != INGREDIENTS.size():
+		return false
+	var valid_ids := {}
+	for entry in INGREDIENTS:
+		valid_ids[entry.id] = true
+	var seen := {}
+	for id in candidate:
+		if not valid_ids.has(str(id)) or seen.has(str(id)):
+			return false
+		seen[str(id)] = true
+	return true
+
+func recipe_entry(id: String) -> Dictionary:
+	for entry in INGREDIENTS:
+		if entry.id == id:
+			return entry
+	return {}
+
+func recipe_entries() -> Array:
+	var entries: Array = []
+	for id in recipe_order:
+		entries.append(recipe_entry(id))
+	return entries
 
 func next_required() -> String:
 	if deposited.size() >= INGREDIENTS.size():
 		return ""
-	return INGREDIENTS[deposited.size()].id
+	return recipe_order[deposited.size()]
 
 func nearby_target() -> String:
 	if witch.position.distance_to(CAULDRON) < 92.0:
@@ -359,6 +393,13 @@ func ingredient_name(id: String) -> String:
 func restore(data: Dictionary) -> void:
 	collected.clear()
 	deposited.clear()
+	var saved_order: Variant = data.get("recipe_order", [])
+	if _valid_recipe_order(saved_order):
+		recipe_order.clear()
+		for id in saved_order:
+			recipe_order.append(str(id))
+	else:
+		recipe_order = _new_recipe_order()
 	for entry in INGREDIENTS:
 		if entry.id in data.get("deposited", []):
 			deposited.append(entry.id)
@@ -375,4 +416,4 @@ func restore(data: Dictionary) -> void:
 	camera.reset_smoothing()
 
 func snapshot() -> Dictionary:
-	return {"collected":collected.duplicate(), "deposited":deposited.duplicate(), "elapsed":elapsed, "x":witch.position.x, "y":witch.position.y}
+	return {"collected":collected.duplicate(), "deposited":deposited.duplicate(), "recipe_order":recipe_order.duplicate(), "elapsed":elapsed, "x":witch.position.x, "y":witch.position.y}

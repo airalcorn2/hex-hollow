@@ -10,6 +10,7 @@ var world: HollowWorld
 var hud: Control
 var overlay: Control
 var rows: Array[Label] = []
+var row_ids: Array[String] = []
 var progress_label: Label
 var satchel_label: Label
 var prompt_label: Label
@@ -76,6 +77,7 @@ func _clear() -> void:
 	hud = null
 	overlay = null
 	rows.clear()
+	row_ids.clear()
 
 func _label(parent: Node, text: String, pos: Vector2, dimensions: Vector2, font_size: int, color: Color = CREAM, heading: bool = false) -> Label:
 	var label := Label.new()
@@ -203,11 +205,13 @@ func _build_hud() -> void:
 	_label(hud, "Spellbook", Vector2(1024, 173), Vector2(215, 38), 26, CREAM, true)
 	_label(hud, "Six ingredients. One little spell.", Vector2(1027, 222), Vector2(210, 25), 13, MUTED)
 	progress_label = _label(hud, "0 / 6 brewed", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
-	for i in WorldScript.INGREDIENTS.size():
-		var item: Dictionary = WorldScript.INGREDIENTS[i]
+	var recipe_entries: Array = world.recipe_entries()
+	for i in recipe_entries.size():
+		var item: Dictionary = recipe_entries[i]
 		var y: float = 310 + i * 51
 		_picture(hud, WorldScript.ICONS[item.id], Rect2(1019, y - 6, 46, 46))
 		rows.append(_label(hud, item.name, Vector2(1072, y), Vector2(173, 24), 14))
+		row_ids.append(item.id)
 		_label(hud, item.hint.split(" · ")[0], Vector2(1072, y + 23), Vector2(173, 20), 11, MUTED)
 	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
 	satchel_label = _label(hud, "SATCHEL  ·  0", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
@@ -227,12 +231,13 @@ func _recipe_changed() -> void:
 	satchel_label.text = "SATCHEL  ·  %d INGREDIENT%s" % [world.collected.size(), "" if world.collected.size() == 1 else "S"]
 	# Ingredients must now be gathered in order (see hollow_world.gd's
 	# next_required()), so the sidebar highlights which one's actually
-	# next -- without this, "why can't I pick that one up yet" has no
-	# visible answer.
+		# next -- without this, "why can't I pick that one up yet" has no
+		# visible answer.
 	var required := world.next_required()
 	for i in rows.size():
-		var id: String = WorldScript.INGREDIENTS[i].id
-		rows[i].text = WorldScript.INGREDIENTS[i].name
+		var id: String = row_ids[i]
+		var item: Dictionary = world.recipe_entry(id)
+		rows[i].text = item.name
 		if id in world.deposited:
 			rows[i].text = "✓ " + rows[i].text
 			rows[i].add_theme_color_override("font_color", MINT)
