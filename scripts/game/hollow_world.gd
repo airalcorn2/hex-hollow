@@ -114,6 +114,8 @@ var cauldron_home := Vector2.ZERO
 var companion_dialogue_index := {"Violet":0, "Amber":0, "Hazel":0}
 var environment_dialogue_index: Array[int] = []
 var recipe_order: Array[String] = []
+var interaction_markers: Array[Label] = []
+var interaction_marker_origins: Array[Vector2] = []
 func _ready() -> void:
 	recipe_order = _new_recipe_order()
 	for _landmark in ENVIRONMENT_INTERACTIONS:
@@ -134,6 +136,7 @@ func _ready() -> void:
 	_add_circle_collision(CAULDRON + Vector2(0, -15), 28)
 	_build_cauldron_bubbles()
 	_build_companion_witches()
+	_build_interaction_markers()
 	for ingredient in INGREDIENTS:
 		var glow := _sprite("spell", ingredient.pos + Vector2(0, -15), 0.48)
 		glow.modulate = Color(0.9, 0.85, 1.0, 0.3)
@@ -199,6 +202,30 @@ func _build_cauldron_bubbles() -> void:
 		bubbles.append(bubble)
 		bubble_origins.append(origins[i])
 
+func _build_interaction_markers() -> void:
+	for companion in companion_witches:
+		_add_interaction_marker(companion.position + Vector2(28, -105), Color("f4c46f"))
+	for landmark in ENVIRONMENT_INTERACTIONS:
+		_add_interaction_marker(landmark.pos + Vector2(0, -55), Color("f4c46f"))
+
+func _add_interaction_marker(pos: Vector2, color: Color) -> void:
+	var marker := Label.new()
+	marker.text = "?"
+	marker.position = pos
+	marker.size = Vector2(24, 28)
+	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	marker.add_theme_font_size_override("font_size", 21)
+	marker.add_theme_font_override("font", preload("res://assets/template/fonts/display/generic_heading.tres"))
+	marker.add_theme_color_override("font_color", color)
+	marker.add_theme_color_override("font_shadow_color", Color("171020"))
+	marker.add_theme_constant_override("shadow_offset_x", 2)
+	marker.add_theme_constant_override("shadow_offset_y", 2)
+	marker.z_index = 20
+	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(marker)
+	interaction_markers.append(marker)
+	interaction_marker_origins.append(pos)
+
 func _sprite(id: String, pos: Vector2, factor: float) -> Sprite2D:
 	var sprite := Sprite2D.new()
 	sprite.texture = ICONS[id]
@@ -254,6 +281,10 @@ func _process(delta: float) -> void:
 		var bubble: Sprite2D = bubbles[i]
 		bubble.position = bubble_origins[i] + Vector2(sin(age * 3.4 + i) * 3.0, -cycle * 28.0)
 		bubble.modulate.a = (0.12 + (1.0 - cycle) * 0.7) if motion_enabled else 0.38
+	for i in interaction_markers.size():
+		var marker: Label = interaction_markers[i]
+		marker.position = interaction_marker_origins[i] + Vector2(0, sin(age * 2.8 + i) * 3.0 if motion_enabled else 0.0)
+		marker.modulate.a = 0.72 + (sin(age * 3.4 + i) * 0.18 if motion_enabled else 0.0)
 		if won:
 			completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta
 			spell.rotation = sin(completion_age) * 0.08

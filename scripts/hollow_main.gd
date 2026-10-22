@@ -188,7 +188,7 @@ func _begin_run(data: Dictionary) -> void:
 	world.set_active(true)
 	_build_hud()
 	_recipe_changed()
-	_show_message("The midnight spell awaits. Find six glowing ingredients!")
+	_show_message("The midnight spell awaits. Find six ingredients—and follow the gold ? markers for secrets!")
 
 func _build_hud() -> void:
 	hud = Control.new()
@@ -218,7 +218,7 @@ func _build_hud() -> void:
 	_label(hud, "Bring your finds to the cauldron", Vector2(1034, 674), Vector2(190, 22), 11, MUTED)
 	_panel(hud, Rect2(24, 740, 1232, 43), Color("281d30"), Color("49364e"), 8)
 	prompt_label = _label(hud, "", Vector2(44, 750), Vector2(850, 24), 15, CREAM)
-	_label(hud, "WASD / ARROWS   ·   ESC PAUSE", Vector2(975, 752), Vector2(260, 22), 11, MUTED)
+	_label(hud, "WASD / ARROWS   ·   E / SPACE INTERACT   ·   ESC PAUSE", Vector2(875, 752), Vector2(370, 22), 11, MUTED)
 	notice_label = _label(hud, "", Vector2(44, 133), Vector2(903, 36), 15, CREAM)
 	notice_label.add_theme_color_override("font_shadow_color", Color("171020"))
 	notice_label.add_theme_constant_override("shadow_offset_x", 1)

@@ -19,6 +19,7 @@ func _check() -> void:
 	assert(recipe_ids.size() == world.INGREDIENTS.size(), "Recipe order contains each ingredient exactly once")
 	assert(world.companion_witches.size() == 3, "Three companion witches surround the cauldron")
 	assert(world.companion_names == ["Violet", "Amber", "Hazel"], "Companion names match the physical cauldron registry")
+	assert(world.interaction_markers.size() == world.companion_witches.size() + world.ENVIRONMENT_INTERACTIONS.size(), "All interactable secrets have map markers")
 	assert(world.bubbles.size() == 4, "Cauldron has multiple bubbling sprites")
 	var bubble_start: Vector2 = world.bubbles[0].position
 	await create_timer(0.2).timeout
