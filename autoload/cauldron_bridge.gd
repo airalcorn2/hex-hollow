@@ -10,19 +10,6 @@ extends Node
 const BASE_URL := ""
 const REQUEST_TIMEOUT_SEC := 3.0
 
-var _request: HTTPRequest
-var _timeout_timer: Timer
-
-
-func _ready() -> void:
-	_request = HTTPRequest.new()
-	add_child(_request)
-	_timeout_timer = Timer.new()
-	_timeout_timer.one_shot = true
-	_timeout_timer.wait_time = REQUEST_TIMEOUT_SEC
-	_timeout_timer.timeout.connect(_on_timeout)
-	add_child(_timeout_timer)
-
 
 func notify_deposit(ingredient_id: String) -> void:
 	_post("/deposit", {"ingredient": ingredient_id})
@@ -33,19 +20,35 @@ func notify_victory() -> void:
 
 
 # Fire-and-forget: nothing here waits on or reads the response, so a slow
-# or unreachable cauldron never stalls the game itself.
+# or unreachable cauldron never stalls the game itself. A fresh
+# HTTPRequest per call, not one shared node -- the final ingredient's
+# deposit and the victory call that follows it fire back-to-back with no
+# await in between (see hollow_world.gd's interact()), and a single
+# HTTPRequest can only have one request in flight at a time: the second
+# call would hit ERR_BUSY while the first is still out on the network and
+# silently drop, which is exactly what was happening before this.
 func _post(path: String, payload: Dictionary) -> void:
 	if BASE_URL.is_empty():
 		return
+	var request := HTTPRequest.new()
+	add_child(request)
+	request.request_completed.connect(
+		func(_result: int, _code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
+			if is_instance_valid(request):
+				request.queue_free()
+	)
 	var headers := PackedStringArray(["Content-Type: application/json"])
-	var error := _request.request(
+	var error := request.request(
 		BASE_URL + path, headers, HTTPClient.METHOD_POST, JSON.stringify(payload)
 	)
-	if error == OK:
-		_timeout_timer.start()
-	else:
+	if error != OK:
 		push_warning("CauldronBridge: couldn't reach the cauldron (error %d)." % error)
-
-
-func _on_timeout() -> void:
-	_request.cancel_request()
+		request.queue_free()
+		return
+	var timer := get_tree().create_timer(REQUEST_TIMEOUT_SEC)
+	timer.timeout.connect(
+		func() -> void:
+			if is_instance_valid(request):
+				request.cancel_request()
+				request.queue_free()
+	)
