@@ -157,18 +157,22 @@ func _show_title() -> void:
 	_label(self, "Gather six enchanted ingredients. Brew a spell before the night is through.", Vector2(44, 684), Vector2(735, 30), 20)
 	_label(self, "WASD / arrows to wander    ·    E / Space to gather & brew    ·    Esc to pause", Vector2(44, 734), Vector2(820, 28), 15, MUTED)
 	_button(self, "Enter the hollow  →", Rect2(924, 661, 310, 50), _start_new_run, true)
+	_button(self, "Practice the Mooncorn Maze", Rect2(924, 718, 310, 38), _practice_maze)
 	var has_incomplete_save := false
 	if not saved.is_empty():
 		has_incomplete_save = saved.get("collected", []).size() < 3 if int(saved.get("level", 1)) == 2 else saved.get("deposited", []).size() < 6
 	if has_incomplete_save:
 		var continue_text := "Continue in the maze" if int(saved.get("level", 1)) == 2 else "Continue your spell"
-		_button(self, continue_text, Rect2(924, 725, 310, 40), _continue_run)
+		_button(self, continue_text, Rect2(924, 760, 310, 34), _continue_run)
 	else:
-		_label(self, "A cozy, moonlit adventure", Vector2(931, 731), Vector2(298, 25), 15, MUTED)
+		_label(self, "A cozy, moonlit adventure", Vector2(931, 765), Vector2(298, 25), 15, MUTED)
 	_button(self, "Open Source Licenses", Rect2(22, 17, 195, 33), func(): Licenses.open(self))
 
 func _start_new_run() -> void:
 	_begin_run({})
+
+func _practice_maze() -> void:
+	_begin_maze({})
 
 func _continue_run() -> void:
 	if int(saved.get("level", 1)) == 2:

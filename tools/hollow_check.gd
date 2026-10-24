@@ -91,6 +91,11 @@ func _check() -> void:
 	assert(maze.nearby_exit(), "Corn maze exit is reachable")
 	maze.interact()
 	assert(main.state == "complete" and maze.won, "Corn maze completion flow starts")
+	main._show_title()
+	await process_frame
+	main._practice_maze()
+	await process_frame
+	assert(main.current_level == 2 and main.world.collected.is_empty(), "Title screen starts a fresh maze practice run")
 	saves.set_adventure(original)
 	print("[hex-hollow] PASS: movement, pause, ordered pickups, one-at-a-time deposits, duplicate prevention, save restore, completed spell, replay, corn maze")
 	quit(0)
