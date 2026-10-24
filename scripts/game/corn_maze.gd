@@ -22,7 +22,6 @@ const CHARM_ICONS := [
 	preload("res://assets/recipe/icons/essence.png"),
 ]
 const GROUND_TEXTURE := preload("res://assets/corn-maze/corn_maze_ground.png")
-const CORN_TUFT_TEXTURE := preload("res://assets/corn-maze/corn_hedge_tuft_clean.png")
 
 var witch: HollowWitch
 var camera: Camera2D
@@ -32,13 +31,11 @@ var elapsed := 0.0
 var age := 0.0
 var walls: Array = []
 var charm_sprites: Array[Sprite2D] = []
-var wall_sprites: Array[Sprite2D] = []
 var collected: Array[String] = []
 var exit_marker: Label
 
 func _ready() -> void:
 	_generate_maze()
-	_build_visuals()
 	_build_collisions()
 	_build_charm_sprites()
 	_build_exit_marker()
@@ -123,22 +120,6 @@ func _build_charm_sprites() -> void:
 		add_child(sprite)
 		charm_sprites.append(sprite)
 
-func _build_visuals() -> void:
-	for y in range(GRID_H):
-		for x in range(GRID_W):
-			if not walls[y][x]:
-				continue
-			var hedge := Sprite2D.new()
-			hedge.texture = CORN_TUFT_TEXTURE
-			hedge.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			hedge.position = Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5) + Vector2(0, 3)
-			hedge.scale = Vector2(68, 76) / CORN_TUFT_TEXTURE.get_size()
-			hedge.flip_h = (x + y) % 2 == 0
-			hedge.modulate = Color(0.88 + (x % 3) * 0.035, 0.92 + (y % 2) * 0.03, 0.84, 1.0)
-			hedge.z_index = 2
-			add_child(hedge)
-			wall_sprites.append(hedge)
-
 func _build_exit_marker() -> void:
 	exit_marker = _marker("EXIT", cell_position(EXIT_CELL) + Vector2(-30, -48), Color("a4e4ba"))
 
@@ -161,13 +142,6 @@ func _marker(text: String, pos: Vector2, color: Color) -> Label:
 
 func _draw() -> void:
 	draw_texture_rect(GROUND_TEXTURE, Rect2(Vector2.ZERO, WORLD_SIZE), false)
-	for y in range(GRID_H):
-		for x in range(GRID_W):
-			if walls[y][x]:
-				continue
-			var path_rect := Rect2(x * CELL + 5, y * CELL + 5, CELL - 10, CELL - 10)
-			draw_rect(path_rect, Color(0.08, 0.11, 0.08, 0.34))
-			draw_rect(path_rect, Color(0.42, 0.31, 0.20, 0.18), false, 2.0)
 	draw_circle(cell_position(EXIT_CELL), 25.0, Color("3d6749"))
 	draw_arc(cell_position(EXIT_CELL), 27.0, 0.0, TAU, 24, Color("a4e4ba"), 2.0)
 
