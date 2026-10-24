@@ -29,18 +29,17 @@ var active := false
 var won := false
 var elapsed := 0.0
 var age := 0.0
-var walls: Array = []
 var charm_sprites: Array[Sprite2D] = []
 var collected: Array[String] = []
 var exit_marker: Label
 
 func _ready() -> void:
-	_generate_maze()
 	_build_collisions()
 	_build_charm_sprites()
 	_build_exit_marker()
 	witch = HollowWitch.new()
 	witch.position = cell_position(START_CELL)
+	witch.set_movement_bounds(Rect2(30.0, 30.0, WORLD_SIZE.x - 60.0, WORLD_SIZE.y - 60.0))
 	witch.z_index = 5
 	add_child(witch)
 	camera = Camera2D.new()
@@ -54,46 +53,11 @@ func _ready() -> void:
 	add_child(camera)
 	queue_redraw()
 
-func _generate_maze() -> void:
-	for y in range(GRID_H):
-		var row: Array = []
-		for x in range(GRID_W):
-			row.append(true)
-		walls.append(row)
-	var stack: Array[Vector2i] = [START_CELL]
-	walls[START_CELL.y][START_CELL.x] = false
-	var directions := [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
-	while not stack.is_empty():
-		var current: Vector2i = stack.back()
-		var shuffled := directions.duplicate()
-		shuffled.shuffle()
-		var carved := false
-		for direction: Vector2i in shuffled:
-			var next := current + direction * 2
-			if next.x <= 0 or next.x >= GRID_W - 1 or next.y <= 0 or next.y >= GRID_H - 1:
-				continue
-			if not walls[next.y][next.x]:
-				continue
-			walls[current.y + direction.y][current.x + direction.x] = false
-			walls[next.y][next.x] = false
-			stack.append(next)
-			carved = true
-			break
-		if not carved:
-			stack.pop_back()
-	walls[EXIT_CELL.y][EXIT_CELL.x] = false
-	walls[EXIT_CELL.y][EXIT_CELL.x - 1] = false
-
 func _build_collisions() -> void:
-	for y in range(GRID_H):
-		for x in range(GRID_W):
-			if walls[y][x]:
-				_add_wall_collision(Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5))
+	# The maze is now a static illustrated scene; do not create invisible random blockers
+	# that disagree with the artwork. Keep only the explicit world boundary.
 	for rect in [Rect2(-16, 0, 16, WORLD_SIZE.y), Rect2(WORLD_SIZE.x, 0, 16, WORLD_SIZE.y), Rect2(0, -16, WORLD_SIZE.x, 16), Rect2(0, WORLD_SIZE.y, WORLD_SIZE.x, 16)]:
 		_add_rect_collision(rect)
-
-func _add_wall_collision(center: Vector2) -> void:
-	_add_rect_collision(Rect2(center - Vector2(CELL * 0.5, CELL * 0.5), Vector2(CELL, CELL)))
 
 func _add_rect_collision(rect: Rect2) -> void:
 	var body := StaticBody2D.new()

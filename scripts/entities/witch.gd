@@ -12,6 +12,7 @@ var active := false
 var facing := "south"
 var clock := 0.0
 var speed := 210.0
+var movement_bounds := Rect2(90.0, 90.0, 1420.0, 887.0)
 var sprite: Sprite2D
 var frames: Dictionary = {}
 
@@ -38,9 +39,12 @@ func move_direction(direction: Vector2, delta: float) -> void:
 	speed = float(TuningStore.get_active_value("player.move.max_speed", 210.0))
 	velocity = direction.normalized() * speed
 	move_and_slide()
-	position.x = clampf(position.x, 90.0, 1510.0)
-	position.y = clampf(position.y, 90.0, 977.0)
+	position.x = clampf(position.x, movement_bounds.position.x, movement_bounds.end.x)
+	position.y = clampf(position.y, movement_bounds.position.y, movement_bounds.end.y)
 	_update_pose(direction, delta)
+
+func set_movement_bounds(bounds: Rect2) -> void:
+	movement_bounds = bounds
 
 func _update_pose(direction: Vector2, delta: float) -> void:
 	if direction.length() > 0.1:

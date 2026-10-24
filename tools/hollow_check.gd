@@ -81,6 +81,9 @@ func _check() -> void:
 	await process_frame
 	var maze = main.world
 	assert(main.current_level == 2, "Spell completion can enter the corn maze")
+	maze.witch.position = Vector2(40, 40)
+	maze.witch.move_direction(Vector2(-1, -1), 0.2)
+	assert(maze.witch.position.x >= 30.0 and maze.witch.position.y >= 30.0, "Maze movement stays inside the actual canvas")
 	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
 	for i in maze.CHARM_CELLS.size():
 		maze.witch.position = maze.cell_position(maze.CHARM_CELLS[i])
