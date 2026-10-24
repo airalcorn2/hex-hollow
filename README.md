@@ -74,10 +74,11 @@ npm run check -- --pack
 
 ## Collision-mask helper
 
-`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, applies configurable HSV vegetation/gold segmentation, snaps the result to a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
+`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, applies configurable HSV vegetation/gold segmentation, filters candidate pixels by local edge density, snaps the result to a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
 
 - JSON containing rectangles and four-point polygons
 - A debug PNG with the candidate regions drawn over the background
+- An optional pixel-level false-color mask: blue pixels pass the color test, orange pixels pass the edge test, and bright green pixels pass both
 - Optional Godot `PackedVector2Array` source
 
 The output is intentionally not imported automatically. Review the debug overlay first: pixel-art shadows, paths, trees, pumpkins, and corn can share colors, so automatic segmentation can produce false positives.
@@ -89,6 +90,7 @@ python3 tools/generate_collision_mask.py \
   --image assets/corn-maze/corn_maze_ground.png \
   --output-json /tmp/corn-collisions.json \
   --output-preview /tmp/corn-collisions-preview.png \
+  --output-pixel-mask /tmp/corn-collisions-pixels.png \
   --output-gdscript /tmp/corn-collisions.gd \
   --world-width 1216 \
   --world-height 832 \

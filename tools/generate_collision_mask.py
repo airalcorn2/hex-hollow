@@ -3,14 +3,16 @@
 
 This is an assistive tool, not a final authority. It uses configurable HSV
 heuristics to find likely vegetation, snaps the result to a coarse grid, merges
-adjacent occupied cells into rectangles, and writes a debug overlay. Review the
-overlay before importing the generated shapes into gameplay.
+adjacent occupied cells into rectangles, and writes pixel-level and rectangle
+debug overlays. Review the overlays before importing the generated shapes into
+gameplay.
 
 Example:
   python3 tools/generate_collision_mask.py \
     --image assets/corn-maze/corn_maze_ground.png \
     --output-json /tmp/corn-collisions.json \
     --output-preview /tmp/corn-collisions-preview.png \
+    --output-pixel-mask /tmp/corn-collisions-pixels.png \
     --output-gdscript /tmp/corn-collisions.gd \
     --world-width 1216 --world-height 832 --cell-size 16
 """
@@ -148,11 +150,28 @@ def write_preview(image: Image.Image, rects: list[Rect], path: Path, opacity: in
     preview.save(path)
 
 
+def write_pixel_mask(mask: np.ndarray, edges: np.ndarray, path: Path) -> None:
+    """Write a false-color pixel diagnostic for the pre-grid heuristic.
+
+    Blue pixels pass the HSV vegetation/gold test, orange pixels are detected
+    as high-frequency edges, and bright green pixels pass both tests. This is
+    intentionally separate from the coarse rectangle preview: it shows the
+    evidence available before cell occupancy and rectangle merging discard
+    pixel-level detail.
+    """
+    rgb = np.zeros((*mask.shape, 3), dtype=np.uint8)
+    rgb[mask] = (40, 110, 255)
+    rgb[edges] = (255, 150, 30)
+    rgb[mask & edges] = (80, 255, 120)
+    Image.fromarray(rgb, mode="RGB").save(path)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", required=True, type=Path)
     parser.add_argument("--output-json", required=True, type=Path)
     parser.add_argument("--output-preview", required=True, type=Path)
+    parser.add_argument("--output-pixel-mask", type=Path, help="False-color pixel diagnostic: blue=color, orange=edge, green=both")
     parser.add_argument("--output-gdscript", type=Path)
     parser.add_argument("--world-width", type=int, required=True)
     parser.add_argument("--world-height", type=int, required=True)
@@ -195,10 +214,13 @@ def main() -> None:
     args.output_preview.parent.mkdir(parents=True, exist_ok=True)
     args.output_json.write_text(json.dumps(payload, indent=2) + "\n")
     write_preview(image, rects, args.output_preview, args.preview_opacity)
+    if args.output_pixel_mask:
+        args.output_pixel_mask.parent.mkdir(parents=True, exist_ok=True)
+        write_pixel_mask(mask, edges, args.output_pixel_mask)
     if args.output_gdscript:
         args.output_gdscript.parent.mkdir(parents=True, exist_ok=True)
         write_godot(args.output_gdscript, rects)
-    print(json.dumps({"rectangles": len(rects), "json": str(args.output_json), "preview": str(args.output_preview), "gdscript": str(args.output_gdscript) if args.output_gdscript else None}, indent=2))
+    print(json.dumps({"rectangles": len(rects), "json": str(args.output_json), "preview": str(args.output_preview), "pixelMask": str(args.output_pixel_mask) if args.output_pixel_mask else None, "gdscript": str(args.output_gdscript) if args.output_gdscript else None}, indent=2))
 
 
 if __name__ == "__main__":
