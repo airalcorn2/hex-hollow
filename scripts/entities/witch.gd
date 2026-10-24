@@ -13,6 +13,7 @@ var facing := "south"
 var clock := 0.0
 var speed := 210.0
 var movement_bounds := Rect2(90.0, 90.0, 1420.0, 887.0)
+var movement_validator: Callable
 var sprite: Sprite2D
 var frames: Dictionary = {}
 
@@ -38,13 +39,32 @@ func _physics_process(delta: float) -> void:
 func move_direction(direction: Vector2, delta: float) -> void:
 	speed = float(TuningStore.get_active_value("player.move.max_speed", 210.0))
 	velocity = direction.normalized() * speed
-	move_and_slide()
+	if movement_validator.is_valid():
+		var motion := velocity * delta
+		_move_axis_with_validator(Vector2(motion.x, 0.0))
+		_move_axis_with_validator(Vector2(0.0, motion.y))
+	else:
+		move_and_slide()
 	position.x = clampf(position.x, movement_bounds.position.x, movement_bounds.end.x)
 	position.y = clampf(position.y, movement_bounds.position.y, movement_bounds.end.y)
 	_update_pose(direction, delta)
 
 func set_movement_bounds(bounds: Rect2) -> void:
 	movement_bounds = bounds
+
+func set_movement_validator(callback: Callable) -> void:
+	movement_validator = callback
+
+func _move_axis_with_validator(motion: Vector2) -> void:
+	if motion.length_squared() < 0.000001:
+		return
+	var steps := maxi(1, ceili((absf(motion.x) + absf(motion.y)) / 4.0))
+	var step := motion / float(steps)
+	for _i in steps:
+		var candidate := position + step
+		if not movement_validator.call(candidate):
+			break
+		position = candidate
 
 func _update_pose(direction: Vector2, delta: float) -> void:
 	if direction.length() > 0.1:

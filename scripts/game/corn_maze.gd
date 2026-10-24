@@ -22,9 +22,16 @@ const CHARM_ICONS := [
 	preload("res://assets/recipe/icons/essence.png"),
 ]
 const GROUND_TEXTURE := preload("res://assets/corn-maze/corn_maze_ground.png")
+const WALKABLE_MASK_TEXTURE := preload("res://assets/corn-maze/corn_maze_walkable_mask.png")
+const MASK_SAMPLE_OFFSETS := [
+	Vector2.ZERO,
+	Vector2(10, 0), Vector2(-10, 0), Vector2(0, 10), Vector2(0, -10),
+	Vector2(7, 7), Vector2(-7, 7), Vector2(7, -7), Vector2(-7, -7),
+]
 
 var witch: HollowWitch
 var camera: Camera2D
+var walkable_mask: Image
 var active := false
 var won := false
 var elapsed := 0.0
@@ -34,12 +41,13 @@ var collected: Array[String] = []
 var exit_marker: Label
 
 func _ready() -> void:
-	_build_collisions()
+	walkable_mask = WALKABLE_MASK_TEXTURE.get_image()
 	_build_charm_sprites()
 	_build_exit_marker()
 	witch = HollowWitch.new()
 	witch.position = cell_position(START_CELL)
-	witch.set_movement_bounds(Rect2(30.0, 30.0, WORLD_SIZE.x - 60.0, WORLD_SIZE.y - 60.0))
+	witch.set_movement_bounds(Rect2(14.0, 14.0, WORLD_SIZE.x - 28.0, WORLD_SIZE.y - 28.0))
+	witch.set_movement_validator(Callable(self, "_is_walkable_position"))
 	witch.z_index = 5
 	add_child(witch)
 	camera = Camera2D.new()
@@ -53,30 +61,16 @@ func _ready() -> void:
 	add_child(camera)
 	queue_redraw()
 
-func _build_collisions() -> void:
-	# The background is static, so use authored obstacle regions that follow its visible
-	# corn clusters instead of generating random invisible maze walls.
-	for corn_patch in [
-		Rect2(82, 142, 178, 92), Rect2(312, 116, 132, 128), Rect2(492, 20, 136, 112),
-		Rect2(680, 112, 165, 126), Rect2(952, 160, 170, 105), Rect2(62, 320, 190, 98),
-		Rect2(310, 294, 148, 132), Rect2(505, 246, 122, 112), Rect2(680, 320, 160, 110),
-		Rect2(940, 320, 212, 104), Rect2(206, 512, 166, 112), Rect2(545, 500, 176, 126),
-		Rect2(820, 520, 170, 126), Rect2(458, 700, 132, 112), Rect2(670, 706, 145, 110),
-		Rect2(880, 690, 176, 116)
-	]:
-		_add_rect_collision(corn_patch)
-	for rect in [Rect2(-16, 0, 16, WORLD_SIZE.y), Rect2(WORLD_SIZE.x, 0, 16, WORLD_SIZE.y), Rect2(0, -16, WORLD_SIZE.x, 16), Rect2(0, WORLD_SIZE.y, WORLD_SIZE.x, 16)]:
-		_add_rect_collision(rect)
-
-func _add_rect_collision(rect: Rect2) -> void:
-	var body := StaticBody2D.new()
-	body.position = rect.get_center()
-	var node := CollisionShape2D.new()
-	var shape := RectangleShape2D.new()
-	shape.size = rect.size
-	node.shape = shape
-	body.add_child(node)
-	add_child(body)
+func _is_walkable_position(candidate: Vector2) -> bool:
+	if walkable_mask == null:
+		return false
+	for offset in MASK_SAMPLE_OFFSETS:
+		var sample := Vector2i(roundi(candidate.x + offset.x), roundi(candidate.y + offset.y))
+		if sample.x < 0 or sample.y < 0 or sample.x >= walkable_mask.get_width() or sample.y >= walkable_mask.get_height():
+			return false
+		if walkable_mask.get_pixelv(sample).r < 0.5:
+			return false
+	return true
 
 func cell_position(cell: Vector2i) -> Vector2:
 	return Vector2(cell.x * CELL + CELL * 0.5, cell.y * CELL + CELL * 0.5)
