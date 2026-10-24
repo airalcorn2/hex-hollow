@@ -14,6 +14,22 @@ func _check() -> void:
 	var world = main.world
 	assert(world.witch.movement_validator.is_valid(), "The Hollow uses mask-validated movement")
 	assert(world._is_walkable_position(world.START_POSITION), "The Hollow spawn is walkable")
+	for radius in [60.0, 150.0, 190.0, 200.0]:
+		for i in 32:
+			var angle := TAU * i / 32.0
+			var point: Vector2 = world.CAULDRON + Vector2(cos(angle), sin(angle)) * radius
+			assert(world._is_walkable_position(point), "Decorative weeds do not block the cauldron clearing")
+	world.witch.position = world.CAULDRON + Vector2(175, 0)
+	for i in range(1, 25):
+		var angle := TAU * i / 24.0
+		var destination: Vector2 = world.CAULDRON + Vector2(cos(angle), sin(angle)) * 175.0
+		var motion: Vector2 = destination - world.witch.position
+		world.witch.move_direction(motion, motion.length() / world.witch.speed)
+		assert(world.witch.position.distance_to(destination) < 0.5, "Witch can walk a full lap through the clearing's weed ring")
+	assert(not world._is_walkable_position(world.CAULDRON + Vector2(0, -15)), "The clearing exception keeps the cauldron solid")
+	for companion in world.companion_witches:
+		assert(not world._is_walkable_position(companion.position), "The clearing exception keeps companion witches solid")
+	world.witch.position = world.START_POSITION
 	world.witch.move_direction(Vector2.DOWN, 0.3)
 	assert(world.witch.position.y > world.START_POSITION.y + 40.0, "Witch can leave the Hollow spawn")
 	world.witch.position = Vector2(984, 266)

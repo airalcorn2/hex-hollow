@@ -125,7 +125,7 @@ python3 tools/generate_collision_mask.py \
   --output-density /tmp/hollow-density.png
 ```
 
-The `--overrides` file contains reviewed world-pixel polygons applied to the raster mask after cleanup. These mark smooth pond water as blocked and the textured wooden bridge as walkable—the opposite of what edge density alone would infer. They do not create extra Godot collision rectangles. All other scenery uses the automatically generated mask. Older save positions that are now blocked are moved to nearby open ground while keeping ingredient and recipe progress.
+The `--overrides` file contains reviewed world-pixel polygons and walkable circles applied to the raster mask after cleanup. These mark smooth pond water as blocked and the textured wooden bridge as walkable—the opposite of what edge density alone would infer. A **210-pixel-radius circle around the cauldron** also makes the entire central clearing and its decorative weed ring walkable; only the cauldron and companion witches remain solid there. These overrides do not create extra Godot collision rectangles. All other scenery uses the automatically generated mask. Older save positions that are now blocked are moved to nearby open ground while keeping ingredient and recipe progress.
 
 Build the managed Preview export:
 

@@ -86,6 +86,12 @@ def apply_overrides(walkable: np.ndarray, path: Path | None) -> np.ndarray:
             if len(polygon) < 3:
                 raise ValueError("Each override polygon requires at least three points")
             draw.polygon([tuple(point) for point in polygon], fill=fill)
+    for circle in data.get("walkable_circles", []):
+        cx, cy = circle["center"]
+        radius = float(circle["radius"])
+        if radius <= 0:
+            raise ValueError("Walkable circle radius must be positive")
+        draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius), fill=255)
     return np.asarray(image) >= 128
 
 

@@ -54,9 +54,9 @@
         "scripts/game/hollow_world.gd"
       ],
       "regions": [],
-      "sha256": "sha256:5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586",
+      "sha256": "sha256:6c0ec443ca18a2b186966267dde417c7244d74d2945491b27db07b2b24ba1dcd",
       "shipped": true,
-      "size": 33335,
+      "size": 32877,
       "source": {},
       "status": "present",
       "transformations": [],
@@ -64,7 +64,21 @@
         "scripts/game/hollow_world.gd"
       ],
       "used": true,
-      "usedBy": []
+      "usedBy": [],
+      "versions": {
+        "sha256:5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586": {
+          "generator": {},
+          "inputs": [],
+          "license": {},
+          "origin": "unknown",
+          "regions": [],
+          "sha256": "sha256:5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586",
+          "size": 33335,
+          "source": {},
+          "transformations": [],
+          "usedBy": []
+        }
+      }
     },
     "assets/hollow/map.png": {
       "declaredUseEvidence": [],
@@ -1270,9 +1284,9 @@
         ]
       }
     ],
-    "pckSha256": "sha256:fa513af75c034f161ce0fbf48edf1c9207df279a8f06c030debee6aa5758698c",
+    "pckSha256": "sha256:42341e4a961cd469f0e8e14aab8717653980737faf74360222fd64b8ec0d9985",
     "profile": "release",
-    "sourceFingerprint": "sha256:249397f0cdba8614637b33dd2949fd93095fe00bf14729f65ab379958be52601"
+    "sourceFingerprint": "sha256:e0cd3943e102030edd96da68739cf068aab64abae5c9bc3fdaa177f09f07eb77"
   },
   "procedures": {},
   "summary": {
