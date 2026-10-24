@@ -232,6 +232,9 @@ func interact() -> void:
 			if TREAT_DATA[i].id == target:
 				treat_sprites[i].visible = false
 		message.emit("Found a %s! Sweet, sticky, and very witchy." % target_name(target).to_lower())
+		# Same real-world splash/announce treatment the main hollow's
+		# ingredients get -- see game_bridge.py's HOLLOW_TREATS.
+		CauldronBridge.notify_treat(target)
 		return
 	if nearby_cauldron():
 		if collected.size() == TREAT_DATA.size():
@@ -239,6 +242,7 @@ func interact() -> void:
 			set_active(false)
 			cauldron.texture = CAULDRON_SPELL_TEXTURE
 			message.emit("The treats melt into the brew. A harvest spell bubbles over!")
+			CauldronBridge.notify_maze_victory()
 			maze_completed.emit()
 		else:
 			message.emit("The cauldron wants all three fall treats. %d still hide in the corn." % (TREAT_DATA.size() - collected.size()))
@@ -249,6 +253,7 @@ func interact() -> void:
 		var lines: Array = landmark.lines
 		var line_index: int = environment_dialogue_index[environment_index]
 		message.emit("%s: \"%s\"" % [landmark.name, lines[line_index]])
+		CauldronBridge.notify_landmark("corn_maze", landmark.id, line_index)
 		environment_dialogue_index[environment_index] = (line_index + 1) % lines.size()
 		return
 	message.emit("Something sweet is hiding in the corn. Follow the paths.")

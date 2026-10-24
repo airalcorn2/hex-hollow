@@ -15,14 +15,14 @@ const INGREDIENTS := [
 ]
 const COMPANION_DIALOGUE := {
 	"Violet": [
-		"The moon is a silver spoon, dear. Stir clockwise for luck.",
-		"A little stardust makes every spell more scholarly.",
-		"Do mind the ghosts. They are terribly fond of interrupting rituals.",
+		"Ahh, the moon is a silver spoon tonight, dear. Stir clockwise for luck.",
+		"A little stardust makes every spell more scholarly, you know.",
+		"Ahh, do mind the ghosts. They are terribly fond of interrupting a good ritual.",
 	],
 	"Amber": [
-		"Drop something spooky in the pot, babe. Give it some attitude.",
-		"That cauldron is glowing. Honestly? Iconic.",
-		"If it hisses, smile like you meant for it to do that.",
+		"Ooh, drop something spooky in the pot. Give it some real attitude!",
+		"That cauldron's glowing again. Show-off.",
+		"Ooh, if it hisses at you, just smile like you meant for that to happen.",
 	],
 	"Hazel": [
 		"Hmph. Keep your fingers out of the brew, child. It bites.",
@@ -32,6 +32,7 @@ const COMPANION_DIALOGUE := {
 }
 const ENVIRONMENT_INTERACTIONS := [
 	{
+		"id":"gravestone_crooked",
 		"name":"The crooked gravestone",
 		"pos":Vector2(264, 169),
 		"prompt":"Read the epitaph",
@@ -41,6 +42,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"gravestone_mossy",
 		"name":"The mossy gravestone",
 		"pos":Vector2(465, 180),
 		"prompt":"Read the epitaph",
@@ -50,6 +52,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"lantern",
 		"name":"The lantern with no flame",
 		"pos":Vector2(402, 620),
 		"prompt":"Inspect the lantern",
@@ -59,6 +62,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"oak",
 		"name":"The whispering oak",
 		"pos":Vector2(880, 770),
 		"prompt":"Listen to the tree",
@@ -68,6 +72,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"pond_sign",
 		"name":"The crooked pond sign",
 		"pos":Vector2(1218, 694),
 		"prompt":"Read the pond sign",
@@ -77,6 +82,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"pumpkin_winking",
 		"name":"The winking pumpkin",
 		"pos":Vector2(1210, 175),
 		"prompt":"Inspect the pumpkin",
@@ -86,6 +92,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		],
 	},
 	{
+		"id":"pumpkin_smallest",
 		"name":"The smallest pumpkin",
 		"pos":Vector2(1370, 245),
 		"prompt":"Inspect the pumpkin",
@@ -471,6 +478,11 @@ func interact() -> void:
 			var lines: Array = COMPANION_DIALOGUE[companion_name]
 			var line_index: int = int(companion_dialogue_index[companion_name])
 			message.emit("%s: \"%s\"" % [companion_name, lines[line_index]])
+			# The real witch of the same name speaks her own line for real
+			# on the physical cauldron -- see game_bridge.py's
+			# HOLLOW_COMPANION_LINES, which must stay in sync with
+			# COMPANION_DIALOGUE above.
+			CauldronBridge.notify_companion(companion_name, line_index)
 			companion_dialogue_index[companion_name] = (line_index + 1) % lines.size()
 			return
 		var environment_index := nearby_environment()
@@ -479,6 +491,7 @@ func interact() -> void:
 			var epitaphs: Array = landmark.epitaphs
 			var epitaph_index: int = environment_dialogue_index[environment_index]
 			message.emit("%s: \"%s\"" % [landmark.name, epitaphs[epitaph_index]])
+			CauldronBridge.notify_landmark("hollow", landmark.id, epitaph_index)
 			environment_dialogue_index[environment_index] = (epitaph_index + 1) % epitaphs.size()
 			return
 	if not collected.is_empty():
