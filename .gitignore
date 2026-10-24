@@ -39,3 +39,6 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Self-contained GitHub distribution: retain game media in Git.
+!/assets/**
