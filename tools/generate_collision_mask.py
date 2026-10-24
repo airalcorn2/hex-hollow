@@ -143,7 +143,7 @@ def main() -> None:
     parser.add_argument("--cell-size", type=int, default=16)
     parser.add_argument("--gaussian-kernel", type=int, default=21, help="Approximate odd-sized Gaussian kernel")
     parser.add_argument("--walkable-threshold", type=int, default=54, help="Grayscale density threshold; values at or below it are walkable")
-    parser.add_argument("--cleanup-kernel", type=int, default=5, help="Odd morphology kernel used to remove small mask specks")
+    parser.add_argument("--cleanup-kernel", type=int, default=9, help="Odd morphology kernel used to remove small mask specks")
     parser.add_argument("--obstacle-occupancy", type=float, default=0.50, help="Obstacle fraction required for a coarse collision cell")
     parser.add_argument("--inset", type=int, default=3)
     parser.add_argument("--min-area", type=int, default=384)

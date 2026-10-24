@@ -178,7 +178,8 @@ func restore(data: Dictionary) -> void:
 	for i in CHARM_DATA.size():
 		var hidden: bool = CHARM_DATA[i].id in collected
 		charm_sprites[i].visible = not hidden
-	witch.position = Vector2(float(data.get("x", START_POSITION.x)), float(data.get("y", START_POSITION.y)))
+	var saved_position := Vector2(float(data.get("x", START_POSITION.x)), float(data.get("y", START_POSITION.y)))
+	witch.position = saved_position if _is_walkable_position(saved_position) else START_POSITION
 	camera.position = witch.position
 	camera.reset_smoothing()
 

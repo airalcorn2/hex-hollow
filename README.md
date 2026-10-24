@@ -99,7 +99,7 @@ python3 tools/generate_collision_mask.py \
   --cell-size 32 \
   --gaussian-kernel 21 \
   --walkable-threshold 54 \
-  --cleanup-kernel 5 \
+  --cleanup-kernel 9 \
   --obstacle-occupancy 0.50 \
   --inset 5 \
   --min-area 1536
