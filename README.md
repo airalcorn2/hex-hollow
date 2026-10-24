@@ -8,7 +8,7 @@ The project is available at [github.com/airalcorn2/hex-hollow](https://github.co
 
 The first level takes place in the Hollow: a moonlit woodland filled with ingredient pickups, companion witches, readable gravestones, lanterns, trees, signs, and a bubbling cauldron.
 
-After completing the first spell, the witch can enter Level 2, the **Mooncorn Maze**. This level uses a static illustrated cornfield scene and contains three moon charms followed by an exit objective. The title screen also includes **Practice the Mooncorn Maze**, which starts Level 2 directly with a fresh set of charms for testing.
+After completing the first spell, the witch can enter Level 2, the **Mooncorn Maze**. This level uses a static illustrated cornfield scene with three fall treats (a candy apple, a caramel corn ball, and candy corn) hidden along its paths. Once all three are gathered, the witch drops them into the bubbling cauldron in the lantern gate to finish the level. The title screen also includes **Practice the Mooncorn Maze**, which starts Level 2 directly with a fresh set of treats for testing.
 
 Progress is stored locally so an unfinished spell or maze run can be continued from the title screen.
 
@@ -60,7 +60,7 @@ npm run preview:status
 
 ## Verification
 
-Run the native gameplay regression test to verify movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, Level 2 entry, moon-charms, maze completion, and direct maze practice mode:
+Run the native gameplay regression test to verify movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, Level 2 entry, fall-treat collection, the maze cauldron finish, and direct maze practice mode:
 
 ```bash
 /usr/local/bin/godot --headless --path . --audio-driver Dummy --script tools/hollow_check.gd

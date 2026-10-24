@@ -94,16 +94,22 @@ func _check() -> void:
 	maze.witch.position = Vector2(370, 101)
 	maze.witch.move_direction(Vector2.DOWN, 0.2)
 	assert(maze.witch.position.y > 101.0, "Witch can always move out of an invalid spot inside corn")
-	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
-	for i in maze.CHARM_POSITIONS.size():
-		assert(maze._is_walkable_position(maze.CHARM_POSITIONS[i]), "Moon charm %d sits on a walkable path" % i)
-		maze.witch.position = maze.CHARM_POSITIONS[i]
-		assert(not maze.nearby_target().is_empty(), "Moon charm %d is reachable" % i)
+	assert(maze.treat_sprites.size() == 3, "Corn maze has three illustrated fall treats")
+	maze.witch.position = Vector2(1078, 705)
+	maze.witch.move_direction(Vector2.UP, 0.5)
+	assert(maze.witch.position.y > maze.CAULDRON_POSITION.y + maze.CAULDRON_RADIUS, "The maze cauldron is solid")
+	assert(maze.nearby_cauldron(), "Witch can stand beside the maze cauldron")
+	maze.interact()
+	assert(not maze.won, "The cauldron refuses to finish before all treats are found")
+	for i in maze.TREAT_POSITIONS.size():
+		assert(maze._is_walkable_position(maze.TREAT_POSITIONS[i]), "Fall treat %d sits on a walkable path" % i)
+		maze.witch.position = maze.TREAT_POSITIONS[i]
+		assert(not maze.nearby_target().is_empty(), "Fall treat %d is reachable" % i)
 		maze.interact()
-	assert(maze.collected.size() == 3, "Corn maze collects all three moon charms")
-	assert(maze._is_walkable_position(maze.EXIT_POSITION), "Maze exit sits on a walkable path")
-	maze.witch.position = maze.EXIT_POSITION
-	assert(maze.nearby_exit(), "Corn maze exit is reachable")
+	assert(maze.collected.size() == 3, "Corn maze collects all three fall treats")
+	maze.witch.position = Vector2(1078, 620)
+	assert(maze._is_walkable_position(maze.witch.position), "The path north of the cauldron is walkable")
+	assert(maze.nearby_cauldron(), "Witch can reach the cauldron from the north side")
 	maze.interact()
 	assert(main.state == "complete" and maze.won, "Corn maze completion flow starts")
 	main._show_title()

@@ -230,7 +230,7 @@ func _begin_maze(data: Dictionary = {}) -> void:
 	world.maze_completed.connect(_maze_completed)
 	world.set_active(true)
 	_build_maze_hud()
-	_show_message("Level 2: enter the Mooncorn Maze. Find three moon charms and reach EXIT!")
+	_show_message("Level 2: the Mooncorn Maze. Gather three fall treats and bring them to the cauldron!")
 
 func _process_maze(delta: float) -> void:
 	notice_age += delta
@@ -241,12 +241,12 @@ func _process_maze(delta: float) -> void:
 	var target: String = world.nearby_target()
 	if not target.is_empty():
 		prompt_label.text = "[ E / SPACE ]  Gather " + world.target_name(target)
-	elif world.nearby_exit():
-		prompt_label.text = "[ E / SPACE ]  Leave the corn maze" if world.collected.size() == 3 else "The EXIT is sealed · Find all 3 moon charms"
+	elif world.nearby_cauldron():
+		prompt_label.text = "[ E / SPACE ]  Drop the treats into the cauldron" if world.collected.size() == 3 else "The cauldron is waiting · Find all 3 fall treats"
 	else:
-		prompt_label.text = "Follow the moonlit charms through the corn."
-	progress_label.text = "%d / 3 moon charms found" % world.collected.size()
-	satchel_label.text = "CHARMS  ·  %d / 3" % world.collected.size()
+		prompt_label.text = "Sniff out the fall treats hidden in the corn."
+	progress_label.text = "%d / 3 fall treats found" % world.collected.size()
+	satchel_label.text = "TREATS  ·  %d / 3" % world.collected.size()
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
 	region_label.text = "THE MOONCORN MAZE"
 
@@ -297,12 +297,15 @@ func _build_maze_hud() -> void:
 	_panel(hud, Rect2(1004, 116, 252, 612), Color("281d30"))
 	_label(hud, "THE SECOND SPELL", Vector2(1026, 139), Vector2(218, 28), 13, GOLD, true)
 	_label(hud, "Mooncorn Maze", Vector2(1024, 173), Vector2(215, 38), 25, CREAM, true)
-	_label(hud, "Three charms. One way out.", Vector2(1027, 222), Vector2(210, 25), 13, MUTED)
-	progress_label = _label(hud, "0 / 3 moon charms found", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
-	_label(hud, "Moon charms shimmer in the corn", Vector2(1027, 306), Vector2(205, 42), 13, MUTED)
-	_label(hud, "Reach EXIT after collecting all three.", Vector2(1027, 354), Vector2(205, 42), 13, MUTED)
+	_label(hud, "Three treats. One harvest brew.", Vector2(1027, 222), Vector2(210, 25), 13, MUTED)
+	progress_label = _label(hud, "0 / 3 fall treats found", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
+	for i in CornMazeScript.TREAT_DATA.size():
+		var y: float = 310 + i * 51
+		_picture(hud, CornMazeScript.TREAT_ICONS[i], Rect2(1019, y - 6, 46, 46))
+		_label(hud, CornMazeScript.TREAT_DATA[i].name, Vector2(1072, y + 8), Vector2(173, 24), 14)
+	_label(hud, "Bring all three to the cauldron in the lantern gate.", Vector2(1027, 470), Vector2(205, 60), 13, MUTED)
 	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
-	satchel_label = _label(hud, "CHARMS  ·  0 / 3", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
+	satchel_label = _label(hud, "TREATS  ·  0 / 3", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
 	_label(hud, "The corn remembers the way in", Vector2(1034, 674), Vector2(190, 22), 11, MUTED)
 	_panel(hud, Rect2(24, 740, 1232, 43), Color("281d30"), Color("49364e"), 8)
 	prompt_label = _label(hud, "", Vector2(44, 750), Vector2(850, 24), 15, CREAM)
@@ -403,7 +406,7 @@ func _maze_completed() -> void:
 		return
 	_make_overlay(
 		"The maze is conquered!",
-		"Three moon charms and one impossible path.\nThe hollow has no more secrets tonight."
+		"Three fall treats and one bubbling harvest brew.\nThe hollow has no more secrets tonight."
 	)
 	_button(overlay, "Brew another spell  →", Rect2(470, 428, 340, 48), _start_new_run, true)
 	_button(overlay, "Back to title", Rect2(470, 490, 340, 46), _show_title)
