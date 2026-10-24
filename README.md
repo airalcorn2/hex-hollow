@@ -12,9 +12,11 @@ After completing the first spell, the witch can enter Level 2, the **Mooncorn Ma
 
 The maze's **Wishing Well** (upper middle), **Lantern Tree** (center-left), and **Pumpkin Wagon** (right-hand clearing) offer optional witchy flavor text. Follow the gold **?** above each landmark, approach from the paths, and press **E / Space**. Repeated inspections cycle through different lines; these interactions do not consume treats or affect the harvest spell.
 
-Environmental **?** indicators in both levels use fixed, object-specific anchors with small downward pointers. Violet, Amber, and Hazel keep their nameplates and **E / Space** dialogue, but do not have question-mark indicators.
+After the harvest spell, enter Level 3, **The Whispering Manor**: a haunted-house interior with six connected rooms, a portrait gallery, dining room, library, music parlor, kitchen and nursery. Gather four cursed keepsakes—a **silver key**, **music box**, **ghost candle** and **velvet ribbon**—then bring them to the bubbling cauldron in the foyer to brew an unhaunting spell. The watching portrait, phantom piano, haunted clock and kitchen hearth offer optional ghostly flavor text. The title's **Practice the haunted house** button starts Level 3 directly.
 
-Progress is stored locally so an unfinished spell or maze run can be continued from the title screen.
+Environmental **?** indicators in all three levels use fixed, object-specific anchors with small downward pointers. Violet, Amber, and Hazel keep their nameplates and **E / Space** dialogue, but do not have question-mark indicators.
+
+Progress is stored locally so an unfinished spell, maze or manor run can be continued from the title screen, including when all collectibles are held but the cauldron spell has not been brewed. Completed earlier chapters offer continuation into the next chapter.
 
 ## Controls
 
@@ -22,7 +24,7 @@ Progress is stored locally so an unfinished spell or maze run can be continued f
 - **E / Space** — Collect ingredients, deposit them, talk to witches, and inspect landmarks
 - **Esc** — Pause or resume
 
-The title screen provides the normal adventure entry point, saved-run continuation, and direct maze practice mode.
+The title screen provides the normal adventure entry point, saved-run continuation, and direct maze and haunted-house practice modes.
 
 ## Project layout
 
@@ -30,7 +32,7 @@ The title screen provides the normal adventure entry point, saved-run continuati
 assets/                 Game art, icons, fonts, and static backgrounds
 scenes/main.tscn        Main Godot scene
 scripts/entities/       Player entity and movement
-scripts/game/           Woodland and Mooncorn Maze world controllers
+scripts/game/           Woodland, Mooncorn Maze and haunted-house controllers
 scripts/hollow_main.gd  Shared title, HUD, pause, save, and level flow
 autoload/               Persistence, tuning, language, and cauldron integration
 tools/hollow_check.gd   Native gameplay regression test
@@ -85,7 +87,7 @@ The sync command preserves GitHub's asset tracking and history, checks each asse
 
 ## Verification
 
-Run the native gameplay regression test to verify movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, Level 2 entry, fall-treat collection, the maze cauldron finish, and direct maze practice mode:
+Run the native gameplay regression test to verify all three chapters, movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, chapter transitions, fall treats, haunted-house doorway traversal, walkable rugs and solid furniture, keepsakes, environmental dialogue, full-satchel continuation, and both practice modes:
 
 ```bash
 godot --headless --path . --editor --quit
@@ -133,7 +135,7 @@ python3 tools/generate_collision_mask.py \
 
 The helper requires Python with Pillow and NumPy. Its output should be adjusted or hand-authored before being used as authoritative gameplay collision.
 
-Both levels sample reviewed pixel masks at runtime instead of approximating background scenery with rectangles. They share the small 12×10-pixel feet footprint, swept substeps and corner assistance. The cauldron and companion witches remain solid live props.
+All three levels sample reviewed pixel masks at runtime instead of approximating background scenery with rectangles. They share the small 12×10-pixel feet footprint, swept substeps and corner assistance. The cauldron and companion witches remain solid live props.
 
 Regenerate the Hollow's mask with the same Gaussian and cleanup settings:
 
@@ -151,6 +153,21 @@ python3 tools/generate_collision_mask.py \
 
 The `--overrides` file contains reviewed world-pixel polygons and walkable circles applied to the raster mask after cleanup. These mark smooth pond water as blocked and the textured wooden bridge as walkable—the opposite of what edge density alone would infer. A **210-pixel-radius circle around the cauldron** also makes the entire central clearing and its decorative weed ring walkable; only the cauldron and companion witches remain solid there. These overrides do not create extra Godot collision rectangles. All other scenery uses the automatically generated mask. Older save positions that are now blocked are moved to nearby open ground while keeping ingredient and recipe progress.
 
+Regenerate the haunted house's mask:
+
+```bash
+python3 tools/generate_collision_mask.py \
+  --image assets/haunted-house/manor_ground.png \
+  --world-width 1536 --world-height 1024 \
+  --gaussian-kernel 21 --walkable-threshold 54 --cleanup-kernel 9 \
+  --overrides config/collisions/manor_mask_overrides.json \
+  --output-json /tmp/manor-candidates.json \
+  --output-preview /tmp/manor-candidates.png \
+  --output-pixel-mask assets/haunted-house/manor_walkable_mask.png
+```
+
+The manor's reviewed raster corrections preserve structural walls, keep the six illustrated doorway gaps open, and make decorative rugs and the foyer floor ornament walkable. `solid_polygons` are applied last so clearing a rug does not clear the table, piano, bed or rocking horse resting on it. These remain pixel-mask corrections, not rectangle-based physics.
+
 Build the managed Preview export:
 
 ```bash
@@ -167,6 +184,8 @@ npm run verify:release
 ## Save data and integrations
 
 Adventure progress is stored through the existing local save service. The cauldron bridge can notify the companion physical-cauldron project when the spell is completed; the game remains playable without that external hardware connection.
+
+Existing woodland and maze bridge endpoints remain unchanged. Level 3 includes an **opt-in** `notify_house_event` hook, disabled by default. To wire up the physical prop, first implement `POST /house_event` on the Pi, then set `ENABLE_HAUNTED_HOUSE_EVENTS` to `true` in `autoload/cauldron_bridge.gd`. Payloads have `event` (`pickup`, `landmark`, or `victory`), with `keepsake` for pickups, or `landmark` and zero-based `line` for inspections. New keepsake IDs are never sent to the older `/deposit` or `/treat` endpoints.
 
 ## Contributing
 

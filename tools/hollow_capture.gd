@@ -27,6 +27,14 @@ func _capture() -> void:
 		main.world.camera.position = main.world.witch.position
 		main.world.camera.reset_smoothing()
 		main.world.interact()
+	elif OS.get_environment("HOLLOW_CAPTURE_MODE") == "house":
+		main._practice_house()
+		await process_frame
+		if OS.get_environment("HOLLOW_CAPTURE_POINT") == "parlor":
+			main.world.witch.position = Vector2(1030, 500)
+			main.world.camera.position = main.world.witch.position
+			main.world.camera.reset_smoothing()
+			main.world.interact()
 	for frame in 12:
 		await process_frame
 	await create_timer(0.35).timeout

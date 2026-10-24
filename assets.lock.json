@@ -5,6 +5,10 @@
       "name": "Corn Maze",
       "order": 70
     },
+    "haunted-house": {
+      "name": "The Whispering Manor",
+      "order": 80
+    },
     "hollow": {
       "name": "Haunted woodland",
       "order": 20
@@ -107,6 +111,54 @@
       "size": 21741,
       "assetType": "image",
       "groupId": "corn-maze",
+      "used": true
+    },
+    "assets/haunted-house/icons/ghost_candle.png": {
+      "path": "/manus-storage/game/sha256/0283cb3818a0cc9a87de465ccc2b96d7039a4f92f4e2501c5e087e94a0082f11.png",
+      "sha256": "sha256:0283cb3818a0cc9a87de465ccc2b96d7039a4f92f4e2501c5e087e94a0082f11",
+      "size": 11182,
+      "assetType": "image",
+      "groupId": "haunted-house",
+      "used": true
+    },
+    "assets/haunted-house/icons/music_box.png": {
+      "path": "/manus-storage/game/sha256/eb57415eba2303906831f4ff53910c6dcb884c29bfccccab8501a3eae02bc88d.png",
+      "sha256": "sha256:eb57415eba2303906831f4ff53910c6dcb884c29bfccccab8501a3eae02bc88d",
+      "size": 17223,
+      "assetType": "image",
+      "groupId": "haunted-house",
+      "used": true
+    },
+    "assets/haunted-house/icons/silver_key.png": {
+      "path": "/manus-storage/game/sha256/148b5dc22a188f3d36a34a368b3fc9d0840eede1f6badd1d47b15ef69a1723b0.png",
+      "sha256": "sha256:148b5dc22a188f3d36a34a368b3fc9d0840eede1f6badd1d47b15ef69a1723b0",
+      "size": 11461,
+      "assetType": "image",
+      "groupId": "haunted-house",
+      "used": true
+    },
+    "assets/haunted-house/icons/velvet_ribbon.png": {
+      "path": "/manus-storage/game/sha256/3c17d3508de2fe41e53897ecd6d015968bd404c0b682e8044cce910e8727a439.png",
+      "sha256": "sha256:3c17d3508de2fe41e53897ecd6d015968bd404c0b682e8044cce910e8727a439",
+      "size": 15739,
+      "assetType": "image",
+      "groupId": "haunted-house",
+      "used": true
+    },
+    "assets/haunted-house/manor_ground.png": {
+      "path": "/manus-storage/game/sha256/c6d50f9faecb3b75d50e9050d27803b7dcd6aed3bc1c7cce1c10a3d50fe2c145.png",
+      "sha256": "sha256:c6d50f9faecb3b75d50e9050d27803b7dcd6aed3bc1c7cce1c10a3d50fe2c145",
+      "size": 2282154,
+      "assetType": "image",
+      "groupId": "haunted-house",
+      "used": true
+    },
+    "assets/haunted-house/manor_walkable_mask.png": {
+      "path": "/manus-storage/game/sha256/64069474b902bf50909321ab82e6d28a4da5d231d082f6d8c13eecb7e7fae259.png",
+      "sha256": "sha256:64069474b902bf50909321ab82e6d28a4da5d231d082f6d8c13eecb7e7fae259",
+      "size": 9292,
+      "assetType": "image",
+      "groupId": "haunted-house",
       "used": true
     },
     "assets/hollow/hollow_walkable_mask.png": {

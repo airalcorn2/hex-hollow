@@ -175,11 +175,100 @@ func _check() -> void:
 	assert(maze.nearby_cauldron(), "Witch can reach the cauldron from the north side")
 	maze.interact()
 	assert(main.state == "complete" and maze.won, "Corn maze completion flow starts")
+	await create_timer(1.3).timeout
+	assert(main.overlay != null, "Maze completion presents the next chapter")
+	var found_house_button := false
+	for child in main.overlay.get_children():
+		if child is Button and child.text.begins_with("Enter the haunted house"):
+			found_house_button = true
+			child.pressed.emit()
+			break
+	assert(found_house_button, "Maze completion offers entry to the haunted house")
+	await process_frame
+	assert(main.current_level == 3, "Next-chapter button enters the haunted house")
+	var house = main.world
+	assert(house._is_walkable_position(house.START_POSITION), "Manor spawn has an open feet footprint")
+	assert(house.witch.movement_validator.is_valid(), "The house uses the shared forgiving mask movement")
+	var tour := [Vector2(768, 855), Vector2(848, 855), Vector2(848, 735), Vector2(768, 735), Vector2(575, 735), Vector2(400, 735), Vector2(768, 735), Vector2(978, 735), Vector2(1170, 780), Vector2(978, 735), Vector2(768, 735), Vector2(768, 475), Vector2(578, 475), Vector2(455, 520), Vector2(578, 475), Vector2(768, 475), Vector2(985, 475), Vector2(1005, 555), Vector2(1005, 475), Vector2(768, 475), Vector2(768, 235), Vector2(578, 235), Vector2(505, 252), Vector2(578, 235), Vector2(768, 235), Vector2(978, 235), Vector2(1150, 260)]
+	for destination in tour:
+		var motion: Vector2 = destination - house.witch.position
+		house.witch.move_direction(motion, motion.length() / house.witch.speed)
+		assert(house.witch.position.distance_to(destination) < 1.0, "All manor rooms can be reached through their open doorways")
+	house.witch.position = Vector2(560, 280)
+	house.witch.move_direction(Vector2.DOWN, 0.5)
+	assert(house.witch.position.y < 317 and house._is_walkable_position(house.witch.position), "House walls prevent walking between rooms except through doorways")
+	house.witch.position = Vector2(1100, 263)
+	house.witch.move_direction(Vector2.RIGHT, 0.4)
+	assert(house.witch.position.x > 1170, "Decorative gallery rugs are fully walkable")
+	assert(not house._is_walkable_position(Vector2(1100, 460)), "The piano stays solid despite its walkable rug")
+	assert(not house._is_walkable_position(house.CAULDRON_POSITION), "The foyer cauldron is solid")
+	house.witch.position = Vector2(768, 860)
+	house.interact()
+	assert(not house.won, "The house cauldron waits for all four keepsakes")
+	var house_approaches := [Vector2(1040, 197), Vector2(1030, 500), Vector2(1340, 495), Vector2(230, 730)]
+	assert(house.interaction_markers.size() == house.ENVIRONMENT_INTERACTIONS.size(), "Hauntings have precisely anchored indicators")
+	for i in house.ENVIRONMENT_INTERACTIONS.size():
+		house.witch.position = house_approaches[i]
+		assert(house._is_walkable_position(house.witch.position) and house.nearby_environment() == i, "Each haunting has a reachable inspection point")
+		var before_line: int = house.environment_dialogue_index[i]
+		house.interact()
+		assert(house.environment_dialogue_index[i] != before_line and house.collected.is_empty(), "Hauntings reveal flavor text without awarding keepsakes")
+	for i in 2:
+		house.witch.position = house.ITEM_POSITIONS[i]
+		assert(house._is_walkable_position(house.witch.position), "Each keepsake sits on connected floor")
+		house.interact()
+		house.interact()
+		assert(house.collected.size() == i + 1, "Keepsakes can only be gathered once")
+	main._toggle_pause()
+	var paused_position: Vector2 = house.witch.position
+	Input.action_press("move_right")
+	await create_timer(0.12).timeout
+	Input.action_release("move_right")
+	assert(house.witch.position == paused_position, "Pause stops movement in the manor")
+	main._resume()
+	var house_save: Dictionary = house.snapshot()
+	house_save.x = 616
+	house_save.y = 332
+	house.restore(house_save)
+	assert(house.witch.position == house.START_POSITION and house.collected.size() == 2, "An invalid old house position restores safely without losing keepsakes")
+	main._save_progress()
+	main._show_title()
+	await process_frame
+	main._continue_run()
+	await process_frame
+	house = main.world
+	assert(main.current_level == 3 and house.collected.size() == 2, "Title continuation restores the correct chapter and keepsakes")
+	for i in range(2, 4):
+		house.witch.position = house.ITEM_POSITIONS[i]
+		house.interact()
+	assert(house.collected.size() == 4 and not house.won, "Gathering keepsakes does not finish the house before brewing")
+	main._save_progress()
+	main._show_title()
+	await process_frame
+	var found_continue := false
+	for child in main.get_children():
+		if child is Button and child.text == "Continue in the manor":
+			found_continue = true
+	assert(found_continue, "A full satchel is still resumable before brewing")
+	main._continue_run()
+	await process_frame
+	house = main.world
+	assert(house.collected.size() == 4 and not house.won, "All four keepsakes survive saved-run continuation")
+	house.witch.position = Vector2(768, 860)
+	house.interact()
+	assert(main.state == "complete" and house.won and not house.active, "The foyer cauldron completes the unhaunting spell once")
+	await create_timer(1.3).timeout
+	assert(main.overlay != null, "The manor presents the final adventure ending")
 	main._show_title()
 	await process_frame
 	main._practice_maze()
 	await process_frame
 	assert(main.current_level == 2 and main.world.collected.is_empty(), "Title screen starts a fresh maze practice run")
+	main._show_title()
+	await process_frame
+	main._practice_house()
+	await process_frame
+	assert(main.current_level == 3 and main.world.collected.is_empty() and not main.world.won, "Title screen starts a fresh haunted-house practice run")
 	saves.set_adventure(original)
-	print("[hex-hollow] PASS: movement, pause, ordered pickups, one-at-a-time deposits, duplicate prevention, save restore, completed spell, replay, corn maze")
+	print("[hex-hollow] PASS: woodland, corn maze, haunted house, doorway traversal, rugs and walls, keepsakes, hauntings, pause, full-satchel save restore, spell completion, replay")
 	quit(0)

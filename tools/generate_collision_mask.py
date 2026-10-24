@@ -92,6 +92,12 @@ def apply_overrides(walkable: np.ndarray, path: Path | None) -> np.ndarray:
         if radius <= 0:
             raise ValueError("Walkable circle radius must be positive")
         draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius), fill=255)
+    # Floor decorations may overlap furniture. Apply reviewed solid footprints
+    # last so clearing a rug cannot make its table or piano walkable.
+    for polygon in data.get("solid_polygons", []):
+        if len(polygon) < 3:
+            raise ValueError("Each solid footprint requires at least three points")
+        draw.polygon([tuple(point) for point in polygon], fill=0)
     return np.asarray(image) >= 128
 
 

@@ -19,3 +19,9 @@ The user's SNES Zelda reference defines the aesthetic: crisp 16-bit pixel-art fa
 - `tools/`: bounded native capture and core-loop check, excluded from release.
 
 Static managed Web export uses the configured `true` build and `site` output; no server or database is needed.
+
+## Level 3 — The Whispering Manor
+
+The third chapter follows completion of the Mooncorn Maze and takes place inside a roofless, top-down illustrated haunted house. Keep the same original 16-bit Halloween art direction, witch locomotion, E / Space interactions, fixed HUD, pause/resume and local saves. Wide connected halls and doorways join six furnished rooms: dining room, portrait gallery, library, music parlor, kitchen and nursery. Collect four cursed keepsakes (silver key, music box, ghost candle and velvet ribbon), then return them to a bubbling cauldron in the foyer to finish an unhaunting spell. There is no combat or countdown. Optional fixed, precisely anchored environmental indicators reveal playful haunted-house flavor text. Rugs and decorative floor details remain walkable; structural walls and substantial furniture do not.
+
+Add `scripts/game/haunted_house.gd` for the third chapter, original room art and keepsake icons in `assets/haunted-house/`, and a reproducible Gaussian walkable mask with reviewed architectural corrections under `config/collisions/`. Extend `scripts/hollow_main.gd` with the Level 2-to-3 transition, third-level HUD and completion, save restoration and a direct practice shortcut. Keep earlier levels and physical cauldron integrations intact; any new third-level bridge events must use an optional extension boundary rather than send unfamiliar ingredient IDs to the existing deposit endpoints. Continue saving verified managed releases and synchronize the asset-complete GitHub distribution through the existing portable sync tool.

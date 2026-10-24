@@ -9,6 +9,8 @@ extends Node
 # no-op, so the game plays fine with no cauldron connected.
 const BASE_URL := ""
 const REQUEST_TIMEOUT_SEC := 3.0
+# Enable only after the physical bridge implements POST /house_event.
+const ENABLE_HAUNTED_HOUSE_EVENTS := false
 
 
 func notify_deposit(ingredient_id: String) -> void:
@@ -40,6 +42,14 @@ func notify_treat(treat_id: String) -> void:
 
 func notify_maze_victory() -> void:
 	_post("/maze_victory", {})
+
+
+func notify_house_event(event: String, details: Dictionary = {}) -> void:
+	if not ENABLE_HAUNTED_HOUSE_EVENTS:
+		return
+	var payload := details.duplicate()
+	payload["event"] = event
+	_post("/house_event", payload)
 
 
 # Fire-and-forget: nothing here waits on or reads the response, so a slow
