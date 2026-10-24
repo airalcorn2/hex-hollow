@@ -76,14 +76,31 @@ def segment(image: Image.Image, args: argparse.Namespace) -> np.ndarray:
     return np.asarray(mask_image) >= 128
 
 
-def occupied_grid(mask: np.ndarray, cell_size: int, occupancy: float) -> np.ndarray:
+def edge_map(image: Image.Image, percentile: float) -> np.ndarray:
+    """Return a high-frequency edge map for texture-density filtering."""
+    rgb = np.asarray(image.convert("RGB"), dtype=np.float32)
+    gray = 0.299 * rgb[..., 0] + 0.587 * rgb[..., 1] + 0.114 * rgb[..., 2]
+    gx = np.diff(gray, axis=1, prepend=gray[:, :1])
+    gy = np.diff(gray, axis=0, prepend=gray[:1, :])
+    magnitude = np.sqrt(gx * gx + gy * gy)
+    threshold = np.percentile(magnitude, percentile)
+    return magnitude >= threshold
+
+
+def occupied_grid(mask: np.ndarray, cell_size: int, occupancy: float, edges: np.ndarray | None = None, min_edge_density: float = 0.0) -> np.ndarray:
     height, width = mask.shape
     usable_width = (width // cell_size) * cell_size
     usable_height = (height // cell_size) * cell_size
     cropped = mask[:usable_height, :usable_width]
     grid = cropped.reshape(usable_height // cell_size, cell_size, usable_width // cell_size, cell_size)
     fraction = grid.mean(axis=(1, 3))
-    return fraction >= occupancy
+    occupied = fraction >= occupancy
+    if edges is not None and min_edge_density > 0.0:
+        edge_crop = edges[:usable_height, :usable_width]
+        edge_grid = edge_crop.reshape(usable_height // cell_size, cell_size, usable_width // cell_size, cell_size)
+        edge_density = edge_grid.mean(axis=(1, 3))
+        occupied &= edge_density >= min_edge_density
+    return occupied
 
 
 def merge_grid(grid: np.ndarray, cell_size: int, inset: int, min_area: int) -> list[Rect]:
@@ -144,6 +161,8 @@ def main() -> None:
     parser.add_argument("--inset", type=int, default=3)
     parser.add_argument("--min-area", type=int, default=384)
     parser.add_argument("--close-size", type=int, default=5)
+    parser.add_argument("--edge-percentile", type=float, default=78.0, help="Global gradient percentile used as the edge threshold")
+    parser.add_argument("--min-edge-density", type=float, default=0.18, help="Minimum fraction of high-gradient pixels in an occupied cell; use 0 to disable")
     parser.add_argument("--green-hue-min", type=float, default=25.0)
     parser.add_argument("--green-hue-max", type=float, default=110.0)
     parser.add_argument("--gold-hue-min", type=float, default=8.0)
@@ -157,7 +176,8 @@ def main() -> None:
 
     image = Image.open(args.image).convert("RGB").resize((args.world_width, args.world_height), Image.Resampling.LANCZOS)
     mask = segment(image, args)
-    grid = occupied_grid(mask, args.cell_size, args.occupancy)
+    edges = edge_map(image, args.edge_percentile)
+    grid = occupied_grid(mask, args.cell_size, args.occupancy, edges, args.min_edge_density)
     rects = merge_grid(grid, args.cell_size, args.inset, args.min_area)
     rects.sort(key=lambda rect: (rect.y, rect.x))
 
@@ -165,9 +185,9 @@ def main() -> None:
         "source": str(args.image),
         "worldSize": [args.world_width, args.world_height],
         "cellSize": args.cell_size,
-        "method": "HSV vegetation/gold segmentation -> coarse occupancy grid -> greedy rectangle merge",
+        "method": "HSV vegetation/gold segmentation + local edge-density filter -> coarse occupancy grid -> greedy rectangle merge",
         "reviewRequired": True,
-        "settings": {key: getattr(args, key) for key in ["occupancy", "inset", "min_area", "close_size", "green_hue_min", "green_hue_max", "gold_hue_min", "gold_hue_max", "saturation_min", "gold_saturation_min", "value_max", "gold_value_max"]},
+        "settings": {key: getattr(args, key) for key in ["occupancy", "inset", "min_area", "close_size", "edge_percentile", "min_edge_density", "green_hue_min", "green_hue_max", "gold_hue_min", "gold_hue_max", "saturation_min", "gold_saturation_min", "value_max", "gold_value_max"]},
         "rectangles": [{"x": r.x, "y": r.y, "width": r.w, "height": r.h} for r in rects],
         "polygons": [r.polygon() for r in rects],
     }

@@ -94,6 +94,7 @@ python3 tools/generate_collision_mask.py \
   --world-height 832 \
   --cell-size 32 \
   --occupancy 0.52 \
+  --min-edge-density 0.30 \
   --close-size 9 \
   --inset 5 \
   --min-area 1536
