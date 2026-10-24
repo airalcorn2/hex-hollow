@@ -74,14 +74,14 @@ npm run check -- --pack
 
 ## Collision-mask helper
 
-`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, applies configurable HSV vegetation/gold segmentation, filters candidate pixels by local edge density, snaps the result to a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
+`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, detects high-frequency edges, converts local edge density into a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
 
 - JSON containing rectangles and four-point polygons
 - A debug PNG with the candidate regions drawn over the background
-- An optional pixel-level false-color mask: blue pixels pass the color test, orange pixels pass the edge test, and bright green pixels pass both
+- An optional binary pixel-level edge mask: white pixels are the raw high-frequency edge signal and black pixels are rejected
 - Optional Godot `PackedVector2Array` source
 
-The output is intentionally not imported automatically. Review the debug overlay first: pixel-art shadows, paths, trees, pumpkins, and corn can share colors, so automatic segmentation can produce false positives.
+The output is intentionally not imported automatically. Review the debug overlay first: paths, trees, pumpkins, and corn can all contain high-frequency detail, so edge-only processing can still produce false positives.
 
 Example:
 
@@ -95,9 +95,7 @@ python3 tools/generate_collision_mask.py \
   --world-width 1216 \
   --world-height 832 \
   --cell-size 32 \
-  --occupancy 0.52 \
   --min-edge-density 0.30 \
-  --close-size 9 \
   --inset 5 \
   --min-area 1536
 ```
