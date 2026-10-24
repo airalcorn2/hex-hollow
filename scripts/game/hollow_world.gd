@@ -35,6 +35,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"gravestone_crooked",
 		"name":"The crooked gravestone",
 		"pos":Vector2(264, 169),
+		"marker_anchor":Vector2(240, 184),
 		"prompt":"Read the epitaph",
 		"epitaphs":[
 			"Here lies Reginald. He chased a ghost. The ghost won.",
@@ -45,6 +46,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"gravestone_mossy",
 		"name":"The mossy gravestone",
 		"pos":Vector2(465, 180),
+		"marker_anchor":Vector2(466, 156),
 		"prompt":"Read the epitaph",
 		"epitaphs":[
 			"Beloved Beatrice. She always said the grave was half full.",
@@ -55,6 +57,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"lantern",
 		"name":"The lantern with no flame",
 		"pos":Vector2(402, 620),
+		"marker_anchor":Vector2(414, 611),
 		"prompt":"Inspect the lantern",
 		"epitaphs":[
 			"The flame went out years ago. Its shadow still flickers.",
@@ -65,6 +68,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"oak",
 		"name":"The whispering oak",
 		"pos":Vector2(880, 770),
+		"marker_anchor":Vector2(938, 781),
 		"prompt":"Listen to the tree",
 		"epitaphs":[
 			"The oak whispers your name, but only on the second listen.",
@@ -75,6 +79,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"pond_sign",
 		"name":"The crooked pond sign",
 		"pos":Vector2(1218, 694),
+		"marker_anchor":Vector2(1213, 605),
 		"prompt":"Read the pond sign",
 		"epitaphs":[
 			"POND RULES: No feeding the fish. They remember faces.",
@@ -85,6 +90,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"pumpkin_winking",
 		"name":"The winking pumpkin",
 		"pos":Vector2(1210, 175),
+		"marker_anchor":Vector2(1194, 145),
 		"prompt":"Inspect the pumpkin",
 		"epitaphs":[
 			"This pumpkin has a heartbeat. It is trying to pretend it doesn't.",
@@ -95,6 +101,7 @@ const ENVIRONMENT_INTERACTIONS := [
 		"id":"pumpkin_smallest",
 		"name":"The smallest pumpkin",
 		"pos":Vector2(1370, 245),
+		"marker_anchor":Vector2(1358, 259),
 		"prompt":"Inspect the pumpkin",
 		"epitaphs":[
 			"It is holding a secret. It refuses to share.",
@@ -236,16 +243,16 @@ func _build_cauldron_bubbles() -> void:
 		bubble_origins.append(origins[i])
 
 func _build_interaction_markers() -> void:
-	for companion in companion_witches:
-		_add_interaction_marker(companion.position + Vector2(28, -105), Color("f4c46f"))
+	# Companions keep their names and dialogue, but need no question marks.
 	for landmark in ENVIRONMENT_INTERACTIONS:
-		_add_interaction_marker(landmark.pos + Vector2(0, -55), Color("f4c46f"))
+		_add_interaction_marker(landmark.marker_anchor, Color("f4c46f"))
 
-func _add_interaction_marker(pos: Vector2, color: Color) -> void:
+func _add_interaction_marker(anchor: Vector2, color: Color) -> void:
 	var marker := Label.new()
 	marker.text = "?"
+	var pos := anchor - Vector2(12, 34)
 	marker.position = pos
-	marker.size = Vector2(24, 28)
+	marker.size = Vector2(24, 34)
 	marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	marker.add_theme_font_size_override("font_size", 21)
 	marker.add_theme_font_override("font", preload("res://assets/template/fonts/display/generic_heading.tres"))
@@ -255,6 +262,10 @@ func _add_interaction_marker(pos: Vector2, color: Color) -> void:
 	marker.add_theme_constant_override("shadow_offset_y", 2)
 	marker.z_index = 20
 	marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var pointer := Polygon2D.new()
+	pointer.polygon = PackedVector2Array([Vector2(9, 28), Vector2(15, 28), Vector2(12, 34)])
+	pointer.color = color
+	marker.add_child(pointer)
 	add_child(marker)
 	interaction_markers.append(marker)
 	interaction_marker_origins.append(pos)
@@ -329,7 +340,7 @@ func _process(delta: float) -> void:
 		bubble.modulate.a = (0.12 + (1.0 - cycle) * 0.7) if motion_enabled else 0.38
 	for i in interaction_markers.size():
 		var marker: Label = interaction_markers[i]
-		marker.position = interaction_marker_origins[i] + Vector2(0, sin(age * 2.8 + i) * 3.0 if motion_enabled else 0.0)
+		marker.position = interaction_marker_origins[i]
 		marker.modulate.a = 0.72 + (sin(age * 3.4 + i) * 0.18 if motion_enabled else 0.0)
 		if won:
 			completion_age += 0.0 if bool(TuningStore.get_active_value("ui.reduced_motion", false)) else delta

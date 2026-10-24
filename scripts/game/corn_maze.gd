@@ -40,7 +40,7 @@ const BUBBLE_OFFSETS := [Vector2(-18, -58), Vector2(-4, -66), Vector2(12, -60), 
 const ENVIRONMENT_INTERACTIONS := [
 	{
 		"id":"well", "name":"Wishing Well", "prompt":"Peer into the wishing well",
-		"pos":Vector2(700, 214), "reach":90.0, "marker_pos":Vector2(688, 125),
+		"pos":Vector2(700, 214), "reach":90.0, "marker_anchor":Vector2(702, 147),
 		"lines":[
 			"Drop in a wish, not a witch. The last one clogged the bucket.",
 			"Your reflection winks first. How terribly impolite.",
@@ -49,7 +49,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	},
 	{
 		"id":"tree", "name":"Lantern Tree", "prompt":"Listen to the lantern tree",
-		"pos":Vector2(414, 443), "reach":90.0, "marker_pos":Vector2(402, 338),
+		"pos":Vector2(414, 443), "reach":90.0, "marker_anchor":Vector2(407, 422),
 		"lines":[
 			"The branches creak: 'I know every shortcut. I just enjoy watching you wander.'",
 			"The lantern flickers twice. A leaf lands on your hat like a tiny blessing.",
@@ -58,7 +58,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	},
 	{
 		"id":"wagon", "name":"Pumpkin Wagon", "prompt":"Inspect the pumpkin wagon",
-		"pos":Vector2(1016, 454), "reach":80.0, "marker_pos":Vector2(1004, 388),
+		"pos":Vector2(1016, 454), "reach":80.0, "marker_anchor":Vector2(1023, 411),
 		"lines":[
 			"The delivery note reads: 'Three pumpkins, two curses. Handle with scare.'",
 			"One pumpkin rolls an inch toward you. You politely pretend not to notice.",
@@ -141,8 +141,8 @@ func _build_interaction_markers() -> void:
 	for landmark in ENVIRONMENT_INTERACTIONS:
 		var marker := Label.new()
 		marker.text = "?"
-		marker.position = landmark.marker_pos
-		marker.size = Vector2(24, 28)
+		marker.position = landmark.marker_anchor - Vector2(12, 34)
+		marker.size = Vector2(24, 34)
 		marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		marker.add_theme_font_size_override("font_size", 21)
 		marker.add_theme_font_override("font", preload("res://assets/template/fonts/display/generic_heading.tres"))
@@ -152,6 +152,10 @@ func _build_interaction_markers() -> void:
 		marker.add_theme_constant_override("shadow_offset_y", 2)
 		marker.z_index = 20
 		marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var pointer := Polygon2D.new()
+		pointer.polygon = PackedVector2Array([Vector2(9, 28), Vector2(15, 28), Vector2(12, 34)])
+		pointer.color = Color("f4c46f")
+		marker.add_child(pointer)
 		add_child(marker)
 		interaction_markers.append(marker)
 		environment_dialogue_index.append(0)
@@ -182,7 +186,7 @@ func _process(delta: float) -> void:
 	cauldron.scale = Vector2.ONE * (0.62 + sin(age * 4.0) * 0.008)
 	var nearest := nearby_environment()
 	for i in interaction_markers.size():
-		interaction_markers[i].position = ENVIRONMENT_INTERACTIONS[i].marker_pos + Vector2(0, sin(age * 2.8 + i) * 3.0)
+		interaction_markers[i].position = ENVIRONMENT_INTERACTIONS[i].marker_anchor - Vector2(12, 34)
 		interaction_markers[i].modulate = Color.WHITE if i == nearest else Color(1.0, 1.0, 1.0, 0.85)
 	queue_redraw()
 
