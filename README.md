@@ -12,7 +12,21 @@ After completing the first spell, the witch can enter Level 2, the **Mooncorn Ma
 
 The maze's **Wishing Well** (upper middle), **Lantern Tree** (center-left), and **Pumpkin Wagon** (right-hand clearing) offer optional witchy flavor text. Follow the gold **?** above each landmark, approach from the paths, and press **E / Space**. Repeated inspections cycle through different lines; these interactions do not consume treats or affect the harvest spell.
 
-After the harvest spell, enter Level 3, **The Whispering Manor**: a haunted-house interior with six connected rooms, a portrait gallery, dining room, library, music parlor, kitchen and nursery. Gather four cursed keepsakes—a **silver key**, **music box**, **ghost candle** and **velvet ribbon**—then bring them to the bubbling cauldron in the foyer to brew an unhaunting spell. The watching portrait, phantom piano, haunted clock and kitchen hearth offer optional ghostly flavor text. The title's **Practice the haunted house** button starts Level 3 directly.
+After the harvest spell, enter Level 3, **The Whispering Manor**: a haunted-house interior with six connected rooms, a portrait gallery, dining room, library, music parlor, kitchen and nursery. Gather four cursed keepsakes—a **silver key**, **music box**, **ghost candle** and **velvet ribbon**—then bring them to the bubbling cauldron in the foyer to brew an unhaunting spell. The title's **Practice the haunted house** button starts Level 3 directly.
+
+The manor has **18 optional environmental interactions**, each with three rotating readings. Follow the fixed gold **?** pointers and press **E / Space** nearby. They reveal ghostly flavor text without awarding keepsakes or changing the spell; collectible and cauldron prompts take priority.
+
+| Area | Objects to inspect |
+| --- | --- |
+| Dining room | The eternal supper and midnight sideboard |
+| Portrait gallery | The watching portrait and haunted mirror |
+| Library | Forbidden books, an unfinished letter, and the wandering globe |
+| Music parlor | Phantom piano, haunted clock, fireplace, and vacant armchair |
+| Kitchen | Haunted hearth and potion pantry |
+| Nursery | Dollhouse, toy chest, rocking horse, and sleepy bed |
+| North foyer | The antlered host above the hall |
+
+The manor's object anchors, interaction ranges and dialogue live in `scripts/game/manor_interactions.gd`, separately from movement and collection logic.
 
 Environmental **?** indicators in all three levels use fixed, object-specific anchors with small downward pointers. Violet, Amber, and Hazel keep their nameplates and **E / Space** dialogue, but do not have question-mark indicators.
 

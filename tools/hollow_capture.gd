@@ -30,7 +30,16 @@ func _capture() -> void:
 	elif OS.get_environment("HOLLOW_CAPTURE_MODE") == "house":
 		main._practice_house()
 		await process_frame
-		if OS.get_environment("HOLLOW_CAPTURE_POINT") == "parlor":
+		var landmark_id := OS.get_environment("HOLLOW_CAPTURE_LANDMARK")
+		if not landmark_id.is_empty():
+			for landmark in main.world.ENVIRONMENT_INTERACTIONS:
+				if landmark.id == landmark_id:
+					main.world.witch.position = landmark.approach
+					main.world.camera.position = main.world.witch.position
+					main.world.camera.reset_smoothing()
+					main.world.interact()
+					break
+		elif OS.get_environment("HOLLOW_CAPTURE_POINT") == "parlor":
 			main.world.witch.position = Vector2(1030, 500)
 			main.world.camera.position = main.world.witch.position
 			main.world.camera.reset_smoothing()
