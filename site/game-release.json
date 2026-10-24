@@ -3,7 +3,7 @@
   "engineVersion": "4.7.2.stable.official.ed1daf0bf",
   "inputs": {
     "objectFormat": "sha1",
-    "tree": "e71af4b899ef65418f803ce54bcfb1600104ea2b",
+    "tree": "63644d2cce59b5df268cd68110fea4be41afd07d",
     "entries": [
       {
         "path": ".gitignore",
@@ -33,13 +33,13 @@
         "path": "README.md",
         "type": "file",
         "mode": "100644",
-        "object": "145605f12716529e1128dfb67183018c391705df"
+        "object": "bfd59a84bbc546872071631b972cea5de96c9582"
       },
       {
         "path": "TODO.md",
         "type": "file",
         "mode": "100644",
-        "object": "f5ef872b4c07b8448494641d2a1a18d51a527b42"
+        "object": "147a79dbb19072d570d442ade916d1f98a3618b6"
       },
       {
         "path": "app.config.ts",
@@ -51,7 +51,7 @@
         "path": "assets.lock.json",
         "type": "file",
         "mode": "100644",
-        "object": "d5c01f18c3f1273ae0c7f446122d178d17d86d55"
+        "object": "37a9733080d7e3f9bec558c8fc98d5f49d8a4273"
       },
       {
         "path": "assets/corn-maze/corn_maze_ground.png",
@@ -74,6 +74,72 @@
         "type": "file",
         "mode": "100644",
         "object": "9a87fb035a016354c79fa71a5efe7fe8c03e8266"
+      },
+      {
+        "path": "assets/haunted-house/icons/ghost_candle.png",
+        "type": "managed",
+        "sha256": "sha256:0283cb3818a0cc9a87de465ccc2b96d7039a4f92f4e2501c5e087e94a0082f11"
+      },
+      {
+        "path": "assets/haunted-house/icons/ghost_candle.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "555df2ae001969f262dbde77cf8d0f700654a19c"
+      },
+      {
+        "path": "assets/haunted-house/icons/music_box.png",
+        "type": "managed",
+        "sha256": "sha256:eb57415eba2303906831f4ff53910c6dcb884c29bfccccab8501a3eae02bc88d"
+      },
+      {
+        "path": "assets/haunted-house/icons/music_box.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "b22fd59e6f59b003f2cb6d8661bfd00c304bca07"
+      },
+      {
+        "path": "assets/haunted-house/icons/silver_key.png",
+        "type": "managed",
+        "sha256": "sha256:148b5dc22a188f3d36a34a368b3fc9d0840eede1f6badd1d47b15ef69a1723b0"
+      },
+      {
+        "path": "assets/haunted-house/icons/silver_key.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "78a6578cce40cea025565cc3eee92e49565a54dc"
+      },
+      {
+        "path": "assets/haunted-house/icons/velvet_ribbon.png",
+        "type": "managed",
+        "sha256": "sha256:3c17d3508de2fe41e53897ecd6d015968bd404c0b682e8044cce910e8727a439"
+      },
+      {
+        "path": "assets/haunted-house/icons/velvet_ribbon.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "be392ad70a5d62f0487b06644e8354cbcaf7cf08"
+      },
+      {
+        "path": "assets/haunted-house/manor_ground.png",
+        "type": "managed",
+        "sha256": "sha256:c6d50f9faecb3b75d50e9050d27803b7dcd6aed3bc1c7cce1c10a3d50fe2c145"
+      },
+      {
+        "path": "assets/haunted-house/manor_ground.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "9472d8c2b969cbedc081604edd053640a5d71b36"
+      },
+      {
+        "path": "assets/haunted-house/manor_walkable_mask.png",
+        "type": "managed",
+        "sha256": "sha256:64069474b902bf50909321ab82e6d28a4da5d231d082f6d8c13eecb7e7fae259"
+      },
+      {
+        "path": "assets/haunted-house/manor_walkable_mask.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "b75e3485aaf8bf3299242adca54b75092007f9de"
       },
       {
         "path": "assets/hollow/hollow_walkable_mask.png",
@@ -817,7 +883,7 @@
         "path": "autoload/cauldron_bridge.gd",
         "type": "file",
         "mode": "100644",
-        "object": "e6b3d85541f9a79f478afcd8fbf5e014dddb6079"
+        "object": "06f50830f03e848421284a9702fc6a94db324dd7"
       },
       {
         "path": "autoload/cauldron_bridge.gd.uid",
@@ -886,6 +952,12 @@
         "object": "d7fa88b4777c63405dc0b5bdd2f4c906ba313a42"
       },
       {
+        "path": "config/collisions/manor_mask_overrides.json",
+        "type": "file",
+        "mode": "100644",
+        "object": "9e733e93c20de626d7de3b98006cdc059e1ff992"
+      },
+      {
         "path": "config/tuning.json",
         "type": "file",
         "mode": "100644",
@@ -943,13 +1015,13 @@
         "path": "plan.md",
         "type": "file",
         "mode": "100644",
-        "object": "35c665f70088a423fc06674d69e2f49ec3e69ac4"
+        "object": "b8fd291b555ace064c186447e38d560bac62efc7"
       },
       {
         "path": "project.godot",
         "type": "file",
         "mode": "100644",
-        "object": "27fa78ac3240da0f051c9af00242f2e569c81ba0"
+        "object": "bd7cc46241c700b41bd9cae1e434737a200910ee"
       },
       {
         "path": "scenes/main.tscn",
@@ -1009,13 +1081,25 @@
         "path": "scripts/game/corn_maze.gd",
         "type": "file",
         "mode": "100644",
-        "object": "9cbb972cd4fdf183ba462e27aaf68e50672ff266"
+        "object": "095c50fe0be836142a34fa619331e804591f4dad"
       },
       {
         "path": "scripts/game/corn_maze.gd.uid",
         "type": "file",
         "mode": "100644",
         "object": "8f9b07acdca95b760dcd0c5ae7ab19dd9297d2a8"
+      },
+      {
+        "path": "scripts/game/haunted_house.gd",
+        "type": "file",
+        "mode": "100644",
+        "object": "f3abf47ca36ecee5b61a19e2592761b007497d3d"
+      },
+      {
+        "path": "scripts/game/haunted_house.gd.uid",
+        "type": "file",
+        "mode": "100644",
+        "object": "9d4a4259a1570161cdbe8056290f8d9e2bfbf354"
       },
       {
         "path": "scripts/game/hollow_world.gd",
@@ -1057,7 +1141,7 @@
         "path": "scripts/hollow_main.gd",
         "type": "file",
         "mode": "100644",
-        "object": "f8ddf88fb79e64e9f5b13828f45fb8271a5df463"
+        "object": "37df7c0763fca1728de1ce5780747624aace6a8e"
       },
       {
         "path": "scripts/hollow_main.gd.uid",
@@ -1375,13 +1459,13 @@
         "path": "tools/generate_collision_mask.py",
         "type": "file",
         "mode": "100755",
-        "object": "9b0b0570cb80ab6ff38704d43b6b6b9cd620838a"
+        "object": "51135da5fca3da3f074a4452972adc8542591710"
       },
       {
         "path": "tools/hollow_capture.gd",
         "type": "file",
         "mode": "100644",
-        "object": "a7ac1f7037dff1aa150e3eeaa7141a360ff8a516"
+        "object": "a5c96896c10294aec0608305e55409b528cd17c6"
       },
       {
         "path": "tools/hollow_capture.gd.uid",
@@ -1393,7 +1477,7 @@
         "path": "tools/hollow_check.gd",
         "type": "file",
         "mode": "100644",
-        "object": "dc7fd93a3c549e0625d6de6d7cd6234fa71a77a2"
+        "object": "6baf2faa7aa3f796e106975a6bf1972ff4c1eabd"
       },
       {
         "path": "tools/hollow_check.gd.uid",
@@ -1452,7 +1536,7 @@
     ]
   },
   "build": {
-    "snapshotId": "sha256:b342109e9c1c5e06a02b2d8e5cf6734331a3c4d202704c932bf86b6ccc3cd53c",
+    "snapshotId": "sha256:839c8ab1c7e18650db588d450492d268ace0178b85165ec6d657a277840d6a87",
     "toolchain": {
       "engineVersion": "4.7.2.stable.official.ed1daf0bf",
       "engineDigest": "sha256:8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
@@ -1465,21 +1549,21 @@
     "profile": "release",
     "export": {
       "profile": "release",
-      "snapshotId": "sha256:b342109e9c1c5e06a02b2d8e5cf6734331a3c4d202704c932bf86b6ccc3cd53c",
+      "snapshotId": "sha256:839c8ab1c7e18650db588d450492d268ace0178b85165ec6d657a277840d6a87",
       "files": {
         "THIRD_PARTY_NOTICES.txt": "sha256:c729a77bf07eb9745b2d89c3ce4ead3357438366f41743d2755ae35f98509cf9",
         "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
         "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
         "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-        "index.html": "sha256:ac9fce2f9c311e421d473770ea6a3736c03543261718806632225523f8dc3741",
+        "index.html": "sha256:445a09f187e8dfa99bc67629b6c2863f2ad062bf118ea6cadbafe43a112e1402",
         "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
         "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
-        "index.pck": "sha256:30e71dcd3403851004c132297d666e534ee022a0a6a225885972cb3c784b4045",
+        "index.pck": "sha256:0414f76dddeaeb05b119d1d5cd071496a4784418e046615e9b958ed6d8a0eb0f",
         "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",
         "index.wasm": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
         "open-source-licenses.html": "sha256:9215f5fdd50039a9b6f3d8f0271cbc21bbdf64b917fb118dd29c8a16b9974e00"
       },
-      "digest": "sha256:a94f6d17044b46f6566bd32856ce7947c9c9d70fc4f7c3058d08f01f92fc100d"
+      "digest": "sha256:483acb57585eb504669f53185f06a77ebe817fae42f738e45a768aec8551d32f"
     }
   },
   "artifacts": {
@@ -1488,8 +1572,8 @@
       "sha256": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0"
     },
     "pck": {
-      "path": "/manus-storage/game/sha256/30e71dcd3403851004c132297d666e534ee022a0a6a225885972cb3c784b4045.pck",
-      "sha256": "sha256:30e71dcd3403851004c132297d666e534ee022a0a6a225885972cb3c784b4045"
+      "path": "/manus-storage/game/sha256/0414f76dddeaeb05b119d1d5cd071496a4784418e046615e9b958ed6d8a0eb0f.pck",
+      "sha256": "sha256:0414f76dddeaeb05b119d1d5cd071496a4784418e046615e9b958ed6d8a0eb0f"
     }
   },
   "files": {
@@ -1498,7 +1582,7 @@
     "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
     "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "sha256:aaf754854e96c0bb106f18496b9259c0a3702a8e2ec4cd1974f2a2ccea4a2419",
+    "index.html": "sha256:50b345e452f285a963ee553742963d2198694fc856b99aca23174e7f0c78db8b",
     "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
     "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
     "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",

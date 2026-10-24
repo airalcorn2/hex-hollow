@@ -271,10 +271,11 @@ func restore(data: Dictionary) -> void:
 	for i in TREAT_DATA.size():
 		var hidden: bool = TREAT_DATA[i].id in collected
 		treat_sprites[i].visible = not hidden
+	elapsed = maxf(0.0, float(data.get("elapsed", 0.0)))
 	var saved_position := Vector2(float(data.get("x", START_POSITION.x)), float(data.get("y", START_POSITION.y)))
 	witch.position = saved_position if _is_walkable_position(saved_position) else START_POSITION
 	camera.position = witch.position
 	camera.reset_smoothing()
 
 func snapshot() -> Dictionary:
-	return {"level":2, "collected":collected.duplicate(), "elapsed":elapsed, "x":witch.position.x, "y":witch.position.y}
+	return {"level":2, "collected":collected.duplicate(), "elapsed":elapsed, "won":won, "x":witch.position.x, "y":witch.position.y}

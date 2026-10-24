@@ -2,6 +2,7 @@ extends Control
 
 const WorldScript = preload("res://scripts/game/hollow_world.gd")
 const CornMazeScript = preload("res://scripts/game/corn_maze.gd")
+const HauntedHouseScript = preload("res://scripts/game/haunted_house.gd")
 const Licenses = preload("res://scripts/manus/open_source_licenses.gd")
 const CREAM := Color("f4e7cd")
 const MUTED := Color("b7a6c2")
@@ -51,6 +52,9 @@ func _process(delta: float) -> void:
 	if current_level == 2:
 		_process_maze(delta)
 		return
+	if current_level == 3:
+		_process_house(delta)
+		return
 	notice_age += delta
 	save_age += delta
 	if save_age > 4.0:
@@ -83,6 +87,8 @@ func _clear() -> void:
 	overlay = null
 	rows.clear()
 	row_ids.clear()
+	notice_age = 0.0
+	save_age = 0.0
 
 func _label(parent: Node, text: String, pos: Vector2, dimensions: Vector2, font_size: int, color: Color = CREAM, heading: bool = false) -> Label:
 	var label := Label.new()
@@ -156,13 +162,19 @@ func _show_title() -> void:
 	_label(self, "A LITTLE MISCHIEF. A LITTLE MAGIC.", Vector2(44, 645), Vector2(650, 28), 14, GOLD, true)
 	_label(self, "Gather six enchanted ingredients. Brew a spell before the night is through.", Vector2(44, 684), Vector2(735, 30), 20)
 	_label(self, "WASD / arrows to wander    ·    E / Space to gather & brew    ·    Esc to pause", Vector2(44, 734), Vector2(820, 28), 15, MUTED)
-	_button(self, "Enter the hollow  →", Rect2(924, 661, 310, 50), _start_new_run, true)
-	_button(self, "Practice the Mooncorn Maze", Rect2(924, 718, 310, 38), _practice_maze)
-	var has_incomplete_save := false
-	if not saved.is_empty():
-		has_incomplete_save = saved.get("collected", []).size() < 3 if int(saved.get("level", 1)) == 2 else saved.get("deposited", []).size() < 6
-	if has_incomplete_save:
-		var continue_text := "Continue in the maze" if int(saved.get("level", 1)) == 2 else "Continue your spell"
+	_button(self, "Enter the hollow  →", Rect2(924, 632, 310, 46), _start_new_run, true)
+	_button(self, "Practice the Mooncorn Maze", Rect2(924, 684, 310, 34), _practice_maze)
+	_button(self, "Practice the haunted house", Rect2(924, 722, 310, 34), _practice_house)
+	var saved_level := int(saved.get("level", 1))
+	var can_continue := not saved.is_empty() and (saved_level < 3 or not bool(saved.get("won", false)))
+	if can_continue:
+		var continue_text := "Continue your spell"
+		if saved_level == 3:
+			continue_text = "Continue in the manor"
+		elif saved_level == 2:
+			continue_text = "Enter the haunted house" if bool(saved.get("won", false)) else "Continue in the maze"
+		elif saved.get("deposited", []).size() >= 6:
+			continue_text = "Continue to the maze"
 		_button(self, continue_text, Rect2(924, 760, 310, 34), _continue_run)
 	else:
 		_label(self, "A cozy, moonlit adventure", Vector2(931, 765), Vector2(298, 25), 15, MUTED)
@@ -174,9 +186,20 @@ func _start_new_run() -> void:
 func _practice_maze() -> void:
 	_begin_maze({})
 
+func _practice_house() -> void:
+	_begin_house({})
+
 func _continue_run() -> void:
-	if int(saved.get("level", 1)) == 2:
-		_begin_maze(saved)
+	var saved_level := int(saved.get("level", 1))
+	if saved_level == 3:
+		_begin_house(saved)
+	elif saved_level == 2:
+		if bool(saved.get("won", false)):
+			_begin_house({})
+		else:
+			_begin_maze(saved)
+	elif saved.get("deposited", []).size() >= 6:
+		_begin_maze({})
 	else:
 		_begin_run(saved)
 
@@ -231,6 +254,33 @@ func _begin_maze(data: Dictionary = {}) -> void:
 	world.set_active(true)
 	_build_maze_hud()
 	_show_message("Level 2: the Mooncorn Maze. Gather three fall treats and bring them to the cauldron!")
+	_save_progress()
+
+func _begin_house(data: Dictionary = {}) -> void:
+	_clear()
+	current_level = 3
+	state = "playing"
+	TuningStore.begin_run()
+	var container := SubViewportContainer.new()
+	container.position = Vector2(24, 116)
+	container.size = Vector2(956, 612)
+	container.stretch = true
+	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(956, 612)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	container.add_child(viewport)
+	add_child(container)
+	world = HauntedHouseScript.new()
+	viewport.add_child(world)
+	if not data.is_empty():
+		world.restore(data)
+	world.message.connect(_show_message)
+	world.house_completed.connect(_house_completed)
+	world.set_active(true)
+	_build_house_hud()
+	_show_message("Level 3: the Whispering Manor. Find four cursed keepsakes and return to the foyer cauldron!")
+	_save_progress()
 
 func _process_maze(delta: float) -> void:
 	notice_age += delta
@@ -251,6 +301,30 @@ func _process_maze(delta: float) -> void:
 	satchel_label.text = "TREATS  ·  %d / 3" % world.collected.size()
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
 	region_label.text = "THE MOONCORN MAZE"
+
+func _process_house(delta: float) -> void:
+	notice_age += delta
+	save_age += delta
+	if save_age > 4.0:
+		_save_progress()
+		save_age = 0.0
+	var target: String = world.nearby_target()
+	if not target.is_empty():
+		prompt_label.text = "[ E / SPACE ]  Gather " + world.target_name(target)
+	elif world.nearby_cauldron():
+		prompt_label.text = "[ E / SPACE ]  Brew the unhaunting spell" if world.collected.size() == 4 else "The foyer cauldron · Find all 4 cursed keepsakes"
+	elif world.nearby_environment() >= 0:
+		prompt_label.text = "[ E / SPACE ]  " + world.environment_prompt(world.nearby_environment())
+	else:
+		prompt_label.text = "Search the haunted rooms · Inspect objects marked with ?"
+	progress_label.text = "%d / 4 keepsakes found" % world.collected.size()
+	satchel_label.text = "KEEPSAKES  ·  %d / 4" % world.collected.size()
+	for i in rows.size():
+		var found: bool = row_ids[i] in world.collected
+		rows[i].text = ("✓ " if found else "") + HauntedHouseScript.ITEM_DATA[i].name
+		rows[i].add_theme_color_override("font_color", MINT if found else CREAM)
+	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
+	region_label.text = world.region_name()
 
 func _build_hud() -> void:
 	hud = Control.new()
@@ -317,6 +391,40 @@ func _build_maze_hud() -> void:
 	notice_label.add_theme_constant_override("shadow_offset_x", 1)
 	notice_label.add_theme_constant_override("shadow_offset_y", 2)
 
+func _build_house_hud() -> void:
+	hud = Control.new()
+	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(hud)
+	_picture(hud, preload("res://assets/share/favicon.png"), Rect2(24, 18, 55, 55))
+	_label(hud, "HEX HOLLOW · LEVEL 3", Vector2(91, 18), Vector2(500, 43), 30, CREAM, true)
+	_label(hud, "The Whispering Manor", Vector2(94, 65), Vector2(400, 25), 14, MUTED)
+	_label(hud, "HALLOWEEN NIGHT", Vector2(900, 27), Vector2(260, 25), 13, GOLD, true)
+	_button(hud, "Ⅱ", Rect2(1198, 24, 56, 45), _toggle_pause)
+	region_label = _label(hud, "THE FOYER", Vector2(27, 88), Vector2(790, 23), 12, GOLD, true)
+	_panel(hud, Rect2(1004, 116, 252, 612), Color("281d30"))
+	_label(hud, "THE THIRD SPELL", Vector2(1026, 139), Vector2(218, 28), 13, GOLD, true)
+	_label(hud, "Haunted House", Vector2(1024, 173), Vector2(215, 38), 24, CREAM, true)
+	_label(hud, "Four keepsakes. One quiet house.", Vector2(1027, 222), Vector2(210, 25), 12, MUTED)
+	progress_label = _label(hud, "0 / 4 keepsakes found", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
+	for i in HauntedHouseScript.ITEM_DATA.size():
+		var y: float = 310 + i * 51
+		var item: Dictionary = HauntedHouseScript.ITEM_DATA[i]
+		_picture(hud, HauntedHouseScript.ITEM_TEXTURES[i], Rect2(1019, y - 6, 46, 46))
+		rows.append(_label(hud, item.name, Vector2(1072, y), Vector2(173, 24), 14))
+		row_ids.append(item.id)
+		_label(hud, item.hint, Vector2(1072, y + 23), Vector2(173, 20), 11, MUTED)
+	_label(hud, "Bring all four to the cauldron\nin the foyer to unhaunt\nthe manor.", Vector2(1027, 536), Vector2(205, 72), 13, MUTED)
+	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
+	satchel_label = _label(hud, "KEEPSAKES  ·  0 / 4", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
+	_label(hud, "Even old ghosts deserve a rest", Vector2(1034, 674), Vector2(190, 22), 11, MUTED)
+	_panel(hud, Rect2(24, 740, 1232, 43), Color("281d30"), Color("49364e"), 8)
+	prompt_label = _label(hud, "", Vector2(44, 750), Vector2(850, 24), 15, CREAM)
+	_label(hud, "WASD / ARROWS   ·   E / SPACE INTERACT   ·   ESC PAUSE", Vector2(875, 752), Vector2(370, 22), 11, MUTED)
+	notice_label = _label(hud, "", Vector2(44, 133), Vector2(903, 36), 15, CREAM)
+	notice_label.add_theme_color_override("font_shadow_color", Color("171020"))
+	notice_label.add_theme_constant_override("shadow_offset_x", 1)
+	notice_label.add_theme_constant_override("shadow_offset_y", 2)
+
 func _recipe_changed() -> void:
 	if progress_label == null:
 		return
@@ -359,8 +467,9 @@ func _toggle_pause() -> void:
 	state = "paused"
 	world.set_active(false)
 	_save_progress()
-	_make_overlay("A moment by moonlight", "Your ingredients are safe. The forest can wait.")
-	_button(overlay, "Return to the hollow", Rect2(470, 388, 340, 48), _resume, true)
+	_make_overlay("A moment by moonlight", "Your finds are safe. The night can wait.")
+	var return_text := "Return to the manor" if current_level == 3 else ("Return to the maze" if current_level == 2 else "Return to the hollow")
+	_button(overlay, return_text, Rect2(470, 388, 340, 48), _resume, true)
 	_button(overlay, "Start a new spell", Rect2(470, 450, 340, 46), _start_new_run)
 	_button(overlay, "Back to title", Rect2(470, 512, 340, 46), _show_title)
 
@@ -404,11 +513,27 @@ func _maze_completed() -> void:
 	_save_progress()
 	TuningStore.end_run()
 	await get_tree().create_timer(1.2).timeout
-	if state != "complete":
+	if state != "complete" or current_level != 2:
 		return
 	_make_overlay(
 		"The maze is conquered!",
-		"Three fall treats and one bubbling harvest brew.\nThe hollow has no more secrets tonight."
+		"Three fall treats and one bubbling harvest brew.\nA haunted house waits beyond the corn."
 	)
-	_button(overlay, "Brew another spell  →", Rect2(470, 428, 340, 48), _start_new_run, true)
-	_button(overlay, "Back to title", Rect2(470, 490, 340, 46), _show_title)
+	_button(overlay, "Enter the haunted house  →", Rect2(470, 428, 340, 48), _begin_house, true)
+	_button(overlay, "Brew another spell", Rect2(470, 490, 340, 46), _start_new_run)
+	_button(overlay, "Back to title", Rect2(470, 552, 340, 40), _show_title)
+
+func _house_completed() -> void:
+	state = "complete"
+	_save_progress()
+	TuningStore.end_run()
+	await get_tree().create_timer(1.2).timeout
+	if state != "complete" or current_level != 3:
+		return
+	_make_overlay(
+		"The manor is at peace!",
+		"Four keepsakes, one gentle unhaunting spell.\nThe ghosts can finally sleep. Happy Halloween!"
+	)
+	_button(overlay, "Wander the manor again  →", Rect2(470, 428, 340, 48), _practice_house, true)
+	_button(overlay, "Start from the hollow", Rect2(470, 490, 340, 46), _start_new_run)
+	_button(overlay, "Back to title", Rect2(470, 552, 340, 40), _show_title)
