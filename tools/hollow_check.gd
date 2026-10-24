@@ -84,6 +84,9 @@ func _check() -> void:
 	maze.witch.position = Vector2(40, 40)
 	maze.witch.move_direction(Vector2(-1, -1), 0.2)
 	assert(maze.witch.position.x >= 30.0 and maze.witch.position.y >= 30.0, "Maze movement stays inside the actual canvas")
+	maze.witch.position = Vector2(60, 180)
+	maze.witch.move_direction(Vector2.RIGHT, 1.0)
+	assert(maze.witch.position.x < 80.0, "Visible corn patch blocks movement")
 	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
 	for i in maze.CHARM_CELLS.size():
 		maze.witch.position = maze.cell_position(maze.CHARM_CELLS[i])

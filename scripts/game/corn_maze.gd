@@ -54,8 +54,17 @@ func _ready() -> void:
 	queue_redraw()
 
 func _build_collisions() -> void:
-	# The maze is now a static illustrated scene; do not create invisible random blockers
-	# that disagree with the artwork. Keep only the explicit world boundary.
+	# The background is static, so use authored obstacle regions that follow its visible
+	# corn clusters instead of generating random invisible maze walls.
+	for corn_patch in [
+		Rect2(82, 142, 178, 92), Rect2(312, 116, 132, 128), Rect2(492, 20, 136, 112),
+		Rect2(680, 112, 165, 126), Rect2(952, 160, 170, 105), Rect2(62, 320, 190, 98),
+		Rect2(310, 294, 148, 132), Rect2(505, 246, 122, 112), Rect2(680, 320, 160, 110),
+		Rect2(940, 320, 212, 104), Rect2(206, 512, 166, 112), Rect2(545, 500, 176, 126),
+		Rect2(820, 520, 170, 126), Rect2(458, 700, 132, 112), Rect2(670, 706, 145, 110),
+		Rect2(880, 690, 176, 116)
+	]:
+		_add_rect_collision(corn_patch)
 	for rect in [Rect2(-16, 0, 16, WORLD_SIZE.y), Rect2(WORLD_SIZE.x, 0, 16, WORLD_SIZE.y), Rect2(0, -16, WORLD_SIZE.x, 16), Rect2(0, WORLD_SIZE.y, WORLD_SIZE.x, 16)]:
 		_add_rect_collision(rect)
 
