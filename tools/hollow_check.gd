@@ -12,6 +12,26 @@ func _check() -> void:
 	main._start_new_run()
 	await process_frame
 	var world = main.world
+	assert(world.witch.movement_validator.is_valid(), "The Hollow uses mask-validated movement")
+	assert(world._is_walkable_position(world.START_POSITION), "The Hollow spawn is walkable")
+	world.witch.move_direction(Vector2.DOWN, 0.3)
+	assert(world.witch.position.y > world.START_POSITION.y + 40.0, "Witch can leave the Hollow spawn")
+	world.witch.position = Vector2(984, 266)
+	world.witch.move_direction(Vector2.RIGHT, 0.5)
+	assert(world.witch.position.x < 1030.0 and world._is_walkable_position(world.witch.position), "Woodland foliage blocks movement without trapping the witch")
+	world.witch.position = Vector2(1264, 705)
+	assert(world._is_walkable_position(world.witch.position), "The bridge entrance is walkable")
+	world.witch.move_direction(Vector2.RIGHT, 0.55)
+	assert(world.witch.position.x > 1368.0, "Witch can cross the wooden bridge")
+	world.witch.position = Vector2(1320, 705)
+	world.witch.move_direction(Vector2.DOWN, 0.5)
+	assert(world.witch.position.y < 735.0, "The pond blocks stepping off the bridge into water")
+	var old_water_save: Dictionary = world.snapshot()
+	old_water_save.x = 1320
+	old_water_save.y = 820
+	world.restore(old_water_save)
+	assert(world._is_walkable_position(world.witch.position), "An old save in water restores onto valid ground")
+	assert(world.recipe_order == old_water_save.recipe_order, "Safe position recovery preserves the shuffled recipe")
 	assert(world.recipe_order.size() == world.INGREDIENTS.size(), "New run creates a full recipe order")
 	var recipe_ids := {}
 	for id in world.recipe_order:
@@ -32,12 +52,14 @@ func _check() -> void:
 		var before_dialogue: int = world.companion_dialogue_index[companion_name]
 		world.interact()
 		assert(world.companion_dialogue_index[companion_name] != before_dialogue, "Companion %s speaks" % companion_name)
+	var environment_approaches := [Vector2(270, 223), Vector2(465, 238), Vector2(446, 674), Vector2(891, 803), Vector2(1243, 720), Vector2(1196, 223), Vector2(1370, 301)]
 	for i in world.ENVIRONMENT_INTERACTIONS.size():
-		world.witch.position = world.ENVIRONMENT_INTERACTIONS[i].pos + Vector2(0, 58)
-		assert(world.nearby_environment() == i, "Gravestone %d is readable" % i)
+		world.witch.position = environment_approaches[i]
+		assert(world._is_walkable_position(world.witch.position), "Hollow landmark %d has a walkable approach" % i)
+		assert(world.nearby_environment() == i, "Hollow landmark %d is readable" % i)
 		var before_epitaph: int = world.environment_dialogue_index[i]
 		world.interact()
-		assert(world.environment_dialogue_index[i] != before_epitaph, "Gravestone %d reveals an epitaph" % i)
+		assert(world.environment_dialogue_index[i] != before_epitaph, "Hollow landmark %d reveals flavor text" % i)
 	world.witch.position = Vector2(800, 635)
 	var start: Vector2 = world.witch.position
 	Input.action_press("move_right")
@@ -52,9 +74,11 @@ func _check() -> void:
 	assert(world.witch.position.distance_to(stopped) < 1.0, "Pause stops movement")
 	main._resume()
 	var saved_recipe_order: Array[String] = world.recipe_order.duplicate()
+	var ingredient_approaches := {"mushroom":Vector2(365, 818), "pumpkin":Vector2(1299, 244), "skull":Vector2(350, 218), "feather":Vector2(815, 198), "essence":Vector2(1321, 716), "moonflower":Vector2(1120, 553)}
 	for i in world.recipe_order.size():
 		var entry: Dictionary = world.recipe_entry(world.recipe_order[i])
-		world.witch.position = entry.pos + Vector2(0, 28)
+		world.witch.position = ingredient_approaches[entry.id]
+		assert(world._is_walkable_position(world.witch.position), "Ingredient %s has a walkable approach" % entry.id)
 		assert(world.next_required() == entry.id, "Recipe order advances one ingredient at a time")
 		assert(world.nearby_target() == entry.id, "Ingredient must be interactable")
 		world.interact()

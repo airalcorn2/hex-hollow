@@ -67,6 +67,28 @@ def clean_walkable_mask(walkable: np.ndarray, kernel: int) -> np.ndarray:
     return np.asarray(cleaned) >= 128
 
 
+def apply_overrides(walkable: np.ndarray, path: Path | None) -> np.ndarray:
+    """Apply explicit semantic exceptions, e.g. smooth water and a wooden bridge.
+
+    Coordinates are world pixels. These polygons edit the raster mask only;
+    they are not additional Godot physics shapes.
+    """
+    if path is None:
+        return walkable
+    data = json.loads(path.read_text())
+    expected = [walkable.shape[1], walkable.shape[0]]
+    if data.get("worldSize") != expected:
+        raise ValueError(f"Override worldSize must match {expected}")
+    image = Image.fromarray(np.where(walkable, 255, 0).astype(np.uint8), mode="L")
+    draw = ImageDraw.Draw(image)
+    for key, fill in [("blocked_polygons", 0), ("walkable_polygons", 255)]:
+        for polygon in data.get(key, []):
+            if len(polygon) < 3:
+                raise ValueError("Each override polygon requires at least three points")
+            draw.polygon([tuple(point) for point in polygon], fill=fill)
+    return np.asarray(image) >= 128
+
+
 def occupied_grid(mask: np.ndarray, cell_size: int, occupancy: float) -> np.ndarray:
     """Convert a binary obstacle mask into coarse occupied cells."""
     height, width = mask.shape
@@ -138,6 +160,7 @@ def main() -> None:
     parser.add_argument("--output-pixel-mask", type=Path, help="Binary walkable-space mask: white=walkable, black=obstacle")
     parser.add_argument("--output-density", type=Path, help="Grayscale Gaussian-smoothed edge-density field")
     parser.add_argument("--output-gdscript", type=Path)
+    parser.add_argument("--overrides", type=Path, help="JSON world-pixel polygons for water/bridge corrections after cleanup")
     parser.add_argument("--world-width", type=int, required=True)
     parser.add_argument("--world-height", type=int, required=True)
     parser.add_argument("--cell-size", type=int, default=16)
@@ -155,6 +178,7 @@ def main() -> None:
     edges = edge_map(image, args.edge_percentile)
     density = gaussian_density(edges, args.gaussian_kernel)
     walkable = clean_walkable_mask(walkable_from_density(density, args.walkable_threshold), args.cleanup_kernel)
+    walkable = apply_overrides(walkable, args.overrides)
     grid = occupied_grid(~walkable, args.cell_size, args.obstacle_occupancy)
     rects = merge_grid(grid, args.cell_size, args.inset, args.min_area)
     rects.sort(key=lambda rect: (rect.y, rect.x))
@@ -165,6 +189,7 @@ def main() -> None:
         "cellSize": args.cell_size,
         "method": "edge map -> Gaussian density field -> grayscale walkable threshold -> coarse obstacle grid -> greedy rectangle merge",
         "reviewRequired": True,
+        "overrides": str(args.overrides) if args.overrides else None,
         "settings": {key: getattr(args, key) for key in ["gaussian_kernel", "walkable_threshold", "cleanup_kernel", "obstacle_occupancy", "inset", "min_area", "edge_percentile"]},
         "rectangles": [{"x": r.x, "y": r.y, "width": r.w, "height": r.h} for r in rects],
         "polygons": [r.polygon() for r in rects],

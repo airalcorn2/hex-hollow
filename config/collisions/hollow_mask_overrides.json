@@ -1,0 +1,11 @@
+{
+  "worldSize": [1600, 1067],
+  "description": "Reviewed shoreline corrections for assets/hollow/map.png. Smooth water has low edge density but is not walkable; the wooden bridge has high edge density but is walkable. Apply these raster corrections after Gaussian thresholding and morphology. All other terrain is classified by the edge-density pipeline.",
+  "blocked_polygons": [
+    [[1011, 770], [1032, 743], [1080, 728], [1133, 740], [1170, 757], [1217, 756], [1252, 745], [1282, 716], [1363, 723], [1381, 749], [1432, 767], [1447, 803], [1432, 844], [1410, 872], [1368, 885], [1320, 885], [1271, 904], [1250, 932], [1210, 942], [1168, 928], [1128, 911], [1092, 893], [1051, 864], [1031, 837], [1014, 805]],
+    [[1280, 658], [1301, 630], [1337, 605], [1380, 600], [1429, 605], [1447, 633], [1449, 657], [1426, 681], [1397, 701], [1355, 697], [1315, 687], [1281, 683]]
+  ],
+  "walkable_polygons": [
+    [[1255, 688], [1387, 696], [1387, 724], [1255, 718]]
+  ]
+}

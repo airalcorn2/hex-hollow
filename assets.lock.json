@@ -109,6 +109,14 @@
       "groupId": "corn-maze",
       "used": true
     },
+    "assets/hollow/hollow_walkable_mask.png": {
+      "path": "/manus-storage/game/sha256/5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586.png",
+      "sha256": "sha256:5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586",
+      "size": 33335,
+      "assetType": "image",
+      "groupId": "hollow",
+      "used": true
+    },
     "assets/hollow/map.png": {
       "path": "/manus-storage/game/sha256/5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af.png",
       "sha256": "sha256:5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af",

@@ -44,6 +44,28 @@
       "used": true,
       "usedBy": []
     },
+    "assets/hollow/hollow_walkable_mask.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:5bb2143aa466d1f30751a16829828af553f36aa81c625bff1627de51be365586",
+      "shipped": true,
+      "size": 33335,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/hollow_world.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
     "assets/hollow/map.png": {
       "declaredUseEvidence": [],
       "generator": {},
@@ -1248,9 +1270,9 @@
         ]
       }
     ],
-    "pckSha256": "sha256:998d70ab9413d98ccb2f658f0cf50cc354f7a23599ae34463558e2748132a339",
+    "pckSha256": "sha256:fa513af75c034f161ce0fbf48edf1c9207df279a8f06c030debee6aa5758698c",
     "profile": "release",
-    "sourceFingerprint": "sha256:79b010263ac37e6f70b9e87d04dd392ffc7a214977c0ed9bceda6bbdd3b755ce"
+    "sourceFingerprint": "sha256:249397f0cdba8614637b33dd2949fd93095fe00bf14729f65ab379958be52601"
   },
   "procedures": {},
   "summary": {
@@ -1283,9 +1305,9 @@
     },
     "files": {
       "downloaded": 0,
-      "retained": 55,
-      "shipped": 51,
-      "used": 40
+      "retained": 56,
+      "shipped": 52,
+      "used": 41
     },
     "origins": {
       "ai": {
@@ -1319,9 +1341,9 @@
         "used": 4
       },
       "unknown": {
-        "retained": 40,
-        "shipped": 36,
-        "used": 36
+        "retained": 41,
+        "shipped": 37,
+        "used": 37
       }
     },
     "packs": {

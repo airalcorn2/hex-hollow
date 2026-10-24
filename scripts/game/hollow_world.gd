@@ -69,7 +69,7 @@ const ENVIRONMENT_INTERACTIONS := [
 	},
 	{
 		"name":"The crooked pond sign",
-		"pos":Vector2(1225, 807),
+		"pos":Vector2(1218, 694),
 		"prompt":"Read the pond sign",
 		"epitaphs":[
 			"POND RULES: No feeding the fish. They remember faces.",
@@ -110,8 +110,19 @@ const ICONS := {
 	"spell":preload("res://assets/recipe/icons/spell.png"),
 }
 const CAULDRON := Vector2(800, 525)
+const START_POSITION := Vector2(800, 635)
+const WORLD_SIZE := Vector2(1600, 1067)
+const MOVEMENT_BOUNDS := Rect2(90, 90, 1420, 887)
+const WALKABLE_MASK_TEXTURE := preload("res://assets/hollow/hollow_walkable_mask.png")
+# Same forgiving feet-sized footprint as the Mooncorn Maze.
+const MASK_SAMPLE_OFFSETS := [
+	Vector2.ZERO,
+	Vector2(6, 0), Vector2(-6, 0), Vector2(0, 5), Vector2(0, -5),
+	Vector2(4, 4), Vector2(-4, 4), Vector2(4, -4), Vector2(-4, -4),
+]
 var witch: HollowWitch
 var camera: Camera2D
+var walkable_mask: Image
 var collected: Array[String] = []
 var deposited: Array[String] = []
 var pickup_sprites: Dictionary = {}
@@ -135,6 +146,7 @@ var recipe_order: Array[String] = []
 var interaction_markers: Array[Label] = []
 var interaction_marker_origins: Array[Vector2] = []
 func _ready() -> void:
+	walkable_mask = WALKABLE_MASK_TEXTURE.get_image()
 	recipe_order = _new_recipe_order()
 	for _landmark in ENVIRONMENT_INTERACTIONS:
 		environment_dialogue_index.append(0)
@@ -143,15 +155,9 @@ func _ready() -> void:
 	terrain.centered = false
 	terrain.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(terrain)
-	# Water and selected tree/stone footprints are solid; open woodland remains walkable.
-	for rect in [Rect2(1065, 780, 345, 140), Rect2(1298, 625, 120, 65), Rect2(5, 5, 75, 1067), Rect2(1520, 5, 80, 1067)]:
-		_add_rect_collision(rect)
-	for footprint in [Vector3(265, 400, 36), Vector3(432, 410, 44), Vector3(520, 430, 34), Vector3(565, 260, 48), Vector3(660, 225, 30), Vector3(1015, 263, 42), Vector3(1215, 432, 48), Vector3(1130, 461, 34), Vector3(633, 740, 49), Vector3(670, 915, 46), Vector3(980, 777, 36), Vector3(264, 169, 24), Vector3(465, 180, 18)]:
-		_add_circle_collision(Vector2(footprint.x, footprint.y), footprint.z)
 	cauldron_home = CAULDRON + Vector2(0, -35)
 	cauldron = _sprite("cauldron", cauldron_home, 1.05)
 	cauldron.z_index = 3
-	_add_circle_collision(CAULDRON + Vector2(0, -15), 28)
 	_build_cauldron_bubbles()
 	_build_companion_witches()
 	_build_interaction_markers()
@@ -162,7 +168,9 @@ func _ready() -> void:
 		var icon := _sprite(ingredient.id, ingredient.pos + Vector2(0, -17), 0.46)
 		pickup_sprites[ingredient.id] = icon
 	witch = HollowWitch.new()
-	witch.position = Vector2(800, 635)
+	witch.position = START_POSITION
+	witch.set_movement_bounds(MOVEMENT_BOUNDS)
+	witch.set_movement_validator(Callable(self, "_is_walkable_position"))
 	witch.z_index = 5
 	add_child(witch)
 	camera = Camera2D.new()
@@ -170,8 +178,8 @@ func _ready() -> void:
 	camera.position_smoothing_speed = 7.0
 	camera.limit_left = 0
 	camera.limit_top = 0
-	camera.limit_right = 1600
-	camera.limit_bottom = 1067
+	camera.limit_right = int(WORLD_SIZE.x)
+	camera.limit_bottom = int(WORLD_SIZE.y)
 	camera.position = witch.position
 	add_child(camera)
 	spell = _sprite("spell", CAULDRON + Vector2(0, -75), 2.0)
@@ -253,25 +261,38 @@ func _sprite(id: String, pos: Vector2, factor: float) -> Sprite2D:
 	add_child(sprite)
 	return sprite
 
-func _add_rect_collision(rect: Rect2) -> void:
-	var body := StaticBody2D.new()
-	body.position = rect.get_center()
-	var node := CollisionShape2D.new()
-	var shape := RectangleShape2D.new()
-	shape.size = rect.size
-	node.shape = shape
-	body.add_child(node)
-	add_child(body)
+func _is_walkable_position(candidate: Vector2) -> bool:
+	if walkable_mask == null or not MOVEMENT_BOUNDS.has_point(candidate):
+		return false
+	# Live props are separate from the background-derived mask.
+	if candidate.distance_to(CAULDRON + Vector2(0, -15)) < 34.0:
+		return false
+	for companion in companion_witches:
+		if candidate.distance_to(companion.position) < 19.0:
+			return false
+	for offset in MASK_SAMPLE_OFFSETS:
+		var sample := Vector2i(roundi(candidate.x + offset.x), roundi(candidate.y + offset.y))
+		if sample.x < 0 or sample.y < 0 or sample.x >= walkable_mask.get_width() or sample.y >= walkable_mask.get_height():
+			return false
+		if walkable_mask.get_pixelv(sample).r < 0.5:
+			return false
+	return true
 
-func _add_circle_collision(pos: Vector2, radius: float) -> void:
-	var body := StaticBody2D.new()
-	body.position = pos
-	var node := CollisionShape2D.new()
-	var shape := CircleShape2D.new()
-	shape.radius = radius
-	node.shape = shape
-	body.add_child(node)
-	add_child(body)
+func _safe_restore_position(saved: Vector2) -> Vector2:
+	if _is_walkable_position(saved):
+		return saved
+	# Old saves can now be inside a tree or in water. Keep progress, but move the
+	# witch to nearby open ground instead of restoring into a blocked footprint.
+	var nearest_position := START_POSITION
+	var nearest_distance := INF
+	for y in range(-96, 97, 4):
+		for x in range(-96, 97, 4):
+			var candidate := saved + Vector2(x, y)
+			var distance := candidate.distance_squared_to(saved)
+			if distance < nearest_distance and _is_walkable_position(candidate):
+				nearest_position = candidate
+				nearest_distance = distance
+	return nearest_position
 
 func set_active(value: bool) -> void:
 	active = value and not won
@@ -496,7 +517,7 @@ func restore(data: Dictionary) -> void:
 	elapsed = maxf(0.0, float(data.get("elapsed", 0)))
 	var x := clampf(float(data.get("x", 800)), 100.0, 1500.0)
 	var y := clampf(float(data.get("y", 635)), 100.0, 960.0)
-	witch.position = Vector2(x, y)
+	witch.position = _safe_restore_position(Vector2(x, y))
 	camera.position = witch.position
 	camera.reset_smoothing()
 

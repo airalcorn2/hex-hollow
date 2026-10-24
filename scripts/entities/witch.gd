@@ -70,16 +70,19 @@ func _move_axis_with_validator(motion: Vector2) -> void:
 	var perpendicular := Vector2(-step.y, step.x).normalized()
 	for _i in steps:
 		var candidate := position + step
-		if escaping or movement_validator.call(candidate):
+		var candidate_walkable: bool = movement_validator.call(candidate)
+		if escaping or candidate_walkable:
 			position = candidate
+			escaping = not candidate_walkable
 			continue
 		# Corner assist: slide sideways a few pixels around a clipped edge.
 		var nudged := false
 		for amount in NUDGE_DISTANCES:
 			for side in [1.0, -1.0]:
 				var shifted: Vector2 = candidate + perpendicular * amount * side
-				if movement_validator.call(shifted):
-					position = position + perpendicular * minf(amount, 2.0) * side
+				var nudge: Vector2 = position + perpendicular * minf(amount, 2.0) * side
+				if movement_validator.call(shifted) and movement_validator.call(nudge):
+					position = nudge
 					nudged = true
 					break
 			if nudged:

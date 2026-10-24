@@ -109,6 +109,24 @@ python3 tools/generate_collision_mask.py \
 
 The helper requires Python with Pillow and NumPy. Its output should be adjusted or hand-authored before being used as authoritative gameplay collision.
 
+Both levels sample reviewed pixel masks at runtime instead of approximating background scenery with rectangles. They share the small 12×10-pixel feet footprint, swept substeps and corner assistance. The cauldron and companion witches remain solid live props.
+
+Regenerate the Hollow's mask with the same Gaussian and cleanup settings:
+
+```bash
+python3 tools/generate_collision_mask.py \
+  --image assets/hollow/map.png \
+  --world-width 1600 --world-height 1067 \
+  --gaussian-kernel 21 --walkable-threshold 54 --cleanup-kernel 9 \
+  --overrides config/collisions/hollow_mask_overrides.json \
+  --output-json /tmp/hollow-candidates.json \
+  --output-preview /tmp/hollow-candidates.png \
+  --output-pixel-mask assets/hollow/hollow_walkable_mask.png \
+  --output-density /tmp/hollow-density.png
+```
+
+The `--overrides` file contains reviewed world-pixel polygons applied to the raster mask after cleanup. These mark smooth pond water as blocked and the textured wooden bridge as walkable—the opposite of what edge density alone would infer. They do not create extra Godot collision rectangles. All other scenery uses the automatically generated mask. Older save positions that are now blocked are moved to nearby open ground while keeping ingredient and recipe progress.
+
 Build the managed Preview export:
 
 ```bash
