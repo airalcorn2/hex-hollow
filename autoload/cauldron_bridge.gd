@@ -9,8 +9,9 @@ extends Node
 # no-op, so the game plays fine with no cauldron connected.
 const BASE_URL := ""
 const REQUEST_TIMEOUT_SEC := 3.0
-# Enable only after the physical bridge implements POST /house_event.
-const ENABLE_HAUNTED_HOUSE_EVENTS := false
+# game_bridge.py now implements POST /house_event (see
+# _handle_house_event() there).
+const ENABLE_HAUNTED_HOUSE_EVENTS := true
 
 
 func notify_deposit(ingredient_id: String) -> void:
