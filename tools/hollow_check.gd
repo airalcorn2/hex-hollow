@@ -81,19 +81,25 @@ func _check() -> void:
 	await process_frame
 	var maze = main.world
 	assert(main.current_level == 2, "Spell completion can enter the corn maze")
-	maze.witch.position = Vector2(40, 40)
-	maze.witch.move_direction(Vector2(-1, -1), 0.2)
-	assert(maze.witch.position.x >= 30.0 and maze.witch.position.y >= 30.0, "Maze movement stays inside the actual canvas")
-	maze.witch.position = Vector2(60, 180)
+	assert(maze.witch.position == maze.START_POSITION, "Maze starts at the entrance plaza")
+	assert(maze._is_walkable_position(maze.START_POSITION), "Maze spawn footprint is walkable")
+	maze.witch.move_direction(Vector2.RIGHT, 0.3)
+	assert(maze.witch.position.x > maze.START_POSITION.x + 40.0, "Witch can walk right out of the spawn")
+	maze.witch.position = maze.START_POSITION
+	maze.witch.move_direction(Vector2.DOWN, 0.3)
+	assert(maze.witch.position.y > maze.START_POSITION.y + 40.0, "Witch can walk down out of the spawn")
+	maze.witch.position = Vector2(180, 156)
 	maze.witch.move_direction(Vector2.RIGHT, 1.0)
-	assert(maze.witch.position.x < 80.0, "Visible corn patch blocks movement")
+	assert(maze.witch.position.x < 215.0, "Corn patch in the walkable mask blocks movement")
 	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
-	for i in maze.CHARM_CELLS.size():
-		maze.witch.position = maze.cell_position(maze.CHARM_CELLS[i])
+	for i in maze.CHARM_POSITIONS.size():
+		assert(maze._is_walkable_position(maze.CHARM_POSITIONS[i]), "Moon charm %d sits on a walkable path" % i)
+		maze.witch.position = maze.CHARM_POSITIONS[i]
 		assert(not maze.nearby_target().is_empty(), "Moon charm %d is reachable" % i)
 		maze.interact()
 	assert(maze.collected.size() == 3, "Corn maze collects all three moon charms")
-	maze.witch.position = maze.cell_position(maze.EXIT_CELL)
+	assert(maze._is_walkable_position(maze.EXIT_POSITION), "Maze exit sits on a walkable path")
+	maze.witch.position = maze.EXIT_POSITION
 	assert(maze.nearby_exit(), "Corn maze exit is reachable")
 	maze.interact()
 	assert(main.state == "complete" and maze.won, "Corn maze completion flow starts")
