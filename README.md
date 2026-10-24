@@ -74,14 +74,15 @@ npm run check -- --pack
 
 ## Collision-mask helper
 
-`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, detects high-frequency edges, converts local edge density into a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
+`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, detects high-frequency edges, applies an approximately `k × k` Gaussian blur, classifies pixels at or below one grayscale threshold as walkable, and derives coarse obstacle candidates from the inverse mask. It writes:
 
 - JSON containing rectangles and four-point polygons
 - A debug PNG with the candidate regions drawn over the background
-- An optional binary pixel-level edge mask: white pixels are the raw high-frequency edge signal and black pixels are rejected
+- An optional binary walkable-space mask: white pixels are walkable and black pixels are obstacle candidates
+- An optional grayscale Gaussian density field for tuning the threshold
 - Optional Godot `PackedVector2Array` source
 
-The output is intentionally not imported automatically. Review the debug overlay first: paths, trees, pumpkins, and corn can all contain high-frequency detail, so edge-only processing can still produce false positives.
+The output is intentionally not imported automatically. Review the walkable mask and density field first: paths, trees, pumpkins, and corn can all contain high-frequency detail, so the threshold still needs visual tuning.
 
 Example:
 
@@ -90,12 +91,15 @@ python3 tools/generate_collision_mask.py \
   --image assets/corn-maze/corn_maze_ground.png \
   --output-json /tmp/corn-collisions.json \
   --output-preview /tmp/corn-collisions-preview.png \
-  --output-pixel-mask /tmp/corn-collisions-pixels.png \
+  --output-pixel-mask /tmp/corn-walkable-mask.png \
+  --output-density /tmp/corn-edge-density.png \
   --output-gdscript /tmp/corn-collisions.gd \
   --world-width 1216 \
   --world-height 832 \
   --cell-size 32 \
-  --min-edge-density 0.30 \
+  --gaussian-kernel 21 \
+  --walkable-threshold 54 \
+  --obstacle-occupancy 0.50 \
   --inset 5 \
   --min-area 1536
 ```

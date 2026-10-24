@@ -1,21 +1,11 @@
 #!/usr/bin/env python3
-"""Generate reviewable collision regions from a static top-down background.
+"""Generate reviewable walkable-space and collision candidates from a background.
 
-This is an assistive tool, not a final authority. It detects high-frequency
-texture, converts local edge density into a coarse occupancy grid, merges
-adjacent occupied cells into rectangles, and writes pixel-level and rectangle
-debug overlays. Review the overlays before importing the generated shapes into
-gameplay.
-
-Example:
-  python3 tools/generate_collision_mask.py \
-    --image assets/corn-maze/corn_maze_ground.png \
-    --output-json /tmp/corn-collisions.json \
-    --output-preview /tmp/corn-collisions-preview.png \
-    --output-pixel-mask /tmp/corn-collisions-pixels.png \
-    --output-gdscript /tmp/corn-collisions.gd \
-    --world-width 1216 --world-height 832 --cell-size 16 \
-    --min-edge-density 0.30
+The primary signal is grayscale edge density. A binary edge map is blurred with
+an approximately k-by-k Gaussian kernel; pixels whose smoothed edge density is
+below one grayscale threshold are treated as walkable. The inverse mask can be
+converted into coarse collision candidates for review, but the pixel mask is
+the authoritative diagnostic.
 """
 
 from __future__ import annotations
@@ -26,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 
 @dataclass(frozen=True)
@@ -36,38 +26,46 @@ class Rect:
     w: int
     h: int
 
-    @property
-    def area(self) -> int:
-        return self.w * self.h
-
     def polygon(self) -> list[list[int]]:
         return [[self.x, self.y], [self.x + self.w, self.y], [self.x + self.w, self.y + self.h], [self.x, self.y + self.h]]
 
 
 def edge_map(image: Image.Image, percentile: float) -> np.ndarray:
-    """Return a high-frequency edge map for texture-density filtering."""
+    """Return a binary high-frequency edge map."""
     rgb = np.asarray(image.convert("RGB"), dtype=np.float32)
     gray = 0.299 * rgb[..., 0] + 0.587 * rgb[..., 1] + 0.114 * rgb[..., 2]
     gx = np.diff(gray, axis=1, prepend=gray[:, :1])
     gy = np.diff(gray, axis=0, prepend=gray[:1, :])
     magnitude = np.sqrt(gx * gx + gy * gy)
-    threshold = np.percentile(magnitude, percentile)
-    return magnitude >= threshold
+    return magnitude >= np.percentile(magnitude, percentile)
 
 
-def occupied_grid(edges: np.ndarray, cell_size: int, min_edge_density: float) -> np.ndarray:
-    """Convert pixel-level edges into occupied cells using local density."""
-    height, width = edges.shape
+def gaussian_density(edges: np.ndarray, kernel: int) -> np.ndarray:
+    """Blur binary edges into an 8-bit local edge-density field."""
+    kernel = max(3, kernel | 1)
+    # Six standard deviations span approximately the requested kernel width.
+    radius = max(0.5, (kernel - 1) / 6.0)
+    source = Image.fromarray(np.where(edges, 255, 0).astype(np.uint8), mode="L")
+    return np.asarray(source.filter(ImageFilter.GaussianBlur(radius=radius)), dtype=np.uint8)
+
+
+def walkable_from_density(density: np.ndarray, threshold: int) -> np.ndarray:
+    """Low smoothed edge density is walkable space."""
+    return density <= threshold
+
+
+def occupied_grid(mask: np.ndarray, cell_size: int, occupancy: float) -> np.ndarray:
+    """Convert a binary obstacle mask into coarse occupied cells."""
+    height, width = mask.shape
     usable_width = (width // cell_size) * cell_size
     usable_height = (height // cell_size) * cell_size
-    cropped = edges[:usable_height, :usable_width]
-    edge_grid = cropped.reshape(usable_height // cell_size, cell_size, usable_width // cell_size, cell_size)
-    edge_density = edge_grid.mean(axis=(1, 3))
-    return edge_density >= min_edge_density
+    cropped = mask[:usable_height, :usable_width]
+    cells = cropped.reshape(usable_height // cell_size, cell_size, usable_width // cell_size, cell_size)
+    return cells.mean(axis=(1, 3)) >= occupancy
 
 
 def merge_grid(grid: np.ndarray, cell_size: int, inset: int, min_area: int) -> list[Rect]:
-    """Greedily merge occupied grid cells into reviewable axis-aligned rectangles."""
+    """Greedily merge occupied grid cells into reviewable rectangles."""
     rows, cols = grid.shape
     used = np.zeros_like(grid, dtype=bool)
     rects: list[Rect] = []
@@ -111,10 +109,12 @@ def write_preview(image: Image.Image, rects: list[Rect], path: Path, opacity: in
     preview.save(path)
 
 
-def write_pixel_mask(edges: np.ndarray, path: Path) -> None:
-    """Write the raw high-frequency edge pixels as a binary diagnostic."""
-    pixels = np.where(edges, 255, 0).astype(np.uint8)
-    Image.fromarray(pixels, mode="L").save(path)
+def write_pixel_mask(mask: np.ndarray, path: Path) -> None:
+    Image.fromarray(np.where(mask, 255, 0).astype(np.uint8), mode="L").save(path)
+
+
+def write_density(density: np.ndarray, path: Path) -> None:
+    Image.fromarray(density, mode="L").save(path)
 
 
 def main() -> None:
@@ -122,21 +122,26 @@ def main() -> None:
     parser.add_argument("--image", required=True, type=Path)
     parser.add_argument("--output-json", required=True, type=Path)
     parser.add_argument("--output-preview", required=True, type=Path)
-    parser.add_argument("--output-pixel-mask", type=Path, help="Binary pixel diagnostic of high-frequency edges")
+    parser.add_argument("--output-pixel-mask", type=Path, help="Binary walkable-space mask: white=walkable, black=obstacle")
+    parser.add_argument("--output-density", type=Path, help="Grayscale Gaussian-smoothed edge-density field")
     parser.add_argument("--output-gdscript", type=Path)
     parser.add_argument("--world-width", type=int, required=True)
     parser.add_argument("--world-height", type=int, required=True)
     parser.add_argument("--cell-size", type=int, default=16)
+    parser.add_argument("--gaussian-kernel", type=int, default=21, help="Approximate odd-sized Gaussian kernel")
+    parser.add_argument("--walkable-threshold", type=int, default=54, help="Grayscale density threshold; values at or below it are walkable")
+    parser.add_argument("--obstacle-occupancy", type=float, default=0.50, help="Obstacle fraction required for a coarse collision cell")
     parser.add_argument("--inset", type=int, default=3)
     parser.add_argument("--min-area", type=int, default=384)
     parser.add_argument("--edge-percentile", type=float, default=78.0, help="Global gradient percentile used as the edge threshold")
-    parser.add_argument("--min-edge-density", type=float, default=0.30, help="Minimum fraction of high-gradient pixels in an occupied cell")
     parser.add_argument("--preview-opacity", type=int, default=92)
     args = parser.parse_args()
 
     image = Image.open(args.image).convert("RGB").resize((args.world_width, args.world_height), Image.Resampling.LANCZOS)
     edges = edge_map(image, args.edge_percentile)
-    grid = occupied_grid(edges, args.cell_size, args.min_edge_density)
+    density = gaussian_density(edges, args.gaussian_kernel)
+    walkable = walkable_from_density(density, args.walkable_threshold)
+    grid = occupied_grid(~walkable, args.cell_size, args.obstacle_occupancy)
     rects = merge_grid(grid, args.cell_size, args.inset, args.min_area)
     rects.sort(key=lambda rect: (rect.y, rect.x))
 
@@ -144,9 +149,9 @@ def main() -> None:
         "source": str(args.image),
         "worldSize": [args.world_width, args.world_height],
         "cellSize": args.cell_size,
-        "method": "global high-frequency edge map -> local edge-density grid -> greedy rectangle merge",
+        "method": "edge map -> Gaussian density field -> grayscale walkable threshold -> coarse obstacle grid -> greedy rectangle merge",
         "reviewRequired": True,
-        "settings": {key: getattr(args, key) for key in ["inset", "min_area", "edge_percentile", "min_edge_density"]},
+        "settings": {key: getattr(args, key) for key in ["gaussian_kernel", "walkable_threshold", "obstacle_occupancy", "inset", "min_area", "edge_percentile"]},
         "rectangles": [{"x": r.x, "y": r.y, "width": r.w, "height": r.h} for r in rects],
         "polygons": [r.polygon() for r in rects],
     }
@@ -156,11 +161,14 @@ def main() -> None:
     write_preview(image, rects, args.output_preview, args.preview_opacity)
     if args.output_pixel_mask:
         args.output_pixel_mask.parent.mkdir(parents=True, exist_ok=True)
-        write_pixel_mask(edges, args.output_pixel_mask)
+        write_pixel_mask(walkable, args.output_pixel_mask)
+    if args.output_density:
+        args.output_density.parent.mkdir(parents=True, exist_ok=True)
+        write_density(density, args.output_density)
     if args.output_gdscript:
         args.output_gdscript.parent.mkdir(parents=True, exist_ok=True)
         write_godot(args.output_gdscript, rects)
-    print(json.dumps({"rectangles": len(rects), "json": str(args.output_json), "preview": str(args.output_preview), "pixelMask": str(args.output_pixel_mask) if args.output_pixel_mask else None, "gdscript": str(args.output_gdscript) if args.output_gdscript else None}, indent=2))
+    print(json.dumps({"rectangles": len(rects), "json": str(args.output_json), "preview": str(args.output_preview), "pixelMask": str(args.output_pixel_mask) if args.output_pixel_mask else None, "density": str(args.output_density) if args.output_density else None, "gdscript": str(args.output_gdscript) if args.output_gdscript else None}, indent=2))
 
 
 if __name__ == "__main__":
