@@ -74,7 +74,7 @@ npm run check -- --pack
 
 ## Collision-mask helper
 
-`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, detects high-frequency edges, applies an approximately `k × k` Gaussian blur, classifies pixels at or below one grayscale threshold as walkable, and derives coarse obstacle candidates from the inverse mask. It writes:
+`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, detects high-frequency edges, applies an approximately `k × k` Gaussian blur, classifies pixels at or below one grayscale threshold as walkable, removes small mask specks with binary morphology, and derives coarse obstacle candidates from the inverse mask. It writes:
 
 - JSON containing rectangles and four-point polygons
 - A debug PNG with the candidate regions drawn over the background
@@ -99,6 +99,7 @@ python3 tools/generate_collision_mask.py \
   --cell-size 32 \
   --gaussian-kernel 21 \
   --walkable-threshold 54 \
+  --cleanup-kernel 5 \
   --obstacle-occupancy 0.50 \
   --inset 5 \
   --min-area 1536

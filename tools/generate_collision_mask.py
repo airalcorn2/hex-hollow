@@ -54,6 +54,19 @@ def walkable_from_density(density: np.ndarray, threshold: int) -> np.ndarray:
     return density <= threshold
 
 
+def clean_walkable_mask(walkable: np.ndarray, kernel: int) -> np.ndarray:
+    """Fill small obstacle specks and remove isolated walkable specks."""
+    if kernel <= 1:
+        return walkable
+    kernel = max(3, kernel | 1)
+    source = Image.fromarray(np.where(walkable, 255, 0).astype(np.uint8), mode="L")
+    # Closing first fills small black holes in paths; opening then removes
+    # isolated white islands that cannot represent useful walking space.
+    cleaned = source.filter(ImageFilter.MaxFilter(kernel)).filter(ImageFilter.MinFilter(kernel))
+    cleaned = cleaned.filter(ImageFilter.MinFilter(kernel)).filter(ImageFilter.MaxFilter(kernel))
+    return np.asarray(cleaned) >= 128
+
+
 def occupied_grid(mask: np.ndarray, cell_size: int, occupancy: float) -> np.ndarray:
     """Convert a binary obstacle mask into coarse occupied cells."""
     height, width = mask.shape
@@ -130,6 +143,7 @@ def main() -> None:
     parser.add_argument("--cell-size", type=int, default=16)
     parser.add_argument("--gaussian-kernel", type=int, default=21, help="Approximate odd-sized Gaussian kernel")
     parser.add_argument("--walkable-threshold", type=int, default=54, help="Grayscale density threshold; values at or below it are walkable")
+    parser.add_argument("--cleanup-kernel", type=int, default=5, help="Odd morphology kernel used to remove small mask specks")
     parser.add_argument("--obstacle-occupancy", type=float, default=0.50, help="Obstacle fraction required for a coarse collision cell")
     parser.add_argument("--inset", type=int, default=3)
     parser.add_argument("--min-area", type=int, default=384)
@@ -140,7 +154,7 @@ def main() -> None:
     image = Image.open(args.image).convert("RGB").resize((args.world_width, args.world_height), Image.Resampling.LANCZOS)
     edges = edge_map(image, args.edge_percentile)
     density = gaussian_density(edges, args.gaussian_kernel)
-    walkable = walkable_from_density(density, args.walkable_threshold)
+    walkable = clean_walkable_mask(walkable_from_density(density, args.walkable_threshold), args.cleanup_kernel)
     grid = occupied_grid(~walkable, args.cell_size, args.obstacle_occupancy)
     rects = merge_grid(grid, args.cell_size, args.inset, args.min_area)
     rects.sort(key=lambda rect: (rect.y, rect.x))
@@ -151,7 +165,7 @@ def main() -> None:
         "cellSize": args.cell_size,
         "method": "edge map -> Gaussian density field -> grayscale walkable threshold -> coarse obstacle grid -> greedy rectangle merge",
         "reviewRequired": True,
-        "settings": {key: getattr(args, key) for key in ["gaussian_kernel", "walkable_threshold", "obstacle_occupancy", "inset", "min_area", "edge_percentile"]},
+        "settings": {key: getattr(args, key) for key in ["gaussian_kernel", "walkable_threshold", "cleanup_kernel", "obstacle_occupancy", "inset", "min_area", "edge_percentile"]},
         "rectangles": [{"x": r.x, "y": r.y, "width": r.w, "height": r.h} for r in rects],
         "polygons": [r.polygon() for r in rects],
     }

@@ -9,6 +9,7 @@ const GRID_W := 19
 const GRID_H := 13
 const WORLD_SIZE := Vector2(GRID_W * CELL, GRID_H * CELL)
 const START_CELL := Vector2i(1, 1)
+const START_POSITION := Vector2(100.0, 88.0)
 const EXIT_CELL := Vector2i(17, 11)
 const CHARM_CELLS := [Vector2i(3, 3), Vector2i(13, 3), Vector2i(9, 9)]
 const CHARM_DATA := [
@@ -45,7 +46,7 @@ func _ready() -> void:
 	_build_charm_sprites()
 	_build_exit_marker()
 	witch = HollowWitch.new()
-	witch.position = cell_position(START_CELL)
+	witch.position = START_POSITION
 	witch.set_movement_bounds(Rect2(14.0, 14.0, WORLD_SIZE.x - 28.0, WORLD_SIZE.y - 28.0))
 	witch.set_movement_validator(Callable(self, "_is_walkable_position"))
 	witch.z_index = 5
@@ -177,7 +178,7 @@ func restore(data: Dictionary) -> void:
 	for i in CHARM_DATA.size():
 		var hidden: bool = CHARM_DATA[i].id in collected
 		charm_sprites[i].visible = not hidden
-	witch.position = Vector2(float(data.get("x", cell_position(START_CELL).x)), float(data.get("y", cell_position(START_CELL).y)))
+	witch.position = Vector2(float(data.get("x", START_POSITION.x)), float(data.get("y", START_POSITION.y)))
 	camera.position = witch.position
 	camera.reset_smoothing()
 
