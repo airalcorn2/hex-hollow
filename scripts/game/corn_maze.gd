@@ -132,7 +132,7 @@ func _build_visuals() -> void:
 			hedge.texture = CORN_TUFT_TEXTURE
 			hedge.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			hedge.position = Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5) + Vector2(0, 3)
-			hedge.scale = Vector2(78, 86) / CORN_TUFT_TEXTURE.get_size()
+			hedge.scale = Vector2(68, 76) / CORN_TUFT_TEXTURE.get_size()
 			hedge.flip_h = (x + y) % 2 == 0
 			hedge.modulate = Color(0.88 + (x % 3) * 0.035, 0.92 + (y % 2) * 0.03, 0.84, 1.0)
 			hedge.z_index = 2
@@ -161,6 +161,13 @@ func _marker(text: String, pos: Vector2, color: Color) -> Label:
 
 func _draw() -> void:
 	draw_texture_rect(GROUND_TEXTURE, Rect2(Vector2.ZERO, WORLD_SIZE), false)
+	for y in range(GRID_H):
+		for x in range(GRID_W):
+			if walls[y][x]:
+				continue
+			var path_rect := Rect2(x * CELL + 5, y * CELL + 5, CELL - 10, CELL - 10)
+			draw_rect(path_rect, Color(0.08, 0.11, 0.08, 0.34))
+			draw_rect(path_rect, Color(0.42, 0.31, 0.20, 0.18), false, 2.0)
 	draw_circle(cell_position(EXIT_CELL), 25.0, Color("3d6749"))
 	draw_arc(cell_position(EXIT_CELL), 27.0, 0.0, TAU, 24, Color("a4e4ba"), 2.0)
 
