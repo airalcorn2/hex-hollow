@@ -19,6 +19,29 @@ func notify_victory() -> void:
 	_post("/victory", {})
 
 
+# witch_name is "Violet"/"Amber"/"Hazel" -- the real witch of the same
+# name speaks her own line. line_index picks which of her cycling lines,
+# so the real reading always matches exactly what's on screen.
+func notify_companion(witch_name: String, line_index: int) -> void:
+	_post("/companion", {"witch": witch_name, "line": line_index})
+
+
+# area is "hollow" or "corn_maze" -- the two worlds' landmark ids aren't
+# unique across each other (see ENVIRONMENT_INTERACTIONS in
+# hollow_world.gd and corn_maze.gd), so the bridge needs both to find the
+# right cached reading.
+func notify_landmark(area: String, landmark_id: String, line_index: int) -> void:
+	_post("/landmark", {"area": area, "landmark": landmark_id, "line": line_index})
+
+
+func notify_treat(treat_id: String) -> void:
+	_post("/treat", {"treat": treat_id})
+
+
+func notify_maze_victory() -> void:
+	_post("/maze_victory", {})
+
+
 # Fire-and-forget: nothing here waits on or reads the response, so a slow
 # or unreachable cauldron never stalls the game itself. A fresh
 # HTTPRequest per call, not one shared node -- the final ingredient's

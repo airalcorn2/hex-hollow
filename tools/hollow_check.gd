@@ -55,7 +55,9 @@ func _check() -> void:
 	assert(recipe_ids.size() == world.INGREDIENTS.size(), "Recipe order contains each ingredient exactly once")
 	assert(world.companion_witches.size() == 3, "Three companion witches surround the cauldron")
 	assert(world.companion_names == ["Violet", "Amber", "Hazel"], "Companion names match the physical cauldron registry")
-	assert(world.interaction_markers.size() == world.companion_witches.size() + world.ENVIRONMENT_INTERACTIONS.size(), "All interactable secrets have map markers")
+	assert(world.interaction_markers.size() == world.ENVIRONMENT_INTERACTIONS.size(), "Only environment objects have question marks; companions do not")
+	for i in world.ENVIRONMENT_INTERACTIONS.size():
+		assert(world.interaction_markers[i].position + Vector2(12, 34) == world.ENVIRONMENT_INTERACTIONS[i].marker_anchor, "Hollow marker points precisely to its visible object")
 	assert(world.bubbles.size() == 4, "Cauldron has multiple bubbling sprites")
 	var bubble_start: Vector2 = world.bubbles[0].position
 	await create_timer(0.2).timeout
@@ -76,6 +78,7 @@ func _check() -> void:
 		var before_epitaph: int = world.environment_dialogue_index[i]
 		world.interact()
 		assert(world.environment_dialogue_index[i] != before_epitaph, "Hollow landmark %d reveals flavor text" % i)
+		assert(world.interaction_markers[i].position + Vector2(12, 34) == world.ENVIRONMENT_INTERACTIONS[i].marker_anchor, "Hollow marker remains fixed during play")
 	world.witch.position = Vector2(800, 635)
 	var start: Vector2 = world.witch.position
 	Input.action_press("move_right")
@@ -146,6 +149,7 @@ func _check() -> void:
 	for i in maze.ENVIRONMENT_INTERACTIONS.size():
 		var landmark: Dictionary = maze.ENVIRONMENT_INTERACTIONS[i]
 		assert(maze.interaction_markers[i].text == "?" and maze.interaction_markers[i].visible, "Maze landmark marker is visible")
+		assert(maze.interaction_markers[i].position + Vector2(12, 34) == landmark.marker_anchor, "Maze pointer remains fixed on its visible object")
 		maze.witch.position = approach_points[i]
 		assert(maze._is_walkable_position(maze.witch.position), "Landmark %s has a walkable approach" % landmark.name)
 		assert(maze.nearby_environment() == i, "Landmark %s can be inspected from the path" % landmark.name)

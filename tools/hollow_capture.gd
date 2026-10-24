@@ -12,8 +12,10 @@ func _capture() -> void:
 	if OS.get_environment("HOLLOW_CAPTURE_MODE") == "game":
 		main._start_new_run()
 		await process_frame
-		if OS.get_environment("HOLLOW_CAPTURE_POINT") == "bridge":
-			main.world.witch.position = Vector2(1321, 705)
+		var capture_points := {"bridge":Vector2(1321, 705), "graves":Vector2(350, 300), "woodland":Vector2(820, 725), "pumpkins":Vector2(1300, 330)}
+		var point := OS.get_environment("HOLLOW_CAPTURE_POINT")
+		if capture_points.has(point):
+			main.world.witch.position = capture_points[point]
 			main.world.camera.position = main.world.witch.position
 			main.world.camera.reset_smoothing()
 	elif OS.get_environment("HOLLOW_CAPTURE_MODE") == "maze":

@@ -12,6 +12,8 @@ After completing the first spell, the witch can enter Level 2, the **Mooncorn Ma
 
 The maze's **Wishing Well** (upper middle), **Lantern Tree** (center-left), and **Pumpkin Wagon** (right-hand clearing) offer optional witchy flavor text. Follow the gold **?** above each landmark, approach from the paths, and press **E / Space**. Repeated inspections cycle through different lines; these interactions do not consume treats or affect the harvest spell.
 
+Environmental **?** indicators in both levels use fixed, object-specific anchors with small downward pointers. Violet, Amber, and Hazel keep their nameplates and **E / Space** dialogue, but do not have question-mark indicators.
+
 Progress is stored locally so an unfinished spell or maze run can be continued from the title screen.
 
 ## Controls
