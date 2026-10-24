@@ -72,6 +72,8 @@ func _check() -> void:
 			assert(world.recipe_order == saved_recipe_order, "Save restore keeps the shuffled recipe order")
 	assert(world.won and world.deposited.size() == 6 and world.spell.visible, "Final deposit completes spell")
 	assert(main.state == "complete", "Result flow starts")
+	await create_timer(1.8).timeout
+	assert(main.overlay != null, "First-level completion overlay appears after the sparkle")
 	main._start_new_run()
 	await process_frame
 	assert(not main.world.won and main.world.collected.is_empty() and main.world.deposited.is_empty(), "Replay resets spell")

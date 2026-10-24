@@ -382,13 +382,13 @@ func _completed() -> void:
 	await get_tree().create_timer(1.6).timeout
 	if state != "complete":
 		return
-		_make_overlay(
-			"The spell is complete!",
-			"Six enchanted ingredients, one perfect brew.\nNow find the Mooncorn Maze beyond the clearing."
-		)
-		_button(overlay, "Enter the corn maze  →", Rect2(470, 428, 340, 48), _begin_maze, true)
-		_button(overlay, "Brew another spell", Rect2(470, 490, 340, 46), _start_new_run)
-		_button(overlay, "Back to title", Rect2(470, 552, 340, 40), _show_title)
+	_make_overlay(
+		"The spell is complete!",
+		"Six enchanted ingredients, one perfect brew.\nNow find the Mooncorn Maze beyond the clearing."
+	)
+	_button(overlay, "Enter the corn maze  →", Rect2(470, 428, 340, 48), _begin_maze, true)
+	_button(overlay, "Brew another spell", Rect2(470, 490, 340, 46), _start_new_run)
+	_button(overlay, "Back to title", Rect2(470, 552, 340, 40), _show_title)
 
 func _maze_completed() -> void:
 	state = "complete"
