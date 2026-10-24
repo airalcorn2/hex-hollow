@@ -12,6 +12,15 @@ func _capture() -> void:
 	if OS.get_environment("HOLLOW_CAPTURE_MODE") == "game":
 		main._start_new_run()
 		await process_frame
+	elif OS.get_environment("HOLLOW_CAPTURE_MODE") == "maze":
+		main._practice_maze()
+		await process_frame
+		var index := clampi(OS.get_environment("HOLLOW_CAPTURE_LANDMARK").to_int(), 0, 2)
+		var approach_points := [Vector2(700, 248), Vector2(441, 519), Vector2(1016, 500)]
+		main.world.witch.position = approach_points[index]
+		main.world.camera.position = main.world.witch.position
+		main.world.camera.reset_smoothing()
+		main.world.interact()
 	for frame in 12:
 		await process_frame
 	await create_timer(0.35).timeout

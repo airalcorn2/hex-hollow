@@ -94,9 +94,17 @@
   },
   "assets": {
     "assets/corn-maze/corn_maze_ground.png": {
-      "path": "/manus-storage/game/sha256/c01679718ae22d87ecf8672f3b47c1db56932c463b483f6c22148d5ee39761b5.png",
-      "sha256": "sha256:c01679718ae22d87ecf8672f3b47c1db56932c463b483f6c22148d5ee39761b5",
-      "size": 7828145,
+      "path": "/manus-storage/game/sha256/151b93481d3f1e0295a872bad39d24265793b8729a61ba13aaba545d6f44b575.png",
+      "sha256": "sha256:151b93481d3f1e0295a872bad39d24265793b8729a61ba13aaba545d6f44b575",
+      "size": 7735480,
+      "assetType": "image",
+      "groupId": "corn-maze",
+      "used": true
+    },
+    "assets/corn-maze/corn_maze_walkable_mask.png": {
+      "path": "/manus-storage/game/sha256/6a2f2581a75c634086054e105cda3de9335266f81afd29186418282ade1582af.png",
+      "sha256": "sha256:6a2f2581a75c634086054e105cda3de9335266f81afd29186418282ade1582af",
+      "size": 21741,
       "assetType": "image",
       "groupId": "corn-maze",
       "used": true
@@ -116,6 +124,30 @@
       "assetType": "image",
       "groupId": "hollow",
       "used": false
+    },
+    "assets/recipe/icons/candy_apple.png": {
+      "path": "/manus-storage/game/sha256/1ce984abe8e5adff23a4eb5dcf2c27205768d33072c0ebcd3a7199b32c9c9d82.png",
+      "sha256": "sha256:1ce984abe8e5adff23a4eb5dcf2c27205768d33072c0ebcd3a7199b32c9c9d82",
+      "size": 16136,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/candy_corn.png": {
+      "path": "/manus-storage/game/sha256/90fd3fd4a43eb6d7282e4b1a4d58fc26bc6e8b73647c46e68528936b0744fc26.png",
+      "sha256": "sha256:90fd3fd4a43eb6d7282e4b1a4d58fc26bc6e8b73647c46e68528936b0744fc26",
+      "size": 16935,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
+    },
+    "assets/recipe/icons/caramel_corn.png": {
+      "path": "/manus-storage/game/sha256/7e4092e0c904108cafca3c8699b59aab2fd0a5deffdcb3f5a9bb6ced35034a44.png",
+      "sha256": "sha256:7e4092e0c904108cafca3c8699b59aab2fd0a5deffdcb3f5a9bb6ced35034a44",
+      "size": 27311,
+      "assetType": "image",
+      "groupId": "recipe",
+      "used": true
     },
     "assets/recipe/icons/cauldron.png": {
       "path": "/manus-storage/game/sha256/847ea8f4c8d23c704fc331c05014c8154fbd6bffbdc185f70cf4c12df637f5a6.png",

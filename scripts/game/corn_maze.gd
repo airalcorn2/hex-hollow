@@ -37,6 +37,35 @@ const MASK_SAMPLE_OFFSETS := [
 	Vector2(4, 4), Vector2(-4, 4), Vector2(4, -4), Vector2(-4, -4),
 ]
 const BUBBLE_OFFSETS := [Vector2(-18, -58), Vector2(-4, -66), Vector2(12, -60), Vector2(22, -52)]
+const ENVIRONMENT_INTERACTIONS := [
+	{
+		"id":"well", "name":"Wishing Well", "prompt":"Peer into the wishing well",
+		"pos":Vector2(700, 214), "reach":90.0, "marker_pos":Vector2(688, 125),
+		"lines":[
+			"Drop in a wish, not a witch. The last one clogged the bucket.",
+			"Your reflection winks first. How terribly impolite.",
+			"A voice below whispers: 'One penny for luck. Two for plausible deniability.'",
+		],
+	},
+	{
+		"id":"tree", "name":"Lantern Tree", "prompt":"Listen to the lantern tree",
+		"pos":Vector2(414, 443), "reach":90.0, "marker_pos":Vector2(402, 338),
+		"lines":[
+			"The branches creak: 'I know every shortcut. I just enjoy watching you wander.'",
+			"The lantern flickers twice. A leaf lands on your hat like a tiny blessing.",
+			"'No broom parking,' says the tree. 'The squirrels have complained.'",
+		],
+	},
+	{
+		"id":"wagon", "name":"Pumpkin Wagon", "prompt":"Inspect the pumpkin wagon",
+		"pos":Vector2(1016, 454), "reach":80.0, "marker_pos":Vector2(1004, 388),
+		"lines":[
+			"The delivery note reads: 'Three pumpkins, two curses. Handle with scare.'",
+			"One pumpkin rolls an inch toward you. You politely pretend not to notice.",
+			"The wheels turn without a breeze. Even the wagons go haunting after hours.",
+		],
+	},
+]
 
 var witch: HollowWitch
 var camera: Camera2D
@@ -48,11 +77,14 @@ var age := 0.0
 var treat_sprites: Array[Sprite2D] = []
 var collected: Array[String] = []
 var cauldron: Sprite2D
+var interaction_markers: Array[Label] = []
+var environment_dialogue_index: Array[int] = []
 
 func _ready() -> void:
 	walkable_mask = WALKABLE_MASK_TEXTURE.get_image()
 	_build_treat_sprites()
 	_build_cauldron()
+	_build_interaction_markers()
 	witch = HollowWitch.new()
 	witch.position = START_POSITION
 	witch.set_movement_bounds(Rect2(14.0, 14.0, WORLD_SIZE.x - 28.0, WORLD_SIZE.y - 28.0))
@@ -105,6 +137,25 @@ func _build_cauldron() -> void:
 	add_child(cauldron)
 	# Bubbles are drawn procedurally in _draw so the brew can change color.
 
+func _build_interaction_markers() -> void:
+	for landmark in ENVIRONMENT_INTERACTIONS:
+		var marker := Label.new()
+		marker.text = "?"
+		marker.position = landmark.marker_pos
+		marker.size = Vector2(24, 28)
+		marker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		marker.add_theme_font_size_override("font_size", 21)
+		marker.add_theme_font_override("font", preload("res://assets/template/fonts/display/generic_heading.tres"))
+		marker.add_theme_color_override("font_color", Color("f4c46f"))
+		marker.add_theme_color_override("font_shadow_color", Color("171020"))
+		marker.add_theme_constant_override("shadow_offset_x", 2)
+		marker.add_theme_constant_override("shadow_offset_y", 2)
+		marker.z_index = 20
+		marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(marker)
+		interaction_markers.append(marker)
+		environment_dialogue_index.append(0)
+
 func _draw() -> void:
 	draw_texture_rect(GROUND_TEXTURE, Rect2(Vector2.ZERO, WORLD_SIZE), false)
 	var brew := Color("a4e4ba") if collected.size() < TREAT_DATA.size() else Color("f2bd58")
@@ -129,6 +180,10 @@ func _process(delta: float) -> void:
 			treat_sprites[i].position.y = TREAT_POSITIONS[i].y - 10 + sin(age * 2.4 + i) * 3.0
 	cauldron.position = CAULDRON_POSITION + Vector2(0, -22 + sin(age * 4.0) * 0.6)
 	cauldron.scale = Vector2.ONE * (0.62 + sin(age * 4.0) * 0.008)
+	var nearest := nearby_environment()
+	for i in interaction_markers.size():
+		interaction_markers[i].position = ENVIRONMENT_INTERACTIONS[i].marker_pos + Vector2(0, sin(age * 2.8 + i) * 3.0)
+		interaction_markers[i].modulate = Color.WHITE if i == nearest else Color(1.0, 1.0, 1.0, 0.85)
 	queue_redraw()
 
 func nearby_target() -> String:
@@ -147,6 +202,25 @@ func target_name(id: String) -> String:
 
 func nearby_cauldron() -> bool:
 	return witch.position.distance_to(CAULDRON_POSITION) < CAULDRON_REACH
+
+func nearby_environment() -> int:
+	# Preserve pickup and cauldron priority, including when holding all treats.
+	if not nearby_target().is_empty() or nearby_cauldron():
+		return -1
+	var result := -1
+	var closest := INF
+	for i in ENVIRONMENT_INTERACTIONS.size():
+		var landmark: Dictionary = ENVIRONMENT_INTERACTIONS[i]
+		var distance: float = witch.position.distance_to(landmark.pos)
+		if distance < float(landmark.reach) and distance < closest:
+			closest = distance
+			result = i
+	return result
+
+func environment_prompt(index: int) -> String:
+	if index < 0 or index >= ENVIRONMENT_INTERACTIONS.size():
+		return "Inspect the surroundings"
+	return ENVIRONMENT_INTERACTIONS[index].prompt
 
 func interact() -> void:
 	if not active:
@@ -168,6 +242,14 @@ func interact() -> void:
 			maze_completed.emit()
 		else:
 			message.emit("The cauldron wants all three fall treats. %d still hide in the corn." % (TREAT_DATA.size() - collected.size()))
+		return
+	var environment_index := nearby_environment()
+	if environment_index >= 0:
+		var landmark: Dictionary = ENVIRONMENT_INTERACTIONS[environment_index]
+		var lines: Array = landmark.lines
+		var line_index: int = environment_dialogue_index[environment_index]
+		message.emit("%s: \"%s\"" % [landmark.name, lines[line_index]])
+		environment_dialogue_index[environment_index] = (line_index + 1) % lines.size()
 		return
 	message.emit("Something sweet is hiding in the corn. Follow the paths.")
 

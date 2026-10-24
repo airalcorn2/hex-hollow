@@ -3,13 +3,13 @@
   "engineVersion": "4.7.2.stable.official.ed1daf0bf",
   "inputs": {
     "objectFormat": "sha1",
-    "tree": "1ade4feb0026da043058371a2fc946c87a147e15",
+    "tree": "cc39e29c00e40e6e6e37655b8853c65396f93585",
     "entries": [
       {
         "path": ".gitignore",
         "type": "file",
         "mode": "100644",
-        "object": "30fef87c6f4fea47eeba577f52db0adcfa27f46c"
+        "object": "e0f57f85b553314d4dc4f08291d2e49ca9fcd8cd"
       },
       {
         "path": ".manus-game-template.json",
@@ -27,13 +27,13 @@
         "path": "README.md",
         "type": "file",
         "mode": "100644",
-        "object": "af4f4f1858b387fb93a14fa1569a9c04293827f1"
+        "object": "26356d4defb0ee30d7a097e774b79cdc9bcc588e"
       },
       {
         "path": "TODO.md",
         "type": "file",
         "mode": "100644",
-        "object": "1efa3a01d7868232a30b0b34046422b49633e79b"
+        "object": "a434ea4702fc092a24c8676f4d79cc03d4e15802"
       },
       {
         "path": "app.config.ts",
@@ -45,7 +45,29 @@
         "path": "assets.lock.json",
         "type": "file",
         "mode": "100644",
-        "object": "83fdc831fdd20a114df314eb05ad27a93e2815cc"
+        "object": "9811f56bd63a41a8f04489ba259bc273f84484d4"
+      },
+      {
+        "path": "assets/corn-maze/corn_maze_ground.png",
+        "type": "managed",
+        "sha256": "sha256:151b93481d3f1e0295a872bad39d24265793b8729a61ba13aaba545d6f44b575"
+      },
+      {
+        "path": "assets/corn-maze/corn_maze_ground.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "80329240b32ed4fd642b4bdba8be8fbce40654bc"
+      },
+      {
+        "path": "assets/corn-maze/corn_maze_walkable_mask.png",
+        "type": "managed",
+        "sha256": "sha256:6a2f2581a75c634086054e105cda3de9335266f81afd29186418282ade1582af"
+      },
+      {
+        "path": "assets/corn-maze/corn_maze_walkable_mask.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "9a87fb035a016354c79fa71a5efe7fe8c03e8266"
       },
       {
         "path": "assets/hollow/map.png",
@@ -68,6 +90,39 @@
         "type": "file",
         "mode": "100644",
         "object": "ca05f6334dcf206a86df20a183de27b143ef0d33"
+      },
+      {
+        "path": "assets/recipe/icons/candy_apple.png",
+        "type": "managed",
+        "sha256": "sha256:1ce984abe8e5adff23a4eb5dcf2c27205768d33072c0ebcd3a7199b32c9c9d82"
+      },
+      {
+        "path": "assets/recipe/icons/candy_apple.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "5cf62c551b35e4561adc0fd00d453bcfe222d638"
+      },
+      {
+        "path": "assets/recipe/icons/candy_corn.png",
+        "type": "managed",
+        "sha256": "sha256:90fd3fd4a43eb6d7282e4b1a4d58fc26bc6e8b73647c46e68528936b0744fc26"
+      },
+      {
+        "path": "assets/recipe/icons/candy_corn.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "2f7e3c83d25c8296f75bbe52a4ebd19a1a58db26"
+      },
+      {
+        "path": "assets/recipe/icons/caramel_corn.png",
+        "type": "managed",
+        "sha256": "sha256:7e4092e0c904108cafca3c8699b59aab2fd0a5deffdcb3f5a9bb6ced35034a44"
+      },
+      {
+        "path": "assets/recipe/icons/caramel_corn.png.import",
+        "type": "file",
+        "mode": "100644",
+        "object": "c1500ac67b5712e5babd882fb734f1dfd8e3b1d9"
       },
       {
         "path": "assets/recipe/icons/cauldron.png",
@@ -742,6 +797,18 @@
         "object": "daccd7d2a5cc119de47801236a27dc762ebde740"
       },
       {
+        "path": "autoload/cauldron_bridge.gd",
+        "type": "file",
+        "mode": "100644",
+        "object": "813bb8a6be7dc03ef8d5dce62eaa542ff6c5638a"
+      },
+      {
+        "path": "autoload/cauldron_bridge.gd.uid",
+        "type": "file",
+        "mode": "100644",
+        "object": "2e76063c568f1e2dd3191a5ec9b99216d9ab3f67"
+      },
+      {
         "path": "autoload/i18n.gd",
         "type": "file",
         "mode": "100644",
@@ -859,7 +926,7 @@
         "path": "project.godot",
         "type": "file",
         "mode": "100644",
-        "object": "6e9e5a8814209793fa050453369d0824a9d73a81"
+        "object": "27fa78ac3240da0f051c9af00242f2e569c81ba0"
       },
       {
         "path": "scenes/main.tscn",
@@ -907,7 +974,7 @@
         "path": "scripts/entities/witch.gd",
         "type": "file",
         "mode": "100644",
-        "object": "7a161b170afbff2415c2b25329bc2f346e46e689"
+        "object": "89c1f15f98ef12540d5f4601a1a14afe37ec32c0"
       },
       {
         "path": "scripts/entities/witch.gd.uid",
@@ -916,10 +983,22 @@
         "object": "b1d7eb0062aac168a7e8a45f7afcf826e03ebaec"
       },
       {
+        "path": "scripts/game/corn_maze.gd",
+        "type": "file",
+        "mode": "100644",
+        "object": "f404fa2d185a55cb5e299aa7ecf2e3c88aecc755"
+      },
+      {
+        "path": "scripts/game/corn_maze.gd.uid",
+        "type": "file",
+        "mode": "100644",
+        "object": "8f9b07acdca95b760dcd0c5ae7ab19dd9297d2a8"
+      },
+      {
         "path": "scripts/game/hollow_world.gd",
         "type": "file",
         "mode": "100644",
-        "object": "2a2d1e7ead1f1b0834325c5db59b942b3f0c48d0"
+        "object": "4f9666a1b563a2222242c4924005da5feeb19268"
       },
       {
         "path": "scripts/game/hollow_world.gd.uid",
@@ -955,7 +1034,7 @@
         "path": "scripts/hollow_main.gd",
         "type": "file",
         "mode": "100644",
-        "object": "4c53bcdfffeb5ee37c25e5a1a4477cab3c7ff1c9"
+        "object": "f8ddf88fb79e64e9f5b13828f45fb8271a5df463"
       },
       {
         "path": "scripts/hollow_main.gd.uid",
@@ -1270,10 +1349,16 @@
         "object": "0810aab0e2ee9e8c03cc20d7e738a2b180ffa1ca"
       },
       {
+        "path": "tools/generate_collision_mask.py",
+        "type": "file",
+        "mode": "100755",
+        "object": "a1658321f53abc02a0d2b3ff5b3814512d9fae6a"
+      },
+      {
         "path": "tools/hollow_capture.gd",
         "type": "file",
         "mode": "100644",
-        "object": "196d6e6e38701f5b08585f3bbfebc2a535c5b7c1"
+        "object": "2ddb72f1016a401557eb016e09c369d6323c0aee"
       },
       {
         "path": "tools/hollow_capture.gd.uid",
@@ -1285,7 +1370,7 @@
         "path": "tools/hollow_check.gd",
         "type": "file",
         "mode": "100644",
-        "object": "b7015d28e0af0d96deb6a452a46d7317da286711"
+        "object": "94a874015a42c8e486ba866616fe0a4ff60ef696"
       },
       {
         "path": "tools/hollow_check.gd.uid",
@@ -1338,7 +1423,7 @@
     ]
   },
   "build": {
-    "snapshotId": "sha256:c7fc60edc991d7a599edfbc83d2b8b37e66557783e942e2e5cf1b198707c16a1",
+    "snapshotId": "sha256:d3b6fa0d61920850e4dcce73a1d2bd68435b9f8a8c945313476db4a0933fec17",
     "toolchain": {
       "engineVersion": "4.7.2.stable.official.ed1daf0bf",
       "engineDigest": "sha256:8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
@@ -1351,21 +1436,21 @@
     "profile": "release",
     "export": {
       "profile": "release",
-      "snapshotId": "sha256:c7fc60edc991d7a599edfbc83d2b8b37e66557783e942e2e5cf1b198707c16a1",
+      "snapshotId": "sha256:d3b6fa0d61920850e4dcce73a1d2bd68435b9f8a8c945313476db4a0933fec17",
       "files": {
         "THIRD_PARTY_NOTICES.txt": "sha256:c729a77bf07eb9745b2d89c3ce4ead3357438366f41743d2755ae35f98509cf9",
         "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
         "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
         "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-        "index.html": "sha256:4db3521f7e7962db22a8533d41816e345d416f9446edb2418f9d46b82aadedb0",
+        "index.html": "sha256:f4f9b16ce0fb1fdda783a63b5b5c085f64599d068e5ccc28bc08ea91a6eb199b",
         "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
         "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
-        "index.pck": "sha256:8f8f1a4a3a8f333ddd2a55367cd218bf1a931c647e21b9d85d33fceaf6a38d39",
+        "index.pck": "sha256:998d70ab9413d98ccb2f658f0cf50cc354f7a23599ae34463558e2748132a339",
         "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",
         "index.wasm": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
         "open-source-licenses.html": "sha256:9215f5fdd50039a9b6f3d8f0271cbc21bbdf64b917fb118dd29c8a16b9974e00"
       },
-      "digest": "sha256:9eb69f12bf79652f412b9fc901d6f0f03a1dd18c907588cc2fabfd76d6f5b1c8"
+      "digest": "sha256:d9fbecf90537a6f9ce248183ece71e6b5ef25ad5d4c82a3dcca33e24cae9c9eb"
     }
   },
   "artifacts": {
@@ -1374,8 +1459,8 @@
       "sha256": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0"
     },
     "pck": {
-      "path": "/manus-storage/game/sha256/8f8f1a4a3a8f333ddd2a55367cd218bf1a931c647e21b9d85d33fceaf6a38d39.pck",
-      "sha256": "sha256:8f8f1a4a3a8f333ddd2a55367cd218bf1a931c647e21b9d85d33fceaf6a38d39"
+      "path": "/manus-storage/game/sha256/998d70ab9413d98ccb2f658f0cf50cc354f7a23599ae34463558e2748132a339.pck",
+      "sha256": "sha256:998d70ab9413d98ccb2f658f0cf50cc354f7a23599ae34463558e2748132a339"
     }
   },
   "files": {
@@ -1384,7 +1469,7 @@
     "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
     "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "sha256:36f6d1e03dc8dbc3ecd1b94dddb31104f681ce8c309c44864ede8f41e4ee7e43",
+    "index.html": "sha256:f7b0d12bbdd1b8e8c077a01280307b37c991147bd5a22e6714293dd7c08c38d9",
     "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
     "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
     "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",

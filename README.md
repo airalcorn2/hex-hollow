@@ -10,6 +10,8 @@ The first level takes place in the Hollow: a moonlit woodland filled with ingred
 
 After completing the first spell, the witch can enter Level 2, the **Mooncorn Maze**. This level uses a static illustrated cornfield scene with three fall treats (a candy apple, a caramel corn ball, and candy corn) hidden along its paths. Once all three are gathered, the witch drops them into the bubbling cauldron in the lantern gate to finish the level. The title screen also includes **Practice the Mooncorn Maze**, which starts Level 2 directly with a fresh set of treats for testing.
 
+The maze's **Wishing Well** (upper middle), **Lantern Tree** (center-left), and **Pumpkin Wagon** (right-hand clearing) offer optional witchy flavor text. Follow the gold **?** above each landmark, approach from the paths, and press **E / Space**. Repeated inspections cycle through different lines; these interactions do not consume treats or affect the harvest spell.
+
 Progress is stored locally so an unfinished spell or maze run can be continued from the title screen.
 
 ## Controls

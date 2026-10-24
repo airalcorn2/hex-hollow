@@ -243,8 +243,10 @@ func _process_maze(delta: float) -> void:
 		prompt_label.text = "[ E / SPACE ]  Gather " + world.target_name(target)
 	elif world.nearby_cauldron():
 		prompt_label.text = "[ E / SPACE ]  Drop the treats into the cauldron" if world.collected.size() == 3 else "The cauldron is waiting · Find all 3 fall treats"
+	elif world.nearby_environment() >= 0:
+		prompt_label.text = "[ E / SPACE ]  " + world.environment_prompt(world.nearby_environment())
 	else:
-		prompt_label.text = "Sniff out the fall treats hidden in the corn."
+		prompt_label.text = "Sniff out the fall treats · Inspect landmarks marked with ?"
 	progress_label.text = "%d / 3 fall treats found" % world.collected.size()
 	satchel_label.text = "TREATS  ·  %d / 3" % world.collected.size()
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
@@ -303,7 +305,7 @@ func _build_maze_hud() -> void:
 		var y: float = 310 + i * 51
 		_picture(hud, CornMazeScript.TREAT_ICONS[i], Rect2(1019, y - 6, 46, 46))
 		_label(hud, CornMazeScript.TREAT_DATA[i].name, Vector2(1072, y + 8), Vector2(173, 24), 14)
-	_label(hud, "Bring all three to the cauldron in the lantern gate.", Vector2(1027, 470), Vector2(205, 60), 13, MUTED)
+	_label(hud, "Bring all three to the cauldron\nin the lantern gate.", Vector2(1027, 470), Vector2(205, 60), 13, MUTED)
 	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
 	satchel_label = _label(hud, "TREATS  ·  0 / 3", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
 	_label(hud, "The corn remembers the way in", Vector2(1034, 674), Vector2(190, 22), 11, MUTED)

@@ -101,12 +101,31 @@ func _check() -> void:
 	assert(maze.nearby_cauldron(), "Witch can stand beside the maze cauldron")
 	maze.interact()
 	assert(not maze.won, "The cauldron refuses to finish before all treats are found")
+	assert(maze.interaction_markers.size() == 3, "All three maze landmarks have question-mark indicators")
+	var approach_points := [Vector2(700, 248), Vector2(441, 519), Vector2(1016, 500)]
+	for i in maze.ENVIRONMENT_INTERACTIONS.size():
+		var landmark: Dictionary = maze.ENVIRONMENT_INTERACTIONS[i]
+		assert(maze.interaction_markers[i].text == "?" and maze.interaction_markers[i].visible, "Maze landmark marker is visible")
+		maze.witch.position = approach_points[i]
+		assert(maze._is_walkable_position(maze.witch.position), "Landmark %s has a walkable approach" % landmark.name)
+		assert(maze.nearby_environment() == i, "Landmark %s can be inspected from the path" % landmark.name)
+		main._process_maze(0.0)
+		assert(main.prompt_label.text.ends_with(landmark.prompt), "HUD offers the matching landmark action")
+		for line_index in landmark.lines.size():
+			maze.interact()
+			assert(main.notice_label.text == "%s: \"%s\"" % [landmark.name, landmark.lines[line_index]], "Landmark reveals the next flavor line")
+		assert(maze.environment_dialogue_index[i] == 0, "Landmark dialogue cycles back to the first line")
+		assert(maze.collected.is_empty() and not maze.won, "Landmark inspection leaves treat and spell progression unchanged")
 	for i in maze.TREAT_POSITIONS.size():
 		assert(maze._is_walkable_position(maze.TREAT_POSITIONS[i]), "Fall treat %d sits on a walkable path" % i)
 		maze.witch.position = maze.TREAT_POSITIONS[i]
 		assert(not maze.nearby_target().is_empty(), "Fall treat %d is reachable" % i)
+		assert(maze.nearby_environment() == -1, "Treat pickups take priority over nearby landmarks")
 		maze.interact()
 	assert(maze.collected.size() == 3, "Corn maze collects all three fall treats")
+	maze.witch.position = approach_points[0]
+	maze.interact()
+	assert(maze.collected.size() == 3 and not maze.won, "Landmarks remain optional while carrying all three treats")
 	maze.witch.position = Vector2(1078, 620)
 	assert(maze._is_walkable_position(maze.witch.position), "The path north of the cauldron is walkable")
 	assert(maze.nearby_cauldron(), "Witch can reach the cauldron from the north side")

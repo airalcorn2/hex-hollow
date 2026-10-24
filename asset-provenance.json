@@ -1,5 +1,49 @@
 {
   "assets": {
+    "assets/corn-maze/corn_maze_ground.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:151b93481d3f1e0295a872bad39d24265793b8729a61ba13aaba545d6f44b575",
+      "shipped": true,
+      "size": 7735480,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/corn-maze/corn_maze_walkable_mask.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:6a2f2581a75c634086054e105cda3de9335266f81afd29186418282ade1582af",
+      "shipped": true,
+      "size": 21741,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
     "assets/hollow/map.png": {
       "declaredUseEvidence": [],
       "generator": {},
@@ -40,6 +84,72 @@
       "used": false,
       "usedBy": []
     },
+    "assets/recipe/icons/candy_apple.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:1ce984abe8e5adff23a4eb5dcf2c27205768d33072c0ebcd3a7199b32c9c9d82",
+      "shipped": true,
+      "size": 16136,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/candy_corn.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:90fd3fd4a43eb6d7282e4b1a4d58fc26bc6e8b73647c46e68528936b0744fc26",
+      "shipped": true,
+      "size": 16935,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/recipe/icons/caramel_corn.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:7e4092e0c904108cafca3c8699b59aab2fd0a5deffdcb3f5a9bb6ced35034a44",
+      "shipped": true,
+      "size": 27311,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "scripts/game/corn_maze.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
     "assets/recipe/icons/cauldron.png": {
       "declaredUseEvidence": [],
       "generator": {},
@@ -47,6 +157,7 @@
       "license": {},
       "origin": "unknown",
       "referenceEvidence": [
+        "scripts/game/corn_maze.gd",
         "scripts/game/hollow_world.gd"
       ],
       "regions": [],
@@ -57,6 +168,7 @@
       "status": "present",
       "transformations": [],
       "useEvidence": [
+        "scripts/game/corn_maze.gd",
         "scripts/game/hollow_world.gd"
       ],
       "used": true,
@@ -69,6 +181,7 @@
       "license": {},
       "origin": "unknown",
       "referenceEvidence": [
+        "scripts/game/corn_maze.gd",
         "scripts/game/hollow_world.gd"
       ],
       "regions": [],
@@ -79,6 +192,7 @@
       "status": "present",
       "transformations": [],
       "useEvidence": [
+        "scripts/game/corn_maze.gd",
         "scripts/game/hollow_world.gd"
       ],
       "used": true,
@@ -1134,9 +1248,9 @@
         ]
       }
     ],
-    "pckSha256": "sha256:8f8f1a4a3a8f333ddd2a55367cd218bf1a931c647e21b9d85d33fceaf6a38d39",
+    "pckSha256": "sha256:998d70ab9413d98ccb2f658f0cf50cc354f7a23599ae34463558e2748132a339",
     "profile": "release",
-    "sourceFingerprint": "sha256:2f019d0687c24078c7602d69cb76c9f432e4381e0575f49414446926c729b096"
+    "sourceFingerprint": "sha256:79b010263ac37e6f70b9e87d04dd392ffc7a214977c0ed9bceda6bbdd3b755ce"
   },
   "procedures": {},
   "summary": {
@@ -1169,9 +1283,9 @@
     },
     "files": {
       "downloaded": 0,
-      "retained": 50,
-      "shipped": 46,
-      "used": 35
+      "retained": 55,
+      "shipped": 51,
+      "used": 40
     },
     "origins": {
       "ai": {
@@ -1205,9 +1319,9 @@
         "used": 4
       },
       "unknown": {
-        "retained": 35,
-        "shipped": 31,
-        "used": 31
+        "retained": 40,
+        "shipped": 36,
+        "used": 36
       }
     },
     "packs": {
