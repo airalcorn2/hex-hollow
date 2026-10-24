@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3w634521sw5r"
-path="res://.godot/imported/corn_wall.png-70aef6907df07b9618cd807b49a88336.ctex"
+uid="uid://dfcoae4iisjqi"
+path="res://.godot/imported/corn_hedge_tuft_clean.png-c0293522b96278b3773e09792cde1970.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/corn-maze/corn_wall.png"
-dest_files=["res://.godot/imported/corn_wall.png-70aef6907df07b9618cd807b49a88336.ctex"]
+source_file="res://assets/corn-maze/corn_hedge_tuft_clean.png"
+dest_files=["res://.godot/imported/corn_hedge_tuft_clean.png-c0293522b96278b3773e09792cde1970.ctex"]
 
 [params]
 

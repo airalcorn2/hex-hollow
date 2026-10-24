@@ -22,7 +22,7 @@ const CHARM_ICONS := [
 	preload("res://assets/recipe/icons/essence.png"),
 ]
 const GROUND_TEXTURE := preload("res://assets/corn-maze/corn_maze_ground.png")
-const CORN_WALL_TEXTURE := preload("res://assets/corn-maze/corn_wall.png")
+const CORN_TUFT_TEXTURE := preload("res://assets/corn-maze/corn_hedge_tuft_clean.png")
 
 var witch: HollowWitch
 var camera: Camera2D
@@ -129,10 +129,10 @@ func _build_visuals() -> void:
 			if not walls[y][x]:
 				continue
 			var hedge := Sprite2D.new()
-			hedge.texture = CORN_WALL_TEXTURE
+			hedge.texture = CORN_TUFT_TEXTURE
 			hedge.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-			hedge.position = Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5)
-			hedge.scale = Vector2(CELL, CELL) / CORN_WALL_TEXTURE.get_size()
+			hedge.position = Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5) + Vector2(0, 3)
+			hedge.scale = Vector2(78, 86) / CORN_TUFT_TEXTURE.get_size()
 			hedge.flip_h = (x + y) % 2 == 0
 			hedge.modulate = Color(0.88 + (x % 3) * 0.035, 0.92 + (y % 2) * 0.03, 0.84, 1.0)
 			hedge.z_index = 2
