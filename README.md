@@ -72,6 +72,35 @@ Run the project pack verification:
 npm run check -- --pack
 ```
 
+## Collision-mask helper
+
+`tools/generate_collision_mask.py` is an offline assistive tool for turning a static top-down background into reviewable collision candidates. It resizes the image to world coordinates, applies configurable HSV vegetation/gold segmentation, snaps the result to a coarse occupancy grid, greedily merges occupied cells into rectangles, and writes:
+
+- JSON containing rectangles and four-point polygons
+- A debug PNG with the candidate regions drawn over the background
+- Optional Godot `PackedVector2Array` source
+
+The output is intentionally not imported automatically. Review the debug overlay first: pixel-art shadows, paths, trees, pumpkins, and corn can share colors, so automatic segmentation can produce false positives.
+
+Example:
+
+```bash
+python3 tools/generate_collision_mask.py \
+  --image assets/corn-maze/corn_maze_ground.png \
+  --output-json /tmp/corn-collisions.json \
+  --output-preview /tmp/corn-collisions-preview.png \
+  --output-gdscript /tmp/corn-collisions.gd \
+  --world-width 1216 \
+  --world-height 832 \
+  --cell-size 32 \
+  --occupancy 0.52 \
+  --close-size 9 \
+  --inset 5 \
+  --min-area 1536
+```
+
+The helper requires Python with Pillow and NumPy. Its output should be adjusted or hand-authored before being used as authoritative gameplay collision.
+
 Build the managed Preview export:
 
 ```bash
