@@ -8,11 +8,11 @@ The project is available at [github.com/airalcorn2/hex-hollow](https://github.co
 
 The first level takes place in the Hollow: a moonlit woodland filled with ingredient pickups, companion witches, readable gravestones, lanterns, trees, signs, and a bubbling cauldron.
 
-After completing the first spell, the witch can enter Level 2, the **Mooncorn Maze**. This level uses a static illustrated cornfield scene with three fall treats (a candy apple, a caramel corn ball, and candy corn) hidden along its paths. Once all three are gathered, the witch drops them into the bubbling cauldron in the lantern gate to finish the level. The title screen also includes **Practice the Mooncorn Maze**, which starts Level 2 directly with a fresh set of treats for testing.
+After completing the first spell, the witch can enter Level 2, the **Mooncorn Maze**. This level uses a static illustrated cornfield scene with three fall treats (a candy apple, a caramel corn ball, and candy corn) hidden along its paths. Once all three are gathered, the witch drops them into the bubbling cauldron in the lantern gate to finish the level. For direct testing, use the hidden level-select menu described below.
 
 The maze's **Wishing Well** (upper middle), **Lantern Tree** (center-left), and **Pumpkin Wagon** (right-hand clearing) offer optional witchy flavor text. Follow the gold **?** above each landmark, approach from the paths, and press **E / Space**. Repeated inspections cycle through different lines; these interactions do not consume treats or affect the harvest spell.
 
-After the harvest spell, enter Level 3, **The Whispering Manor**: a haunted-house interior with six connected rooms, a portrait gallery, dining room, library, music parlor, kitchen and nursery. Gather four cursed keepsakes—a **silver key**, **music box**, **ghost candle** and **velvet ribbon**—then bring them to the bubbling cauldron in the foyer to brew an unhaunting spell. The title's **Practice the haunted house** button starts Level 3 directly.
+After the harvest spell, enter Level 3, **The Whispering Manor**: a haunted-house interior with six connected rooms, a portrait gallery, dining room, library, music parlor, kitchen and nursery. Gather four cursed keepsakes—a **silver key**, **music box**, **ghost candle** and **velvet ribbon**—then bring them to the bubbling cauldron in the foyer to brew an unhaunting spell. The hidden level-select menu can start Level 3 directly for testing.
 
 The manor has **18 optional environmental interactions**, each with three rotating readings. Follow the fixed gold **?** pointers and press **E / Space** nearby. They reveal ghostly flavor text without awarding keepsakes or changing the spell; collectible and cauldron prompts take priority.
 
@@ -38,7 +38,13 @@ Progress is stored locally so an unfinished spell, maze or manor run can be cont
 - **E / Space** — Collect ingredients, deposit them, talk to witches, and inspect landmarks
 - **Esc** — Pause or resume
 
-The title screen provides the normal adventure entry point, saved-run continuation, and direct maze and haunted-house practice modes.
+The regular title screen shows only the normal adventure entry point and saved-run continuation, alongside the license button.
+
+### Hidden testing menu
+
+On the title screen, press **F2** (or **Fn + F2** where required by your keyboard) to open the secret level selector. Click a level, or press **1** for the Hollow, **2** for the Mooncorn Maze, or **3** for the Whispering Manor. Press **F2**, **Esc**, or **Back to title** to dismiss it. The shortcut does nothing during active gameplay.
+
+Opening and cancelling the menu leaves saved progress untouched. Choosing a level starts a fresh test run and replaces the current local adventure save, matching the previous practice shortcuts. The shortcut is documented here but is not advertised on the normal title screen.
 
 ## Project layout
 
@@ -101,7 +107,7 @@ The sync command preserves GitHub's asset tracking and history, checks each asse
 
 ## Verification
 
-Run the native gameplay regression test to verify all three chapters, movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, chapter transitions, fall treats, haunted-house doorway traversal, walkable rugs and solid furniture, keepsakes, environmental dialogue, full-satchel continuation, and both practice modes:
+Run the native gameplay regression test to verify all three chapters, movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, chapter transitions, fall treats, haunted-house doorway traversal, walkable rugs and solid furniture, keepsakes, environmental dialogue, full-satchel continuation, hidden level selection, keyboard shortcuts and safe cancellation:
 
 ```bash
 godot --headless --path . --editor --quit

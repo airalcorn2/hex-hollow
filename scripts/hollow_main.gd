@@ -36,6 +36,24 @@ func _ready() -> void:
 	_show_title()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		var key: Key = event.keycode if event.keycode != KEY_NONE else event.physical_keycode
+		if key == KEY_F2 and state in ["title", "level_select"]:
+			_toggle_level_select()
+			get_viewport().set_input_as_handled()
+			return
+		if state == "level_select":
+			match key:
+				KEY_1, KEY_KP_1:
+					_start_new_run()
+				KEY_2, KEY_KP_2:
+					_practice_maze()
+				KEY_3, KEY_KP_3:
+					_practice_house()
+				KEY_ESCAPE:
+					_close_level_select()
+			get_viewport().set_input_as_handled()
+			return
 	if event.is_action_pressed("pause"):
 		if state == "playing":
 			_toggle_pause()
@@ -162,9 +180,7 @@ func _show_title() -> void:
 	_label(self, "A LITTLE MISCHIEF. A LITTLE MAGIC.", Vector2(44, 645), Vector2(650, 28), 14, GOLD, true)
 	_label(self, "Gather six enchanted ingredients. Brew a spell before the night is through.", Vector2(44, 684), Vector2(735, 30), 20)
 	_label(self, "WASD / arrows to wander    ·    E / Space to gather & brew    ·    Esc to pause", Vector2(44, 734), Vector2(820, 28), 15, MUTED)
-	_button(self, "Enter the hollow  →", Rect2(924, 632, 310, 46), _start_new_run, true)
-	_button(self, "Practice the Mooncorn Maze", Rect2(924, 684, 310, 34), _practice_maze)
-	_button(self, "Practice the haunted house", Rect2(924, 722, 310, 34), _practice_house)
+	_button(self, "Enter the hollow  →", Rect2(924, 661, 310, 50), _start_new_run, true)
 	var saved_level := int(saved.get("level", 1))
 	var can_continue := not saved.is_empty() and (saved_level < 3 or not bool(saved.get("won", false)))
 	if can_continue:
@@ -175,10 +191,32 @@ func _show_title() -> void:
 			continue_text = "Enter the haunted house" if bool(saved.get("won", false)) else "Continue in the maze"
 		elif saved.get("deposited", []).size() >= 6:
 			continue_text = "Continue to the maze"
-		_button(self, continue_text, Rect2(924, 760, 310, 34), _continue_run)
+		_button(self, continue_text, Rect2(924, 725, 310, 46), _continue_run)
 	else:
-		_label(self, "A cozy, moonlit adventure", Vector2(931, 765), Vector2(298, 25), 15, MUTED)
+		_label(self, "A cozy, moonlit adventure", Vector2(931, 736), Vector2(298, 25), 15, MUTED)
 	_button(self, "Open Source Licenses", Rect2(22, 17, 195, 33), func(): Licenses.open(self))
+
+func _toggle_level_select() -> void:
+	if state == "level_select":
+		_close_level_select()
+		return
+	if state != "title":
+		return
+	state = "level_select"
+	_make_overlay("Secret level select", "1 / 2 / 3 selects · F2 / Esc closes\nFresh test runs replace the current save.")
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_button(overlay, "1 · The Hollow", Rect2(470, 397, 340, 42), _start_new_run, true)
+	_button(overlay, "2 · Mooncorn Maze", Rect2(470, 445, 340, 42), _practice_maze)
+	_button(overlay, "3 · Whispering Manor", Rect2(470, 493, 340, 42), _practice_house)
+	_button(overlay, "Back to title", Rect2(470, 550, 340, 36), _close_level_select)
+
+func _close_level_select() -> void:
+	if state != "level_select":
+		return
+	if overlay != null:
+		overlay.queue_free()
+		overlay = null
+	state = "title"
 
 func _start_new_run() -> void:
 	_begin_run({})
