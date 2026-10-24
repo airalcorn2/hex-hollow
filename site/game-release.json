@@ -3,7 +3,7 @@
   "engineVersion": "4.7.2.stable.official.ed1daf0bf",
   "inputs": {
     "objectFormat": "sha1",
-    "tree": "206c3bbc57b280766382fe72c3ae328405ff0d62",
+    "tree": "5d089e04093e4429b76f855f64f3de794a577def",
     "entries": [
       {
         "path": ".gitignore",
@@ -33,13 +33,13 @@
         "path": "README.md",
         "type": "file",
         "mode": "100644",
-        "object": "70c8ebc41ab80193872758e9a4031b05c81f6d5b"
+        "object": "a1bac18b03e06a9e84581af81f84d1f11b045b01"
       },
       {
         "path": "TODO.md",
         "type": "file",
         "mode": "100644",
-        "object": "93013f9ea53b4483be329ce918934a05412522d6"
+        "object": "da752b72c595135fbf518df1a49ee6faefa9ddfe"
       },
       {
         "path": "app.config.ts",
@@ -1153,7 +1153,7 @@
         "path": "scripts/hollow_main.gd",
         "type": "file",
         "mode": "100644",
-        "object": "37df7c0763fca1728de1ce5780747624aace6a8e"
+        "object": "44dd8497af687eb13e2af44f95222a5fc903f22a"
       },
       {
         "path": "scripts/hollow_main.gd.uid",
@@ -1477,7 +1477,7 @@
         "path": "tools/hollow_capture.gd",
         "type": "file",
         "mode": "100644",
-        "object": "d9a2e0f76ea0b0c3bbfe4af54485930e4d75c557"
+        "object": "876cdfd9f2f315469a16be90b993d76ceb144bad"
       },
       {
         "path": "tools/hollow_capture.gd.uid",
@@ -1489,7 +1489,7 @@
         "path": "tools/hollow_check.gd",
         "type": "file",
         "mode": "100644",
-        "object": "413dc9bd44cf3bd133b7595dd2655062559d3c4f"
+        "object": "515ec1bcfe161772fcbbcf7a3487000d00e153f5"
       },
       {
         "path": "tools/hollow_check.gd.uid",
@@ -1548,7 +1548,7 @@
     ]
   },
   "build": {
-    "snapshotId": "sha256:f81c704c181713b3791823dab6449bd367f201694b4e16b1c5ec9e86459c2f62",
+    "snapshotId": "sha256:b9fd66e725696ece76ad5e2358734a7c674a7041173ac5ecaf419acac6c7adea",
     "toolchain": {
       "engineVersion": "4.7.2.stable.official.ed1daf0bf",
       "engineDigest": "sha256:8d106cbe6144c2dc7e881d61d2429c1a8a76e6b22ef48bd5e48dcf934953f71e",
@@ -1561,21 +1561,21 @@
     "profile": "release",
     "export": {
       "profile": "release",
-      "snapshotId": "sha256:f81c704c181713b3791823dab6449bd367f201694b4e16b1c5ec9e86459c2f62",
+      "snapshotId": "sha256:b9fd66e725696ece76ad5e2358734a7c674a7041173ac5ecaf419acac6c7adea",
       "files": {
         "THIRD_PARTY_NOTICES.txt": "sha256:c729a77bf07eb9745b2d89c3ce4ead3357438366f41743d2755ae35f98509cf9",
         "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
         "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
         "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-        "index.html": "sha256:3e4a987dc83c825140f6f3763fbbb8c80e767335e5e08c0fd1cb7839cd489612",
+        "index.html": "sha256:485be2a247d9c1a4e54d26d05f5bf69713a036fe7e2337e4c344272484f46f1c",
         "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
         "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
-        "index.pck": "sha256:0f2a3efd2b15b5fc5eb1b4a6d0c1010ee42e6fa14ba0dee9e71af1e721b32879",
+        "index.pck": "sha256:17fcb0a3259546c7744b2efccd5a361540def2efe7e1f62b2b9ba846f1ae5650",
         "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",
         "index.wasm": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
         "open-source-licenses.html": "sha256:9215f5fdd50039a9b6f3d8f0271cbc21bbdf64b917fb118dd29c8a16b9974e00"
       },
-      "digest": "sha256:b37cc92839b0bf517b1301e70f143f838f8f5e42e2a5ddff977922b5a02b18d3"
+      "digest": "sha256:60653b4048b0f8edfd841e49ec0a7c1720f6023f02654a157977a6a8220c5372"
     }
   },
   "artifacts": {
@@ -1584,8 +1584,8 @@
       "sha256": "sha256:fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0"
     },
     "pck": {
-      "path": "/manus-storage/game/sha256/0f2a3efd2b15b5fc5eb1b4a6d0c1010ee42e6fa14ba0dee9e71af1e721b32879.pck",
-      "sha256": "sha256:0f2a3efd2b15b5fc5eb1b4a6d0c1010ee42e6fa14ba0dee9e71af1e721b32879"
+      "path": "/manus-storage/game/sha256/17fcb0a3259546c7744b2efccd5a361540def2efe7e1f62b2b9ba846f1ae5650.pck",
+      "sha256": "sha256:17fcb0a3259546c7744b2efccd5a361540def2efe7e1f62b2b9ba846f1ae5650"
     }
   },
   "files": {
@@ -1594,7 +1594,7 @@
     "index.apple-touch-icon.png": "sha256:c3217b9308bc58e499185f6613ccd4c523f5cb9c73b746488ec6b198bdd8dc65",
     "index.audio.position.worklet.js": "sha256:be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
     "index.audio.worklet.js": "sha256:5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
-    "index.html": "sha256:1368546c846d83e4e5387f60afa46d48ab005dc950946f3fbdbefb05b3416004",
+    "index.html": "sha256:91ef19667e718bf74abcd830cf004615ba13b70b9166e7e196c4b531ab04e36e",
     "index.icon.png": "sha256:20f28566e226738dd8ac966a0229f9c134e22894a848ea20d608586f83cf3c1c",
     "index.js": "sha256:cb28c2d8ffd8981888823f1b6d98cdec4e3e11adf209ad556c22878e6d51c63a",
     "index.png": "sha256:5743a648b82437e0e60db5e4aa08103cea96b01e110961082223c0e7fa819ebf",

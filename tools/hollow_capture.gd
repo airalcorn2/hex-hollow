@@ -44,6 +44,8 @@ func _capture() -> void:
 			main.world.camera.position = main.world.witch.position
 			main.world.camera.reset_smoothing()
 			main.world.interact()
+	elif OS.get_environment("HOLLOW_CAPTURE_MODE") == "level_select":
+		main._toggle_level_select()
 	for frame in 12:
 		await process_frame
 	await create_timer(0.35).timeout

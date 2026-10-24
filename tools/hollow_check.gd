@@ -270,14 +270,54 @@ func _check() -> void:
 	assert(main.overlay != null, "The manor presents the final adventure ending")
 	main._show_title()
 	await process_frame
-	main._practice_maze()
+	for child in main.get_children():
+		assert(not (child is Button and child.text.begins_with("Practice")), "Testing shortcuts are not visible on the normal title screen")
+	var before_menu: Dictionary = saves.get_adventure()
+	await _press_key(KEY_F2)
+	assert(main.state == "level_select" and main.overlay != null and main.world == null, "F2 opens the hidden selector from the title screen")
+	await _press_key(KEY_F2, true)
+	assert(main.state == "level_select", "Key repeat does not toggle the selector repeatedly")
+	await _press_key(KEY_ENTER)
+	assert(main.state == "level_select" and main.world == null, "Enter inside the selector does not accidentally start a normal adventure")
+	await _press_key(KEY_F2)
+	assert(main.state == "title" and main.overlay == null and saves.get_adventure() == before_menu, "F2 closes the selector without changing saved progress")
+	await _press_key(KEY_F2)
+	await _press_key(KEY_ESCAPE)
+	assert(main.state == "title" and saves.get_adventure() == before_menu, "Esc cancels hidden level selection safely")
+	var test_level := 1
+	for code in [KEY_1, KEY_2, KEY_3]:
+		await _press_key(KEY_F2)
+		await _press_key(code)
+		assert(main.state == "playing" and main.current_level == test_level and main.world.collected.is_empty(), "Number keys start fresh test runs in each chosen level")
+		var active_world = main.world
+		await _press_key(KEY_F2)
+		assert(main.state == "playing" and main.world == active_world, "The hidden shortcut does not interrupt active gameplay")
+		main._show_title()
+		await process_frame
+		test_level += 1
+	await _press_key(KEY_F2)
+	for child in main.overlay.get_children():
+		if child is Button and child.text == "Back to title":
+			child.pressed.emit()
+			break
+	assert(main.state == "title" and main.overlay == null, "The selector's Back button closes it")
 	await process_frame
-	assert(main.current_level == 2 and main.world.collected.is_empty(), "Title screen starts a fresh maze practice run")
-	main._show_title()
-	await process_frame
-	main._practice_house()
-	await process_frame
-	assert(main.current_level == 3 and main.world.collected.is_empty() and not main.world.won, "Title screen starts a fresh haunted-house practice run")
+	await _press_key(KEY_ENTER)
+	assert(main.current_level == 1 and main.state == "playing", "Normal title-screen Enter still starts the adventure")
 	saves.set_adventure(original)
-	print("[hex-hollow] PASS: woodland, corn maze, haunted house, doorway traversal, rugs and walls, keepsakes, hauntings, pause, full-satchel save restore, spell completion, replay")
+	print("[hex-hollow] PASS: three chapters, movement, hauntings, pause, save restore, spells, hidden level selection, safe cancellation, keyboard shortcuts")
 	quit(0)
+
+func _press_key(code: Key, echo: bool = false) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.physical_keycode = code
+	event.pressed = true
+	event.echo = echo
+	Input.parse_input_event(event)
+	await process_frame
+	var release := InputEventKey.new()
+	release.keycode = code
+	release.physical_keycode = code
+	Input.parse_input_event(release)
+	await process_frame
