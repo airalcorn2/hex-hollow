@@ -25,10 +25,12 @@ const CHARM_ICONS := [
 ]
 const GROUND_TEXTURE := preload("res://assets/corn-maze/corn_maze_ground.png")
 const WALKABLE_MASK_TEXTURE := preload("res://assets/corn-maze/corn_maze_walkable_mask.png")
+# Forgiving feet-sized footprint: the witch's sprite and hat may overlap corn
+# visually, but only a small area around her feet is tested against the mask.
 const MASK_SAMPLE_OFFSETS := [
 	Vector2.ZERO,
-	Vector2(10, 0), Vector2(-10, 0), Vector2(0, 10), Vector2(0, -10),
-	Vector2(7, 7), Vector2(-7, 7), Vector2(7, -7), Vector2(-7, -7),
+	Vector2(6, 0), Vector2(-6, 0), Vector2(0, 5), Vector2(0, -5),
+	Vector2(4, 4), Vector2(-4, 4), Vector2(4, -4), Vector2(-4, -4),
 ]
 
 var witch: HollowWitch

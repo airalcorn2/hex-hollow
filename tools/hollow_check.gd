@@ -88,9 +88,12 @@ func _check() -> void:
 	maze.witch.position = maze.START_POSITION
 	maze.witch.move_direction(Vector2.DOWN, 0.3)
 	assert(maze.witch.position.y > maze.START_POSITION.y + 40.0, "Witch can walk down out of the spawn")
-	maze.witch.position = Vector2(180, 156)
+	maze.witch.position = Vector2(508, 230)
 	maze.witch.move_direction(Vector2.RIGHT, 1.0)
-	assert(maze.witch.position.x < 215.0, "Corn patch in the walkable mask blocks movement")
+	assert(maze.witch.position.x < 545.0, "Corn patch in the walkable mask blocks movement")
+	maze.witch.position = Vector2(370, 101)
+	maze.witch.move_direction(Vector2.DOWN, 0.2)
+	assert(maze.witch.position.y > 101.0, "Witch can always move out of an invalid spot inside corn")
 	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
 	for i in maze.CHARM_POSITIONS.size():
 		assert(maze._is_walkable_position(maze.CHARM_POSITIONS[i]), "Moon charm %d sits on a walkable path" % i)

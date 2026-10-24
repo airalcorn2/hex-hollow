@@ -1,6 +1,10 @@
 class_name HollowWitch
 extends CharacterBody2D
 
+# How far sideways (pixels) mask-validated movement will look for a way around
+# a clipped corner before treating the move as blocked.
+const NUDGE_DISTANCES := [2.0, 4.0, 6.0, 8.0]
+
 const POSES := {
 	"south": [preload("res://assets/witch/walk/south_0.png"), preload("res://assets/witch/walk/south_1.png"), preload("res://assets/witch/walk/south_2.png"), preload("res://assets/witch/walk/south_3.png")],
 	"north": [preload("res://assets/witch/walk/north_0.png"), preload("res://assets/witch/walk/north_1.png"), preload("res://assets/witch/walk/north_2.png"), preload("res://assets/witch/walk/north_3.png")],
@@ -60,11 +64,28 @@ func _move_axis_with_validator(motion: Vector2) -> void:
 		return
 	var steps := maxi(1, ceili((absf(motion.x) + absf(motion.y)) / 4.0))
 	var step := motion / float(steps)
+	# If the current spot is already invalid (e.g. an old save), never trap the
+	# player: allow free movement until she reaches walkable ground again.
+	var escaping: bool = not movement_validator.call(position)
+	var perpendicular := Vector2(-step.y, step.x).normalized()
 	for _i in steps:
 		var candidate := position + step
-		if not movement_validator.call(candidate):
+		if escaping or movement_validator.call(candidate):
+			position = candidate
+			continue
+		# Corner assist: slide sideways a few pixels around a clipped edge.
+		var nudged := false
+		for amount in NUDGE_DISTANCES:
+			for side in [1.0, -1.0]:
+				var shifted: Vector2 = candidate + perpendicular * amount * side
+				if movement_validator.call(shifted):
+					position = position + perpendicular * minf(amount, 2.0) * side
+					nudged = true
+					break
+			if nudged:
+				break
+		if not nudged:
 			break
-		position = candidate
 
 func _update_pose(direction: Vector2, delta: float) -> void:
 	if direction.length() > 0.1:
