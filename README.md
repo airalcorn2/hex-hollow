@@ -38,7 +38,14 @@ web/                    Loading and web-export presentation
 
 ## Running locally
 
-Install Godot 4 and Node.js, then run the project from the repository root.
+The GitHub distribution contains all game artwork, collision masks, fonts, import sidecars, and license notices. Install **Godot 4.7.2** (the tested version), then clone the repository:
+
+```bash
+git clone https://github.com/airalcorn2/hex-hollow.git
+cd hex-hollow
+```
+
+Open `project.godot` in Godot and press **F6 / Run Current Scene** on `scenes/main.tscn`, or **F5 / Run Project**. Godot will rebuild its import cache automatically. No Manus account, asset hydration, Node.js, or Git LFS is required to play locally.
 
 To open the project in Godot:
 
@@ -52,7 +59,7 @@ To run the game directly:
 godot --path .
 ```
 
-The repository also contains the managed Preview workflow:
+The commands below are for development **inside a bound Manus project** with Node.js and its Game runtime installed; they are not required for a normal standalone Godot checkout:
 
 ```bash
 npm run dev
@@ -60,15 +67,30 @@ npm run preview:build
 npm run preview:status
 ```
 
+### Keeping the portable GitHub version up to date
+
+The managed project stores media separately from its own Git history. The GitHub distribution deliberately includes those files, including unused source artwork, so ordinary cloning stays self-contained. Caches (`.godot/`), build outputs, dependencies, and secrets are excluded.
+
+After saving a verified managed release, sync it into a separate clean GitHub checkout rather than pushing the media-free source commit directly:
+
+```bash
+python3 tools/sync_portable_github.py \
+  --repo-dir /absolute/path/to/hex-hollow-portable \
+  --push
+```
+
+The sync command preserves GitHub's asset tracking and history, checks each asset against the saved manifest, and uses a normal non-force push. It stops on conflicts or unexpected asset edits. Omit `--push` to prepare a local version for inspection first. See `AGENTS.md` for the repository boundaries.
+
 ## Verification
 
 Run the native gameplay regression test to verify movement, pause behavior, ordered ingredient collection, cauldron deposits, save restoration, spell completion, replay, Level 2 entry, fall-treat collection, the maze cauldron finish, and direct maze practice mode:
 
 ```bash
-/usr/local/bin/godot --headless --path . --audio-driver Dummy --script tools/hollow_check.gd
+godot --headless --path . --editor --quit
+godot --headless --path . --audio-driver Dummy --script tools/hollow_check.gd
 ```
 
-Run the project pack verification:
+Inside Manus, run the prepared project pack verification:
 
 ```bash
 npm run check -- --pack

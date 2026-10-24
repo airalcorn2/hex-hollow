@@ -29,3 +29,13 @@ node_modules/
 # Template fonts (subset WOFF2) restore from assets.lock.json like other media.
 
 .manus-artifacts.json
+# Local-only development files and secrets.
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
