@@ -1,12 +1,13 @@
 extends Control
 
 const WorldScript = preload("res://scripts/game/hollow_world.gd")
+const CornMazeScript = preload("res://scripts/game/corn_maze.gd")
 const Licenses = preload("res://scripts/manus/open_source_licenses.gd")
 const CREAM := Color("f4e7cd")
 const MUTED := Color("b7a6c2")
 const MINT := Color("a4e4ba")
 const GOLD := Color("e5ae67")
-var world: HollowWorld
+var world
 var hud: Control
 var overlay: Control
 var rows: Array[Label] = []
@@ -20,6 +21,7 @@ var notice_age := 0.0
 var save_age := 0.0
 var state := "title"
 var saved: Dictionary = {}
+var current_level := 1
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color("171020"))
@@ -46,12 +48,15 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	if state != "playing" or world == null:
 		return
+	if current_level == 2:
+		_process_maze(delta)
+		return
 	notice_age += delta
 	save_age += delta
 	if save_age > 4.0:
 		_save_progress()
 		save_age = 0.0
-	var target := world.nearby_target()
+	var target: String = world.nearby_target()
 	if target == "cauldron":
 		prompt_label.text = "[ E / SPACE ]  Add %d to the cauldron" % world.collected.size() if not world.collected.is_empty() else "Your cauldron · %d / 6 brewed" % world.deposited.size()
 	elif not target.is_empty():
@@ -63,7 +68,7 @@ func _process(delta: float) -> void:
 	else:
 		prompt_label.text = "Follow the woodland trails. Look for a magical glow."
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
-	var pos := world.witch.position
+	var pos: Vector2 = world.witch.position
 	region_label.text = "THE CAULDRON CLEARING"
 	if pos.y < 350:
 		region_label.text = "THE OLD GRAVEYARD" if pos.x < 650 else ("THE PUMPKIN PATCH" if pos.x > 1050 else "RAVEN'S WALK")
@@ -152,8 +157,12 @@ func _show_title() -> void:
 	_label(self, "Gather six enchanted ingredients. Brew a spell before the night is through.", Vector2(44, 684), Vector2(735, 30), 20)
 	_label(self, "WASD / arrows to wander    ·    E / Space to gather & brew    ·    Esc to pause", Vector2(44, 734), Vector2(820, 28), 15, MUTED)
 	_button(self, "Enter the hollow  →", Rect2(924, 661, 310, 50), _start_new_run, true)
-	if not saved.is_empty() and saved.get("deposited", []).size() < 6:
-		_button(self, "Continue your spell", Rect2(924, 725, 310, 40), _continue_run)
+	var has_incomplete_save := false
+	if not saved.is_empty():
+		has_incomplete_save = saved.get("collected", []).size() < 3 if int(saved.get("level", 1)) == 2 else saved.get("deposited", []).size() < 6
+	if has_incomplete_save:
+		var continue_text := "Continue in the maze" if int(saved.get("level", 1)) == 2 else "Continue your spell"
+		_button(self, continue_text, Rect2(924, 725, 310, 40), _continue_run)
 	else:
 		_label(self, "A cozy, moonlit adventure", Vector2(931, 731), Vector2(298, 25), 15, MUTED)
 	_button(self, "Open Source Licenses", Rect2(22, 17, 195, 33), func(): Licenses.open(self))
@@ -162,10 +171,14 @@ func _start_new_run() -> void:
 	_begin_run({})
 
 func _continue_run() -> void:
-	_begin_run(saved)
+	if int(saved.get("level", 1)) == 2:
+		_begin_maze(saved)
+	else:
+		_begin_run(saved)
 
 func _begin_run(data: Dictionary) -> void:
 	_clear()
+	current_level = 1
 	state = "playing"
 	TuningStore.begin_run()
 	var container := SubViewportContainer.new()
@@ -189,6 +202,49 @@ func _begin_run(data: Dictionary) -> void:
 	_build_hud()
 	_recipe_changed()
 	_show_message("The midnight spell awaits. Find six ingredients—and follow the gold ? markers for secrets!")
+
+func _begin_maze(data: Dictionary = {}) -> void:
+	_clear()
+	current_level = 2
+	state = "playing"
+	TuningStore.begin_run()
+	var container := SubViewportContainer.new()
+	container.position = Vector2(24, 116)
+	container.size = Vector2(956, 612)
+	container.stretch = true
+	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(956, 612)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	container.add_child(viewport)
+	add_child(container)
+	world = CornMazeScript.new()
+	viewport.add_child(world)
+	if not data.is_empty():
+		world.restore(data)
+	world.message.connect(_show_message)
+	world.maze_completed.connect(_maze_completed)
+	world.set_active(true)
+	_build_maze_hud()
+	_show_message("Level 2: enter the Mooncorn Maze. Find three moon charms and reach EXIT!")
+
+func _process_maze(delta: float) -> void:
+	notice_age += delta
+	save_age += delta
+	if save_age > 4.0:
+		_save_progress()
+		save_age = 0.0
+	var target: String = world.nearby_target()
+	if not target.is_empty():
+		prompt_label.text = "[ E / SPACE ]  Gather " + world.target_name(target)
+	elif world.nearby_exit():
+		prompt_label.text = "[ E / SPACE ]  Leave the corn maze" if world.collected.size() == 3 else "The EXIT is sealed · Find all 3 moon charms"
+	else:
+		prompt_label.text = "Follow the gold ? markers through the corn."
+	progress_label.text = "%d / 3 moon charms found" % world.collected.size()
+	satchel_label.text = "CHARMS  ·  %d / 3" % world.collected.size()
+	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
+	region_label.text = "THE MOONCORN MAZE"
 
 func _build_hud() -> void:
 	hud = Control.new()
@@ -224,6 +280,34 @@ func _build_hud() -> void:
 	notice_label.add_theme_constant_override("shadow_offset_x", 1)
 	notice_label.add_theme_constant_override("shadow_offset_y", 2)
 
+func _build_maze_hud() -> void:
+	hud = Control.new()
+	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(hud)
+	_picture(hud, preload("res://assets/share/favicon.png"), Rect2(24, 18, 55, 55))
+	_label(hud, "HEX HOLLOW · LEVEL 2", Vector2(91, 18), Vector2(500, 43), 30, CREAM, true)
+	_label(hud, "The Mooncorn Maze", Vector2(94, 65), Vector2(400, 25), 14, MUTED)
+	_label(hud, "HALLOWEEN NIGHT", Vector2(900, 27), Vector2(260, 25), 13, GOLD, true)
+	_button(hud, "Ⅱ", Rect2(1198, 24, 56, 45), _toggle_pause)
+	region_label = _label(hud, "THE MOONCORN MAZE", Vector2(27, 88), Vector2(790, 23), 12, GOLD, true)
+	_panel(hud, Rect2(1004, 116, 252, 612), Color("281d30"))
+	_label(hud, "THE SECOND SPELL", Vector2(1026, 139), Vector2(218, 28), 13, GOLD, true)
+	_label(hud, "Mooncorn Maze", Vector2(1024, 173), Vector2(215, 38), 25, CREAM, true)
+	_label(hud, "Three charms. One way out.", Vector2(1027, 222), Vector2(210, 25), 13, MUTED)
+	progress_label = _label(hud, "0 / 3 moon charms found", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
+	_label(hud, "Gold ? markers reveal moon charms", Vector2(1027, 306), Vector2(205, 42), 13, MUTED)
+	_label(hud, "Reach EXIT after collecting all three.", Vector2(1027, 354), Vector2(205, 42), 13, MUTED)
+	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
+	satchel_label = _label(hud, "CHARMS  ·  0 / 3", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)
+	_label(hud, "The corn remembers the way in", Vector2(1034, 674), Vector2(190, 22), 11, MUTED)
+	_panel(hud, Rect2(24, 740, 1232, 43), Color("281d30"), Color("49364e"), 8)
+	prompt_label = _label(hud, "", Vector2(44, 750), Vector2(850, 24), 15, CREAM)
+	_label(hud, "WASD / ARROWS   ·   E / SPACE INTERACT   ·   ESC PAUSE", Vector2(875, 752), Vector2(370, 22), 11, MUTED)
+	notice_label = _label(hud, "", Vector2(44, 133), Vector2(903, 36), 15, CREAM)
+	notice_label.add_theme_color_override("font_shadow_color", Color("171020"))
+	notice_label.add_theme_constant_override("shadow_offset_x", 1)
+	notice_label.add_theme_constant_override("shadow_offset_y", 2)
+
 func _recipe_changed() -> void:
 	if progress_label == null:
 		return
@@ -233,7 +317,7 @@ func _recipe_changed() -> void:
 	# next_required()), so the sidebar highlights which one's actually
 		# next -- without this, "why can't I pick that one up yet" has no
 		# visible answer.
-	var required := world.next_required()
+	var required: String = world.next_required()
 	for i in rows.size():
 		var id: String = row_ids[i]
 		var item: Dictionary = world.recipe_entry(id)
@@ -257,6 +341,7 @@ func _show_message(text: String) -> void:
 func _save_progress() -> void:
 	if world != null:
 		saved = world.snapshot()
+		saved["level"] = current_level
 		SaveStore.set_adventure(saved)
 
 func _toggle_pause() -> void:
@@ -297,9 +382,24 @@ func _completed() -> void:
 	await get_tree().create_timer(1.6).timeout
 	if state != "complete":
 		return
+		_make_overlay(
+			"The spell is complete!",
+			"Six enchanted ingredients, one perfect brew.\nNow find the Mooncorn Maze beyond the clearing."
+		)
+		_button(overlay, "Enter the corn maze  →", Rect2(470, 428, 340, 48), _begin_maze, true)
+		_button(overlay, "Brew another spell", Rect2(470, 490, 340, 46), _start_new_run)
+		_button(overlay, "Back to title", Rect2(470, 552, 340, 40), _show_title)
+
+func _maze_completed() -> void:
+	state = "complete"
+	_save_progress()
+	TuningStore.end_run()
+	await get_tree().create_timer(1.2).timeout
+	if state != "complete":
+		return
 	_make_overlay(
-		"The spell is complete!",
-		"Six enchanted ingredients, one perfect brew.\nYou've brought a little magic to Halloween."
+		"The maze is conquered!",
+		"Three moon charms and one impossible path.\nThe hollow has no more secrets tonight."
 	)
 	_button(overlay, "Brew another spell  →", Rect2(470, 428, 340, 48), _start_new_run, true)
 	_button(overlay, "Back to title", Rect2(470, 490, 340, 46), _show_title)

@@ -75,6 +75,20 @@ func _check() -> void:
 	main._start_new_run()
 	await process_frame
 	assert(not main.world.won and main.world.collected.is_empty() and main.world.deposited.is_empty(), "Replay resets spell")
+	main._begin_maze({})
+	await process_frame
+	var maze = main.world
+	assert(main.current_level == 2, "Spell completion can enter the corn maze")
+	assert(maze.charm_sprites.size() == 3 and maze.charm_markers.size() == 3, "Corn maze has three marked moon charms")
+	for i in maze.CHARM_CELLS.size():
+		maze.witch.position = maze.cell_position(maze.CHARM_CELLS[i])
+		assert(not maze.nearby_target().is_empty(), "Moon charm %d is reachable" % i)
+		maze.interact()
+	assert(maze.collected.size() == 3, "Corn maze collects all three moon charms")
+	maze.witch.position = maze.cell_position(maze.EXIT_CELL)
+	assert(maze.nearby_exit(), "Corn maze exit is reachable")
+	maze.interact()
+	assert(main.state == "complete" and maze.won, "Corn maze completion flow starts")
 	saves.set_adventure(original)
-	print("[hex-hollow] PASS: movement, pause, ordered pickups, one-at-a-time deposits, duplicate prevention, save restore, completed spell, replay")
+	print("[hex-hollow] PASS: movement, pause, ordered pickups, one-at-a-time deposits, duplicate prevention, save restore, completed spell, replay, corn maze")
 	quit(0)
