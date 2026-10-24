@@ -205,17 +205,26 @@ func _check() -> void:
 	house.witch.position = Vector2(768, 860)
 	house.interact()
 	assert(not house.won, "The house cauldron waits for all four keepsakes")
-	var house_approaches := [Vector2(1040, 197), Vector2(1030, 500), Vector2(1340, 495), Vector2(230, 730)]
+	assert(house.ENVIRONMENT_INTERACTIONS.size() == 18, "The manor offers eighteen optional hauntings")
 	assert(house.interaction_markers.size() == house.ENVIRONMENT_INTERACTIONS.size(), "Hauntings have precisely anchored indicators")
 	for i in house.ENVIRONMENT_INTERACTIONS.size():
-		house.witch.position = house_approaches[i]
+		var landmark: Dictionary = house.ENVIRONMENT_INTERACTIONS[i]
+		house.witch.position = landmark.approach
 		assert(house._is_walkable_position(house.witch.position) and house.nearby_environment() == i, "Each haunting has a reachable inspection point")
+		assert(house.interaction_markers[i].position + Vector2(12, 34) == landmark.marker_anchor, "Each question-mark pointer stays pinned to its illustrated object")
+		assert(house.environment_prompt(i) == landmark.prompt, "Each haunting has an object-specific prompt")
 		var before_line: int = house.environment_dialogue_index[i]
-		house.interact()
-		assert(house.environment_dialogue_index[i] != before_line and house.collected.is_empty(), "Hauntings reveal flavor text without awarding keepsakes")
+		var observed_lines: Array[String] = []
+		for line_number in landmark.lines.size():
+			house.interact()
+			observed_lines.append(main.notice_label.text)
+			assert(house.environment_dialogue_index[i] == (before_line + line_number + 1) % landmark.lines.size(), "Repeated inspections rotate the haunting's dialogue")
+		assert(observed_lines.size() == 3 and observed_lines[0] != observed_lines[1] and observed_lines[1] != observed_lines[2], "Each haunting has three distinct readings")
+		assert(house.collected.is_empty() and not house.won and main.state == "playing", "Hauntings do not award keepsakes or advance the spell")
 	for i in 2:
 		house.witch.position = house.ITEM_POSITIONS[i]
 		assert(house._is_walkable_position(house.witch.position), "Each keepsake sits on connected floor")
+		assert(house.nearby_environment() == -1 and house.nearby_target() == house.ITEM_DATA[i].id, "Kept objectives take priority over nearby hauntings")
 		house.interact()
 		house.interact()
 		assert(house.collected.size() == i + 1, "Keepsakes can only be gathered once")

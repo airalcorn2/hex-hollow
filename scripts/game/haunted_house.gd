@@ -32,44 +32,7 @@ const MASK_SAMPLE_OFFSETS := [
 	Vector2(4, 4), Vector2(-4, 4), Vector2(4, -4), Vector2(-4, -4),
 ]
 const BUBBLE_OFFSETS := [Vector2(-22, -74), Vector2(-5, -85), Vector2(13, -79), Vector2(27, -68)]
-const ENVIRONMENT_INTERACTIONS := [
-	{
-		"id":"portrait", "name":"The Watching Portrait", "prompt":"Study the watching portrait",
-		"pos":Vector2(1040, 175), "reach":90.0, "marker_anchor":Vector2(1024, 109),
-		"lines":[
-			"The lady in the frame sighs. 'Do straighten your hat. We have standards, even after death.'",
-			"Her eyes follow you. 'Of course I stare, dear. Nobody brings me a book.'",
-			"A painted hand points toward the foyer. 'Four keepsakes. One brew. Then kindly let us sleep.'",
-		],
-	},
-	{
-		"id":"piano", "name":"The Phantom Piano", "prompt":"Listen to the phantom piano",
-		"pos":Vector2(1090, 487), "reach":92.0, "marker_anchor":Vector2(1128, 439),
-		"lines":[
-			"One key plays by itself. The next note is a tiny, offended sneeze.",
-			"A ghostly pianist whispers: 'Requests cost a shilling. Complaints cost two.'",
-			"The sheet music is titled A Minor Inconvenience. Every note is a boo.",
-		],
-	},
-	{
-		"id":"clock", "name":"The Thirteenth-Hour Clock", "prompt":"Inspect the haunted clock",
-		"pos":Vector2(1408, 490), "reach":88.0, "marker_anchor":Vector2(1408, 439),
-		"lines":[
-			"It strikes thirteen. A voice inside mutters: 'Daylight haunting time. Terrible business.'",
-			"The pendulum swings backward. 'You are not late,' says the clock. 'Yesterday is early.'",
-			"A little brass plaque reads: Winding optional. Existential dread included.",
-		],
-	},
-	{
-		"id":"oven", "name":"The Haunted Hearth", "prompt":"Warm your hands by the haunted hearth",
-		"pos":Vector2(198, 697), "reach":88.0, "marker_anchor":Vector2(186, 664),
-		"lines":[
-			"Something in the chimney asks for toast. 'Lightly frightened, please.'",
-			"The kettle whistles a funeral march, then apologizes. It meant to make tea.",
-			"A recipe card says: Add one pinch of salt. Do not add the cook. Again.",
-		],
-	},
-]
+const ENVIRONMENT_INTERACTIONS = preload("res://scripts/game/manor_interactions.gd").LANDMARKS
 
 var witch: HollowWitch
 var camera: Camera2D
