@@ -240,7 +240,7 @@ func _process_maze(delta: float) -> void:
 	elif world.nearby_exit():
 		prompt_label.text = "[ E / SPACE ]  Leave the corn maze" if world.collected.size() == 3 else "The EXIT is sealed · Find all 3 moon charms"
 	else:
-		prompt_label.text = "Follow the gold ? markers through the corn."
+		prompt_label.text = "Follow the moonlit charms through the corn."
 	progress_label.text = "%d / 3 moon charms found" % world.collected.size()
 	satchel_label.text = "CHARMS  ·  %d / 3" % world.collected.size()
 	notice_label.modulate.a = 1.0 if notice_age < 5.0 else 0.0
@@ -295,7 +295,7 @@ func _build_maze_hud() -> void:
 	_label(hud, "Mooncorn Maze", Vector2(1024, 173), Vector2(215, 38), 25, CREAM, true)
 	_label(hud, "Three charms. One way out.", Vector2(1027, 222), Vector2(210, 25), 13, MUTED)
 	progress_label = _label(hud, "0 / 3 moon charms found", Vector2(1027, 265), Vector2(209, 30), 16, MINT)
-	_label(hud, "Gold ? markers reveal moon charms", Vector2(1027, 306), Vector2(205, 42), 13, MUTED)
+	_label(hud, "Moon charms shimmer in the corn", Vector2(1027, 306), Vector2(205, 42), 13, MUTED)
 	_label(hud, "Reach EXIT after collecting all three.", Vector2(1027, 354), Vector2(205, 42), 13, MUTED)
 	_panel(hud, Rect2(1022, 634, 215, 72), Color("34253e"), Color("56415e"), 8)
 	satchel_label = _label(hud, "CHARMS  ·  0 / 3", Vector2(1034, 642), Vector2(190, 24), 13, GOLD, true)

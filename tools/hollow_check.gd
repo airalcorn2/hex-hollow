@@ -81,7 +81,7 @@ func _check() -> void:
 	await process_frame
 	var maze = main.world
 	assert(main.current_level == 2, "Spell completion can enter the corn maze")
-	assert(maze.charm_sprites.size() == 3 and maze.charm_markers.size() == 3, "Corn maze has three marked moon charms")
+	assert(maze.charm_sprites.size() == 3, "Corn maze has three illustrated moon charms")
 	for i in maze.CHARM_CELLS.size():
 		maze.witch.position = maze.cell_position(maze.CHARM_CELLS[i])
 		assert(not maze.nearby_target().is_empty(), "Moon charm %d is reachable" % i)

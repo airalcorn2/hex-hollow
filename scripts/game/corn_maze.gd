@@ -21,6 +21,8 @@ const CHARM_ICONS := [
 	preload("res://assets/recipe/icons/moonflower.png"),
 	preload("res://assets/recipe/icons/essence.png"),
 ]
+const GROUND_TEXTURE := preload("res://assets/corn-maze/corn_maze_ground.png")
+const CORN_WALL_TEXTURE := preload("res://assets/corn-maze/corn_wall.png")
 
 var witch: HollowWitch
 var camera: Camera2D
@@ -30,13 +32,13 @@ var elapsed := 0.0
 var age := 0.0
 var walls: Array = []
 var charm_sprites: Array[Sprite2D] = []
-var charm_markers: Array[Label] = []
-var charm_marker_origins: Array[Vector2] = []
+var wall_sprites: Array[Sprite2D] = []
 var collected: Array[String] = []
 var exit_marker: Label
 
 func _ready() -> void:
 	_generate_maze()
+	_build_visuals()
 	_build_collisions()
 	_build_charm_sprites()
 	_build_exit_marker()
@@ -120,9 +122,22 @@ func _build_charm_sprites() -> void:
 		sprite.z_index = 3
 		add_child(sprite)
 		charm_sprites.append(sprite)
-		var marker := _marker("?", sprite.position + Vector2(-12, -48), Color("f4c46f"))
-		charm_markers.append(marker)
-		charm_marker_origins.append(marker.position)
+
+func _build_visuals() -> void:
+	for y in range(GRID_H):
+		for x in range(GRID_W):
+			if not walls[y][x]:
+				continue
+			var hedge := Sprite2D.new()
+			hedge.texture = CORN_WALL_TEXTURE
+			hedge.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			hedge.position = Vector2(x * CELL + CELL * 0.5, y * CELL + CELL * 0.5)
+			hedge.scale = Vector2(CELL, CELL) / CORN_WALL_TEXTURE.get_size()
+			hedge.flip_h = (x + y) % 2 == 0
+			hedge.modulate = Color(0.88 + (x % 3) * 0.035, 0.92 + (y % 2) * 0.03, 0.84, 1.0)
+			hedge.z_index = 2
+			add_child(hedge)
+			wall_sprites.append(hedge)
 
 func _build_exit_marker() -> void:
 	exit_marker = _marker("EXIT", cell_position(EXIT_CELL) + Vector2(-30, -48), Color("a4e4ba"))
@@ -145,20 +160,7 @@ func _marker(text: String, pos: Vector2, color: Color) -> Label:
 	return marker
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, WORLD_SIZE), Color("2c3924"))
-	for y in range(GRID_H):
-		for x in range(GRID_W):
-			var rect := Rect2(x * CELL, y * CELL, CELL, CELL)
-			if walls[y][x]:
-				draw_rect(rect.grow(-4), Color("725a32"))
-				draw_rect(Rect2(rect.position + Vector2(8, 8), Vector2(5, CELL - 16)), Color("bb9149"))
-				draw_rect(Rect2(rect.position + Vector2(27, 4), Vector2(5, CELL - 12)), Color("9a7739"))
-				draw_rect(Rect2(rect.position + Vector2(45, 10), Vector2(5, CELL - 18)), Color("c29b50"))
-				draw_line(rect.position + Vector2(5, 10), rect.position + Vector2(CELL - 5, 10), Color("d5ae5d"), 2)
-			else:
-				draw_rect(rect, Color("3c4a2b"))
-				draw_line(rect.position + Vector2(8, 51), rect.position + Vector2(19, 48), Color("566238"), 2)
-				draw_line(rect.position + Vector2(40, 16), rect.position + Vector2(55, 19), Color("566238"), 2)
+	draw_texture_rect(GROUND_TEXTURE, Rect2(Vector2.ZERO, WORLD_SIZE), false)
 	draw_circle(cell_position(EXIT_CELL), 25.0, Color("3d6749"))
 	draw_arc(cell_position(EXIT_CELL), 27.0, 0.0, TAU, 24, Color("a4e4ba"), 2.0)
 
@@ -173,10 +175,6 @@ func _process(delta: float) -> void:
 	age += delta
 	if active:
 		elapsed += delta
-	for i in charm_markers.size():
-		var marker: Label = charm_markers[i]
-		marker.position = charm_marker_origins[i] + Vector2(0, sin(age * 2.8 + i) * 3.0)
-		marker.modulate.a = 0.72 + sin(age * 3.4 + i) * 0.18
 	for i in charm_sprites.size():
 		if not charm_sprites[i].visible:
 			continue
@@ -210,7 +208,6 @@ func interact() -> void:
 		for i in CHARM_DATA.size():
 			if CHARM_DATA[i].id == target:
 				charm_sprites[i].visible = false
-				charm_markers[i].visible = false
 		message.emit("Found %s. The maze remembers your footsteps." % target_name(target))
 		return
 	if nearby_exit():
@@ -222,7 +219,7 @@ func interact() -> void:
 		else:
 			message.emit("The maze gate is sealed. Find all three moon charms first.")
 		return
-	message.emit("The corn whispers from every direction. Follow the gold ? markers.")
+	message.emit("The corn whispers from every direction. Follow the moonlit charms.")
 
 func restore(data: Dictionary) -> void:
 	collected.clear()
@@ -232,7 +229,6 @@ func restore(data: Dictionary) -> void:
 	for i in CHARM_DATA.size():
 		var hidden: bool = CHARM_DATA[i].id in collected
 		charm_sprites[i].visible = not hidden
-		charm_markers[i].visible = not hidden
 	witch.position = Vector2(float(data.get("x", cell_position(START_CELL).x)), float(data.get("y", cell_position(START_CELL).y)))
 	camera.position = witch.position
 	camera.reset_smoothing()

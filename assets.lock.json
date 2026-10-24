@@ -1,6 +1,10 @@
 {
   "version": 2,
   "groups": {
+    "corn-maze": {
+      "name": "Corn Maze",
+      "order": 70
+    },
     "hollow": {
       "name": "Haunted woodland",
       "order": 20
@@ -89,6 +93,22 @@
     }
   },
   "assets": {
+    "assets/corn-maze/corn_maze_ground.png": {
+      "path": "/manus-storage/game/sha256/c01679718ae22d87ecf8672f3b47c1db56932c463b483f6c22148d5ee39761b5.png",
+      "sha256": "sha256:c01679718ae22d87ecf8672f3b47c1db56932c463b483f6c22148d5ee39761b5",
+      "size": 7828145,
+      "assetType": "image",
+      "groupId": "corn-maze",
+      "used": true
+    },
+    "assets/corn-maze/corn_wall.png": {
+      "path": "/manus-storage/game/sha256/6c5ecc50669543bb4974691085f87a71f8f998dda90bd368ad6dc6bb79faf60d.png",
+      "sha256": "sha256:6c5ecc50669543bb4974691085f87a71f8f998dda90bd368ad6dc6bb79faf60d",
+      "size": 4932774,
+      "assetType": "image",
+      "groupId": "corn-maze",
+      "used": true
+    },
     "assets/hollow/map.png": {
       "path": "/manus-storage/game/sha256/5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af.png",
       "sha256": "sha256:5bfaab6190024d24133255212a455a9f13749e3c68cd91ae22e7bea0305470af",
