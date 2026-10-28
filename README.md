@@ -2,8 +2,6 @@
 
 Hex Hollow is a small top-down Halloween adventure built with Godot. You play as a young witch exploring a haunted woodland, gathering enchanted ingredients, brewing a spell in the cauldron, and discovering what lies beyond the clearing.
 
-The project is available at [github.com/airalcorn2/hex-hollow](https://github.com/airalcorn2/hex-hollow).
-
 ## Gameplay
 
 The first level takes place in the Hollow: a moonlit woodland filled with ingredient pickups, companion witches, readable gravestones, lanterns, trees, signs, and a bubbling cauldron.
